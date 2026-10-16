@@ -97,4 +97,37 @@ This document records key design decisions and resolutions to ambiguities betwee
 - **Decision**: Remove `"output": "server"` and experimental `reactCompiler` from `apps/mobile/app.json`. Add `-c` (clear cache) by default to `dev:mobile` and add a `dev:mobile:tunnel` script.
 - **Rationale**: The default Expo template included web server-side rendering (`"output": "server"`), which activated `@expo/server` middleware. When native mobile devices or Expo Go connected to the Metro bundler port, the server middleware attempted to SSR-render web lambdas, aborting the connection with `Metro error: This operation was aborted (http.js controller.abort())` and causing Expo Go to show "Something went wrong". Removing server output restores pure native Metro bundling.
 
+---
+
+### Decision 15: Design System Tokens, Font Pipeline & Component Library (P2)
+- **Decision**:
+  1. Font Loading: Plus Jakarta Sans (400, 500, 600, 700) and Newsreader (400, 500i, 600, 700) loaded synchronously via `@expo-google-fonts` in `RootLayout` (`apps/mobile/src/app/_layout.tsx`), holding `SplashScreen.preventAutoHideAsync()` until fonts resolve.
+  2. Pure Design Tokens: Zero hard-coded hex codes or numeric dimensions outside `apps/mobile/src/theme/tokens.ts`. App background set strictly to `bg` (`#F8FAFC`).
+  3. Accessibility & Ergonomics: Min 48×48 dp touch targets on all pressables (via hitSlop or minHeight), explicit `accessibilityRole` and `accessibilityLabel` attributes, status never communicated through color alone (icon + label), and smooth animation fallbacks.
+  4. Component Suite (23 UI + CampaignCard):
+     - `Button` (primary/secondary/ghost/danger, lg/md/sm, loading, disabled, haptic feedback, 0.98 press scale)
+     - `Card` (surface, border line, radius 16, soft elevation)
+     - `ProgressBar` (animated fill on mount, dynamic green success at 100%+)
+     - `StatusPill` (13 lifecycle states with dedicated Lucide icons & labels)
+     - `CategoryChip` (10 official categories with distinct Lucide icons, selected/unselected, count badge)
+     - `Skeleton` (shimmer opacity animation)
+     - `EmptyState` & `ErrorState` (purposeful iconography, informative copy, retry actions)
+     - `Toast` (`ToastProvider` context + `useToast` hook with info, success, warning, danger helpers)
+     - `Accordion` (animated chevron rotation & collapsible body)
+     - `InfoTip` (tappable (i) trigger opening accessible bottom sheet with 6 presets: reach, fees, funds, review, cpm, promotion)
+     - `Sheet` (accessible drag-handle modal with backdrop blur & safe-area insets)
+     - `Segmented` (iOS-style pill selector)
+     - `TextField` & `TextArea` (labels, required markers, helper text, error text, character counters, disabled state)
+     - `Avatar` (expo-image or initials fallback with deterministic palette color)
+     - `Stat` (headline metric, descriptive label, citation)
+     - `Timeline` (vertical chronological progression with completed/current/upcoming status)
+     - `StepIndicator` (5-step creation tracker: Basics → Story → Visuals → Reach → Submit; completed steps tappable)
+     - `StickyActionBar` (pinned bottom bar with safe area padding, primary 52dp button, optional price breakdown)
+     - `SourceItem` (citation card with publisher, domain, checked verification badge, external linking)
+     - `ReachEstimateBadge` (pill displaying ~X–Y people reached + InfoTip trigger + estimate subtitle)
+     - `DemoDataBadge` (distinct subtle indicator for prototype transparency)
+     - `CampaignCard` (default feed, compact horizontal, featured hero, and skeleton variants)
+  5. Component Showcase: Accessible at `/dev/components` and linked directly from the home screen for complete visual verification.
+- **Rationale**: Establishes a rock-solid, production-grade foundation for all subsequent mobile screens (P4–P7) with 100% type safety and zero design divergence.
+
 
