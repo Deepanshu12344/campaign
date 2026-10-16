@@ -8,7 +8,9 @@
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx prisma/seed.ts",
+    "db:check": "tsx scripts/check-db.ts",
+    "db:runner": "tsx scripts/db-runner.ts"
   },
   "dependencies": {
     "@campaigns/shared": "*",
@@ -29,6 +31,7 @@
     "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.13.9",
+    "embedded-postgres": "^18.4.0-beta.17",
     "prisma": "^6.4.1",
     "tsx": "^4.19.3",
     "typescript": "^5.8.0"

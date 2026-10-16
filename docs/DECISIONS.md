@@ -130,4 +130,16 @@ This document records key design decisions and resolutions to ambiguities betwee
   5. Component Showcase: Accessible at `/dev/components` and linked directly from the home screen for complete visual verification.
 - **Rationale**: Establishes a rock-solid, production-grade foundation for all subsequent mobile screens (P4–P7) with 100% type safety and zero design divergence.
 
+---
+
+### Decision 16: Database Layer, Schema Architecture & Seeding Integrity (P3)
+- **Decision**:
+  1. **Dual URL Configuration**: Configured Prisma datasource with both `DATABASE_URL` (pooled connection for runtime queries) and `DIRECT_URL` (direct connection for migrations and DDL operations) to support Supabase/Neon connection poolers seamlessly.
+  2. **Local PostgreSQL Support**: Added `docker-compose.yml` for local containerized development and embedded PostgreSQL 18.4 runner (`apps/api/scripts/db-runner.ts`) as an automated fallback when Docker or system-level PostgreSQL is unavailable.
+  3. **Official Categories Enum**: Modeled the 10 official categories as a PostgreSQL `Category` enum with `@map(...)` to align 1:1 with `@campaigns/shared` TypeScript union types and preserve display formatting.
+  4. **Strict Financial Ledger Integrity**: Enforced that `Campaign.raisedCents` mathematically equals `sum(contributions.amountCents)` where `status = SUCCEEDED`. Added `apps/api/scripts/check-db.ts` (`npm run db:check`) to validate and assert this invariant across all database rows.
+  5. **Idempotent Seed Pipeline**: Built `apps/api/prisma/seed.ts` using deterministic UUIDs, upserts, and clean cascading resets. Seeded 13 campaigns across all categories and creator types, demo credentials (`creator@demo.com`, `backer@demo.com`, `admin@demo.com`, password `Demo@1234`), review decisions, campaign events, updates, notifications, and completed report data.
+- **Rationale**: Prevents financial reconciliation errors between the campaign feed and contribution receipts, satisfies all acceptance criteria, and guarantees zero database drift across test runs.
+
+
 

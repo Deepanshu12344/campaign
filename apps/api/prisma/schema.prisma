@@ -3,6 +3,294 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum CampaignStatus {
+  DRAFT
+  SUBMITTED
+  CHANGES_REQUESTED
+  APPROVED
+  FUNDING
+  FUNDING_CLOSED
+  DISTRIBUTION_PREP
+  PROMOTING
+  COMPLETED
+  REJECTED
+  CANCELLED
+  REFUND_PENDING
+  FAILED
+}
+
+enum Category {
+  ENVIRONMENT      @map("Environment")
+  HEALTH           @map("Health")
+  SCIENCE          @map("Science")
+  EDUCATION        @map("Education")
+  PUBLIC_POLICY    @map("Public Policy")
+  ECONOMIC_POLICY  @map("Economic Policy")
+  COMMUNITY        @map("Community")
+  ARTS_AND_CULTURE @map("Arts & Culture")
+  BUSINESS         @map("Business")
+  OTHER            @map("Other")
+}
+
+enum CreatorType {
+  INDIVIDUAL @map("individual")
+  CREATOR    @map("creator")
+  NONPROFIT  @map("nonprofit")
+  BUSINESS   @map("business")
+  COMMUNITY  @map("community")
+}
+
+enum ContributionStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+  CANCELLED
+  REJECTED
+  REFUNDED
+}
+
+enum ReviewDecisionType {
+  APPROVED
+  CHANGES_REQUESTED
+  REJECTED
+}
+
+enum FeedbackResponse {
+  NO
+  SOMEWHAT
+  YES
+}
+
+enum ReachType {
+  ESTIMATED
+  MEASURED
+}
+
+model User {
+  id                String           @id @default(uuid())
+  email             String           @unique
+  passwordHash      String
+  name              String
+  avatarUrl         String?
+  role              UserRole         @default(USER)
+  notificationPrefs Json             @default("{}")
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  campaigns         Campaign[]
+  contributions     Contribution[]
+  reviewDecisions   ReviewDecision[]
+  notifications     Notification[]
+  follows           Follow[]
+  savedCampaigns    SavedCampaign[]
+  feedbacks         Feedback[]
+
+  @@map("users")
+}
+
+model Campaign {
+  id               String           @id @default(uuid())
+  creatorId        String
+  creator          User             @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  status           CampaignStatus   @default(DRAFT)
+  title            String
+  category         Category
+  creatorName      String
+  creatorType      CreatorType      @default(INDIVIDUAL)
+  summary          String
+  coverUrl         String?
+  fallbackImageUrl String?
+  story            Json             @default("[]")
+  sources          Json             @default("[]")
+  adCreative       Json?
+  reach            Json?
+  fundingGoalCents Int
+  raisedCents      Int              @default(0)
+  version          Int              @default(1)
+  pendingRevision  Json?
+  startsAt         DateTime?
+  endsAt           DateTime?
+  submittedAt      DateTime?
+  publishedAt      DateTime?
+  reviewNotes      String?
+  isDemo           Boolean          @default(true)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  contributions    Contribution[]
+  reviewDecisions  ReviewDecision[]
+  events           CampaignEvent[]
+  updates          CampaignUpdate[]
+  follows          Follow[]
+  saves            SavedCampaign[]
+  feedbacks        Feedback[]
+  report           Report?
+  notifications    Notification[]
+
+  @@index([status])
+  @@index([category])
+  @@index([endsAt])
+  @@index([creatorId])
+  @@index([status, category])
+  @@index([status, endsAt])
+  @@map("campaigns")
+}
+
+model Contribution {
+  id                String             @id @default(uuid())
+  campaignId        String
+  campaign          Campaign           @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  userId            String?
+  user              User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
+  guestEmail        String?
+  guestReceiptToken String?
+  amountCents       Int
+  feeCents          Int
+  totalCents        Int
+  status            ContributionStatus @default(PENDING)
+  isAnonymous       Boolean            @default(true)
+  publicName        String?
+  receiptNo         String             @unique
+  isDemo            Boolean            @default(true)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@index([campaignId])
+  @@index([userId])
+  @@index([status])
+  @@index([campaignId, status])
+  @@index([guestReceiptToken])
+  @@map("contributions")
+}
+
+model ReviewDecision {
+  id         String             @id @default(uuid())
+  campaignId String
+  campaign   Campaign           @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  reviewerId String
+  reviewer   User               @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  decision   ReviewDecisionType
+  notes      String
+  createdAt  DateTime           @default(now())
+
+  @@index([campaignId])
+  @@index([reviewerId])
+  @@map("review_decisions")
+}
+
+model CampaignEvent {
+  id         String   @id @default(uuid())
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  type       String
+  payload    Json     @default("{}")
+  createdAt  DateTime @default(now())
+
+  @@index([campaignId])
+  @@index([campaignId, createdAt])
+  @@map("campaign_events")
+}
+
+model CampaignUpdate {
+  id         String   @id @default(uuid())
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  title      String
+  body       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([campaignId])
+  @@index([campaignId, createdAt])
+  @@map("campaign_updates")
+}
+
+model Notification {
+  id         String    @id @default(uuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type       String
+  title      String
+  body       String
+  campaignId String?
+  campaign   Campaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  readAt     DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([userId])
+  @@index([userId, readAt])
+  @@map("notifications")
+}
+
+model Follow {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, campaignId])
+  @@index([userId])
+  @@index([campaignId])
+  @@map("follows")
+}
+
+model SavedCampaign {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, campaignId])
+  @@index([userId])
+  @@index([campaignId])
+  @@map("saved_campaigns")
+}
+
+model Feedback {
+  id                String           @id @default(uuid())
+  campaignId        String
+  campaign          Campaign         @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  userId            String?
+  user              User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
+  visualsEncouraged FeedbackResponse
+  messageChanged    FeedbackResponse
+  createdAt         DateTime         @default(now())
+
+  @@index([campaignId])
+  @@map("feedbacks")
+}
+
+model Report {
+  id               String    @id @default(uuid())
+  campaignId       String    @unique
+  campaign         Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  fundsRaisedCents Int
+  adSpendCents     Int
+  impressions      Int
+  reach            Int
+  reachType        ReachType @default(ESTIMATED)
+  clicks           Int       @default(0)
+  ctr              Float     @default(0.0)
+  startedAt        DateTime?
+  endedAt          DateTime?
+  isDemo           Boolean   @default(true)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([campaignId])
+  @@map("reports")
 }
