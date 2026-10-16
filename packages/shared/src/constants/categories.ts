@@ -15,4 +15,14 @@ export const CATEGORIES = [
 
 export type Category = (typeof CATEGORIES)[number];
 
-export const CategorySchema = z.enum(CATEGORIES);
+export const CategorySchema = z.preprocess((val) => {
+  if (typeof val !== 'string') return val;
+  const match = CATEGORIES.find(
+    (c) =>
+      c.toLowerCase() === val.toLowerCase() ||
+      c.toUpperCase() === val.toUpperCase() ||
+      c.replace(/[\s&]+/g, '_').toUpperCase() === val.toUpperCase()
+  );
+  return match || val;
+}, z.enum(CATEGORIES));
+

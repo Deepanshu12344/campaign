@@ -1,11 +1,13 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import pinoHttp from 'pino-http';
 import { pino } from 'pino';
+import apiV1Router from './routes';
+import { errorHandler } from './middlewares/error.middleware';
 
-const logger = pino({
+export const logger = pino({
   level: process.env.LOG_LEVEL || 'info',
 });
 
@@ -31,13 +33,13 @@ app.use(
 // General rate limiter
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 300,
+  max: 500,
   standardHeaders: true,
   legacyHeaders: false,
 });
 app.use(limiter);
 
-// Health check endpoint
+// Health check endpoint (at root)
 app.get('/health', (_req: Request, res: Response) => {
   res.status(200).json({
     status: 'ok',
@@ -45,7 +47,10 @@ app.get('/health', (_req: Request, res: Response) => {
   });
 });
 
-// 404 handler
+// Mount API v1 router
+app.use('/api/v1', apiV1Router);
+
+// 404 handler for undefined routes
 app.use((_req: Request, res: Response) => {
   res.status(404).json({
     error: {
@@ -55,18 +60,8 @@ app.use((_req: Request, res: Response) => {
   });
 });
 
-// Global error handler
-app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
-  const errorMessage = err instanceof Error ? err.message : 'Internal Server Error';
-  logger.error({ err }, 'Unhandled application error');
-
-  res.status(500).json({
-    error: {
-      code: 'INTERNAL_SERVER_ERROR',
-      message: errorMessage,
-    },
-  });
-});
+// Centralized error handler
+app.use(errorHandler);
 
 if (process.env.NODE_ENV !== 'test') {
   app.listen(port, () => {

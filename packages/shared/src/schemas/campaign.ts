@@ -143,3 +143,133 @@ export const CampaignCardDtoSchema = z.object({
 });
 
 export type CampaignCardDto = z.infer<typeof CampaignCardDtoSchema>;
+
+export const CAMPAIGN_SORTS = [
+  'trending',
+  'newest',
+  'most_funded',
+  'ending_soon',
+  'closest_to_goal',
+] as const;
+
+export type CampaignSort = (typeof CAMPAIGN_SORTS)[number];
+export const CampaignSortSchema = z.enum(CAMPAIGN_SORTS);
+
+export const CampaignQuerySchema = z.object({
+  search: z.string().optional(),
+  category: CategorySchema.optional(),
+  status: CampaignStatusSchema.optional(),
+  sort: CampaignSortSchema.default('trending'),
+  minGoal: z.coerce.number().int().nonnegative().optional(),
+  maxGoal: z.coerce.number().int().positive().optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(50).default(10),
+  cursor: z.string().optional(),
+});
+
+export type CampaignQuery = z.infer<typeof CampaignQuerySchema>;
+
+export const CampaignListResponseSchema = z.object({
+  items: z.array(CampaignCardDtoSchema),
+  total: z.number().int(),
+  page: z.number().int(),
+  limit: z.number().int(),
+  totalPages: z.number().int(),
+  hasNextPage: z.boolean(),
+  categoryCounts: z.record(z.string(), z.number()),
+});
+
+export type CampaignListResponse = z.infer<typeof CampaignListResponseSchema>;
+
+// Detailed DTO
+export const CampaignDetailDtoSchema = z.object({
+  id: z.string().uuid(),
+  creatorId: z.string(),
+  status: CampaignStatusSchema,
+  title: z.string(),
+  category: CategorySchema,
+  creatorName: z.string(),
+  creatorType: CreatorTypeSchema,
+  summary: z.string(),
+  coverUrl: z.string().nullable(),
+  story: z.array(StoryBlockSchema),
+  sources: z.array(SourceSchema),
+  adCreative: AdCreativeSchema.nullable(),
+  reach: ReachSettingsSchema.nullable(),
+  fundingGoalCents: z.number().int(),
+  raisedCents: z.number().int(),
+  percentFunded: z.number().min(0),
+  daysRemaining: z.number().int().nullable(),
+  estimatedReachLow: z.number().int(),
+  estimatedReachHigh: z.number().int(),
+  startsAt: z.coerce.date().nullable(),
+  endsAt: z.coerce.date().nullable(),
+  submittedAt: z.coerce.date().nullable(),
+  publishedAt: z.coerce.date().nullable(),
+  reviewSummary: z.object({
+    reviewNotes: z.string().nullable().optional(),
+    status: CampaignStatusSchema,
+    statement: z.string(),
+  }),
+  useOfFundsSummary: z.object({
+    platformFeePct: z.number(),
+    adBudgetPct: z.number(),
+    platformFeeCents: z.number(),
+    adBudgetCents: z.number(),
+    statement: z.string(),
+  }),
+  updates: z.array(
+    z.object({
+      id: z.string(),
+      title: z.string(),
+      body: z.string(),
+      createdAt: z.coerce.date(),
+    })
+  ),
+  feedbackSummary: z.object({
+    totalCount: z.number().int(),
+    visualsEncouraged: z.object({
+      NO: z.number().int(),
+      SOMEWHAT: z.number().int(),
+      YES: z.number().int(),
+    }),
+    messageChanged: z.object({
+      NO: z.number().int(),
+      SOMEWHAT: z.number().int(),
+      YES: z.number().int(),
+    }),
+  }),
+  backersSummary: z.object({
+    totalCount: z.number().int(),
+    recentPublicBackers: z.array(
+      z.object({
+        publicName: z.string(),
+        amountCents: z.number().int(),
+        createdAt: z.coerce.date(),
+      })
+    ),
+  }),
+  isSaved: z.boolean().default(false),
+  isFollowing: z.boolean().default(false),
+  isDemo: z.boolean().default(true),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+});
+
+export type CampaignDetailDto = z.infer<typeof CampaignDetailDtoSchema>;
+
+// Feedback Input Schema
+export const FeedbackInputSchema = z.object({
+  visualsEncouraged: z.enum(['NO', 'SOMEWHAT', 'YES']),
+  messageChanged: z.enum(['NO', 'SOMEWHAT', 'YES']),
+});
+
+export type FeedbackInput = z.infer<typeof FeedbackInputSchema>;
+
+// Quote Input Schema
+export const QuoteInputSchema = z.object({
+  amountCents: z.number().int().min(100, 'Minimum contribution is $1.00 (100 cents)'),
+});
+
+export type QuoteInput = z.infer<typeof QuoteInputSchema>;
+

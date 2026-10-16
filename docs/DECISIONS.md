@@ -141,5 +141,18 @@ This document records key design decisions and resolutions to ambiguities betwee
   5. **Idempotent Seed Pipeline**: Built `apps/api/prisma/seed.ts` using deterministic UUIDs, upserts, and clean cascading resets. Seeded 13 campaigns across all categories and creator types, demo credentials (`creator@demo.com`, `backer@demo.com`, `admin@demo.com`, password `Demo@1234`), review decisions, campaign events, updates, notifications, and completed report data.
 - **Rationale**: Prevents financial reconciliation errors between the campaign feed and contribution receipts, satisfies all acceptance criteria, and guarantees zero database drift across test runs.
 
+---
 
+### Decision 17: REST API Layer, Authentication, Query Pipeline & Typed Mobile Client (P4)
+- **Decision**:
+  1. **Layered API Architecture**: Built `apps/api` following a strict `routes -> controllers -> services` separation mounted under `/api/v1`, while maintaining `/health` at root for platform monitoring.
+  2. **Standardized Error Handling**: Unified all HTTP error responses to `{ error: { code, message, fields? } }` using custom `AppError` subclasses (`BadRequestError`, `ValidationError`, `UnauthorizedError`, `ForbiddenError`, `NotFoundError`, `ConflictError`, `CampaignNotFundingError`).
+  3. **JWT Authentication & Role Middleware**: Implemented bcrypt password hashing (cost factor 10), short-lived JWT access tokens (15 minutes), and long-lived refresh tokens (7 days). Provided `optionalAuth` (gracefully sets `req.user` if valid token present while permitting guests), `requireAuth` (rejects unauthenticated requests with 401), and `requireRole` (rejects insufficient permissions with 403).
+  4. **Server-Side Search & Privacy Invariants**:
+     - Real server-side text search across campaign `title`, `summary`, `creatorName`, `category`, and JSON `story` blocks.
+     - Public listing enforcement: non-public states (`DRAFT`, `SUBMITTED`, `CHANGES_REQUESTED`, `REJECTED`) are strictly excluded from public queries. Individual non-public campaigns return 404 to anonymous users and non-owners.
+     - Privacy rule: `GET /campaigns/:id` completely redacts private backer email, user ID, and identity, listing only aggregate backer counts and public names where `isAnonymous === false`.
+  5. **Funding State Guard on Quotes**: `POST /campaigns/:id/quote` validates that the campaign is actively in `FUNDING` status, returning a clear `CAMPAIGN_NOT_FUNDING` error code otherwise.
+  6. **Typed Mobile Client & TanStack Query Hooks**: Built `apps/mobile/src/api/client.ts` with cross-platform token persistence (`expo-secure-store` with web/memory fallback), 10-second timeout, typed `ApiError` normalization, single retry on network failure, and automatic token refresh on 401. Implemented typed TanStack Query hooks: `useCampaigns` (infinite query), `useFeatured`, `useCampaign`, `useQuote`, `useEstimateConfig`, and mutations (`useSignIn`, `useSignUp`, `useSignOut`, `useSaveCampaign`, `useFollowCampaign`, `useSubmitFeedback`).
+- **Rationale**: Guarantees complete end-to-end type safety between backend and frontend without duplicating schemas, enforces critical privacy and financial invariants at the API boundary, and provides seamless offline-aware network resilience on mobile.
 
