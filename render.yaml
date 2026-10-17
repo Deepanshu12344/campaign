@@ -49,12 +49,19 @@ services:
       - key: GEMINI_API_KEY
         sync: false
 
+      # Local uploads directory fallback relative to app working directory
+      - key: UPLOADS_DIR
+        value: ./uploads
+
       # Supabase Storage configuration for persistent production uploads
       - key: SUPABASE_URL
         sync: false
 
       - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false
+
+      - key: SUPABASE_STORAGE_BUCKET
+        value: campaign-uploads
 
       - key: SUPABASE_BUCKET
         value: campaign-uploads

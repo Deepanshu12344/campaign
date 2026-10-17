@@ -52,16 +52,21 @@ Before starting, ensure you have:
      - Format: `postgresql://postgres.[PROJECT_REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:5432/postgres`
    - *Replace `[PASSWORD]` with your actual database password.*
 
-### B. Create Storage Bucket for Uploads
-1. In the left navigation, click **Storage**.
+### B. Create Storage Bucket for Uploads (Production Default)
+1. In the left navigation of your Supabase Dashboard, click **Storage**.
 2. Click **New bucket**.
-3. Bucket name: enter `campaign-uploads`.
-4. Toggle **Public bucket** to **ON** (so campaign covers and ad creatives are publicly readable via CDN).
-5. Click **Save**.
-6. Retrieve API credentials:
+3. **Name**: Enter `campaign-uploads`.
+4. **Public bucket**: Toggle to **ON** (ensures campaign hero covers and advertising media are publicly accessible via Supabase CDN URLs).
+5. **Allowed MIME types**: Leave blank or set to `image/*` (accepts JPEG, PNG, WebP).
+6. **File size limit**: Set to `5 MB` (matching platform maximum file size).
+7. Click **Save**.
+8. Retrieve API credentials:
    - Navigate to **Project Settings** → **API**.
    - Copy the **Project URL** (e.g., `https://abcdefgh.supabase.co`) → this is `SUPABASE_URL`.
-   - Under **Project API keys**, copy the `service_role` key (secret) → this is `SUPABASE_SERVICE_ROLE_KEY`.
+   - Under **Project API keys**, reveal and copy the `service_role` key (secret) → this is `SUPABASE_SERVICE_ROLE_KEY`.
+
+> [!NOTE]
+> Supabase Storage is the default storage driver in production. If `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are unset, the API falls back to local disk (`./uploads`). If the local disk is not writable in an ephemeral container, the server starts up normally without crashing, and any file upload requests return **HTTP 503 Service Unavailable** with an actionable message while all other API endpoints remain fully functional.
 
 ---
 
@@ -119,9 +124,11 @@ In the **Environment** tab of your Render service, add the following key-value p
 | `JWT_SECRET` | A secure random 32+ character string | **Yes** |
 | `ALLOWED_ORIGINS` | Comma-separated allowed web origins (leave blank for mobile-only) | Optional |
 | `GEMINI_API_KEY` | Your Google Gemini API key for ad copy & story assist | Optional |
-| `SUPABASE_URL` | `https://[PROJECT_REF].supabase.co` | Optional (for persistent uploads) |
-| `SUPABASE_SERVICE_ROLE_KEY` | Secret service role API key | Optional (for persistent uploads) |
-| `SUPABASE_BUCKET` | `campaign-uploads` | Optional (defaults to `campaign-uploads`) |
+| `UPLOADS_DIR` | `./uploads` (Resolved relative to app directory; never root `/`) | Optional (defaults to `./uploads`) |
+| `SUPABASE_URL` | `https://[PROJECT_REF].supabase.co` | **Recommended for production** |
+| `SUPABASE_SERVICE_ROLE_KEY` | Secret service role API key | **Recommended for production** |
+| `SUPABASE_STORAGE_BUCKET` | `campaign-uploads` | Optional (defaults to `campaign-uploads`) |
+| `SUPABASE_BUCKET` | `campaign-uploads` | Optional (backward-compatible alias) |
 
 Click **Save Changes**. Render will automatically trigger an initial deployment.
 

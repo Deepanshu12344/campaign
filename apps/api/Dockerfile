@@ -39,20 +39,23 @@ WORKDIR /app
 # Install minimal runtime dependencies (OpenSSL for Prisma query engine)
 RUN apk add --no-cache openssl libc6-compat dumb-init
 
-# Create directory for uploads if local storage fallback is used
-RUN mkdir -p /app/uploads && chown -R node:node /app
-
 # Copy production node_modules and Prisma schema/client
 COPY --from=builder --chown=node:node /app/node_modules /app/node_modules
 COPY --from=builder --chown=node:node /app/apps/api/dist /app/dist
 COPY --from=builder --chown=node:node /app/apps/api/prisma /app/prisma
 COPY --from=builder --chown=node:node /app/apps/api/package.json /app/package.json
 
+# Create uploads folder, ensure non-root node ownership and write permissions across /app
+RUN mkdir -p /app/uploads && \
+    chown -R node:node /app && \
+    chmod -R 775 /app /app/uploads
+
 # Run as non-root user
 USER node
 
 ENV NODE_ENV=production \
-    PORT=4000
+    PORT=4000 \
+    UPLOADS_DIR=/app/uploads
 
 EXPOSE 4000
 

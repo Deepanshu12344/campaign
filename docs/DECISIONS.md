@@ -912,3 +912,29 @@ This document records key design decisions and resolutions to ambiguities betwee
   9. **Smoke Test Automation (`scripts/smoke.sh`)**:
      - Created executable bash smoke test suite verifying `/health`, `/api/v1/config/estimates`, `/api/v1/campaigns`, auth sign-in, campaign detail by ID, and contribution quote calculations.
 - **Rationale**: Delivers a production-ready, secure, resilient backend deployment on Render with zero secret leakage, safe database migrations and seeding, automatic upload persistence, and graceful mobile cold-start UX.
+
+---
+
+### Decision 37: Resilient File Upload Storage, Non-Root Container Permissions, and HTTP 503 Fallback
+- **Context**: Deployed API crashed immediately at startup on Render with `EACCES: permission denied, mkdir '/uploads'` originating from `StorageService` constructor (`mkdirSync`). Bundled distribution files (`/app/dist`) caused relative paths like `../../uploads` to resolve to the Linux root filesystem (`/uploads`), where non-root container users have no write access, terminating the Node process before `/health` could be served.
+- **Decision**:
+  1. **Configurable & Safe Path Resolution (`UPLOADS_DIR`)**:
+     - Added `UPLOADS_DIR` environment variable defaulting to `./uploads`.
+     - Always resolves relative to the application working directory (`process.cwd()`), never to the root filesystem (`/`).
+     - Sanitizes leading slashes on user-provided values if outside `process.cwd()` to prevent root climbing.
+  2. **Non-Crashing Startup & Lazy Folder Check**:
+     - Removed eager, throwing `fs.mkdirSync` from `StorageService` constructor.
+     - Implemented `ensureLocalUploadsDir()` safely wrapped in `try/catch` with write permission verification (`fs.accessSync(..., fs.constants.W_OK)`).
+     - If directory creation fails at boot (e.g. read-only filesystem), it logs a warning and disables local disk fallback without crashing the process.
+  3. **Dual Storage Driver & HTTP 503 Graceful Degradation**:
+     - Supabase Storage (`SUPABASE_STORAGE_BUCKET`, defaulting to `campaign-uploads`) remains the primary persistent driver for production.
+     - Local disk serves as fallback for local development or when cloud storage is unconfigured.
+     - If neither Supabase nor local disk is available/writable, file uploads throw `ServiceUnavailableError` (HTTP 503 `SERVICE_UNAVAILABLE`) with an actionable error message while all other API endpoints (campaigns, auth, contributions, admin, health check) continue operating without interruption.
+  4. **Container Permissions Hardening (`apps/api/Dockerfile`)**:
+     - Pre-creates `/app/uploads` in the production runner stage.
+     - Executes `chown -R node:node /app` and `chmod -R 775 /app /app/uploads` before dropping root privileges to `USER node`.
+     - Sets `ENV UPLOADS_DIR=/app/uploads`.
+  5. **Blueprint, Config & Deployment Guides**:
+     - Added `UPLOADS_DIR` and `SUPABASE_STORAGE_BUCKET` to `apps/api/.env.example` and `render.yaml`.
+     - Updated `docs/DEPLOY.md` with explicit Supabase bucket creation instructions (`campaign-uploads` public bucket, 5MB limit, image MIME types).
+- **Rationale**: Completely prevents startup crash loops on ephemeral or permission-constrained cloud hosts (Render, Railway, Fly.io, AWS ECS), ensures non-root security compliance, and guarantees graceful degradation under storage outages.

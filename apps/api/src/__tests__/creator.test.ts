@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll } from 'vitest';
+import { describe, it, expect, beforeAll, vi } from 'vitest';
 import request from 'supertest';
 import app from '../index';
 import { prisma } from '../utils/prisma';
@@ -399,6 +399,29 @@ describe('Creator & Lifecycle API (/api/v1)', () => {
       expect(res.body).toHaveProperty('filename');
       expect(res.body.size).toBe(pngBuffer.length);
       expect(res.body.mimeType).toBe('image/png');
+    });
+
+    it('returns HTTP 503 SERVICE_UNAVAILABLE when storage is unavailable', async () => {
+      const { storageService } = await import('../services/storage.service.js');
+      const { ServiceUnavailableError } = await import('../utils/errors.js');
+      const uploadSpy = vi.spyOn(storageService, 'uploadFile').mockRejectedValueOnce(
+        new ServiceUnavailableError('Upload storage is temporarily unavailable. Supabase Storage is not configured or failed, and local disk storage is not writable.')
+      );
+
+      const pngBuffer = Buffer.from('test');
+      const res = await request(app)
+        .post('/api/v1/uploads')
+        .set('Authorization', `Bearer ${creatorToken}`)
+        .attach('file', pngBuffer, {
+          filename: 'fail.png',
+          contentType: 'image/png',
+        });
+
+      expect(res.status).toBe(503);
+      expect(res.body.error.code).toBe('SERVICE_UNAVAILABLE');
+      expect(res.body.error.message).toContain('Upload storage is temporarily unavailable');
+
+      uploadSpy.mockRestore();
     });
   });
 });

@@ -26,6 +26,7 @@ web-build/
 # Node / TypeScript / Builds
 dist/
 build/
+uploads/
 *.tsbuildinfo
 
 # Testing & Coverage

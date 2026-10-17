@@ -106,7 +106,7 @@ describe('AI Story API (/api/v1/ai/draft-story)', () => {
     expect(res.body.improvedParagraph.length).toBeGreaterThan(rawParagraph.length);
     // Should be properly capitalized
     expect(res.body.improvedParagraph[0]).toBe(res.body.improvedParagraph[0].toUpperCase());
-  });
+  }, 15000);
 
   it('returns 400 when invalid category is passed', async () => {
     const res = await request(app)

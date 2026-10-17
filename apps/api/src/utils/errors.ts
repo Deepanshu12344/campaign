@@ -67,3 +67,9 @@ export class PreconditionFailedError extends AppError {
   }
 }
 
+export class ServiceUnavailableError extends AppError {
+  constructor(message = 'Service temporarily unavailable', code = 'SERVICE_UNAVAILABLE') {
+    super(503, code, message);
+  }
+}
+

@@ -132,6 +132,6 @@ describe('AI API (/api/v1/ai)', () => {
       expect(adCopyRes.status).toBe(200);
       expect(adCopyRes.body).not.toHaveProperty('fundingGoalCents');
       expect(adCopyRes.body).not.toHaveProperty('fundingGoal');
-    });
+    }, 20000);
   });
 });

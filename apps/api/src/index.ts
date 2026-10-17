@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-import path from 'path';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
@@ -79,7 +78,7 @@ app.get('/health', (_req: Request, res: Response) => {
 });
 
 // Static uploads serving (for local fallback)
-app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
+app.use('/uploads', express.static(envConfig.UPLOADS_DIR));
 
 // Mount API v1 router
 app.use('/api/v1', apiV1Router);

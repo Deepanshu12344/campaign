@@ -10,9 +10,11 @@ export interface EnvConfig {
   JWT_SECRET: string;
   LOG_LEVEL: string;
   ALLOWED_ORIGINS: string[];
+  UPLOADS_DIR: string;
   SUPABASE_URL?: string;
   SUPABASE_SERVICE_ROLE_KEY?: string;
   SUPABASE_BUCKET: string;
+  SUPABASE_STORAGE_BUCKET: string;
   GEMINI_API_KEY?: string;
 }
 
@@ -73,6 +75,27 @@ export function validateEnv(): EnvConfig {
     .map((o) => o.trim())
     .filter(Boolean);
 
+  // Resolve uploads directory safely relative to process.cwd()
+  const rawUploadsDir = process.env.UPLOADS_DIR?.trim();
+  let resolvedUploadsDir: string;
+  if (!rawUploadsDir) {
+    resolvedUploadsDir = path.resolve(process.cwd(), 'uploads');
+  } else if (path.isAbsolute(rawUploadsDir)) {
+    // If an absolute path is provided, prevent resolving to filesystem root '/' or '/uploads'
+    // Allow if it is an explicit subpath inside process.cwd(); otherwise force relative to process.cwd()
+    if (rawUploadsDir.startsWith(process.cwd()) && rawUploadsDir !== '/') {
+      resolvedUploadsDir = rawUploadsDir;
+    } else {
+      const relativePart = rawUploadsDir.replace(/^[/\\]+/, '');
+      resolvedUploadsDir = path.resolve(process.cwd(), relativePart || 'uploads');
+    }
+  } else {
+    resolvedUploadsDir = path.resolve(process.cwd(), rawUploadsDir);
+  }
+
+  const supabaseBucket =
+    process.env.SUPABASE_STORAGE_BUCKET || process.env.SUPABASE_BUCKET || 'campaign-uploads';
+
   return {
     NODE_ENV: nodeEnv,
     PORT: parseInt(process.env.PORT || '4000', 10),
@@ -81,9 +104,11 @@ export function validateEnv(): EnvConfig {
     JWT_SECRET: jwtSecret || 'test-jwt-secret-do-not-use-in-production-1234567890',
     LOG_LEVEL: process.env.LOG_LEVEL || (isTest ? 'silent' : 'info'),
     ALLOWED_ORIGINS: parsedOrigins,
+    UPLOADS_DIR: resolvedUploadsDir,
     SUPABASE_URL: process.env.SUPABASE_URL,
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
-    SUPABASE_BUCKET: process.env.SUPABASE_BUCKET || 'campaign-uploads',
+    SUPABASE_BUCKET: supabaseBucket,
+    SUPABASE_STORAGE_BUCKET: supabaseBucket,
     GEMINI_API_KEY: process.env.GEMINI_API_KEY,
   };
 }
