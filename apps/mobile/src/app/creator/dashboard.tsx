@@ -6,8 +6,8 @@ import {
   ScrollView,
   Pressable,
   RefreshControl,
-  Image,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { useRouter, Href } from 'expo-router';
 import {
   Plus,

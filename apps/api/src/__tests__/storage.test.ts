@@ -33,7 +33,7 @@ describe('StorageService & Resilient Upload Storage', () => {
       throw err;
     });
 
-    const svc = new StorageService('/non-writable/uploads');
+    const svc = new StorageService('/non-writable/uploads', { forceLocal: true });
     const fakeFile = {
       originalname: 'test.jpg',
       buffer: Buffer.from('test image data'),
@@ -50,7 +50,7 @@ describe('StorageService & Resilient Upload Storage', () => {
 
   it('successfully writes to local storage when directory is writable', async () => {
     const tempTestDir = path.resolve(process.cwd(), 'uploads/test-temp');
-    const svc = new StorageService(tempTestDir);
+    const svc = new StorageService(tempTestDir, { forceLocal: true });
     const fakeFile = {
       originalname: 'unit-test.png',
       buffer: Buffer.from('sample pixel data'),

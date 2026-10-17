@@ -18,11 +18,11 @@ export class StorageService {
   private uploadsDir: string;
   private bucket: string;
 
-  constructor(customUploadsDir?: string) {
+  constructor(customUploadsDir?: string, options?: { forceLocal?: boolean }) {
     this.uploadsDir = customUploadsDir || envConfig.UPLOADS_DIR;
     this.bucket = envConfig.SUPABASE_STORAGE_BUCKET || envConfig.SUPABASE_BUCKET || 'campaign-uploads';
 
-    if (envConfig.SUPABASE_URL && envConfig.SUPABASE_SERVICE_ROLE_KEY) {
+    if (!options?.forceLocal && envConfig.SUPABASE_URL && envConfig.SUPABASE_SERVICE_ROLE_KEY) {
       try {
         this.supabase = createClient(
           envConfig.SUPABASE_URL,

@@ -395,7 +395,7 @@ describe('Creator & Lifecycle API (/api/v1)', () => {
 
       expect(res.status).toBe(201);
       expect(res.body).toHaveProperty('url');
-      expect(res.body.url).toMatch(/^\/uploads\//);
+      expect(res.body.url).toMatch(/^(\/uploads\/|https?:\/\/)/);
       expect(res.body).toHaveProperty('filename');
       expect(res.body.size).toBe(pngBuffer.length);
       expect(res.body.mimeType).toBe('image/png');
