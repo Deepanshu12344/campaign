@@ -32,12 +32,16 @@ const CAMPAIGNS = {
   creatorChanges: '39012345-67ab-4cde-8890-bcdef0123456',
 };
 
+import { assertSafeDatabaseUrl } from '../src/utils/db-guard';
+
 export interface SeedOptions {
   isProd?: boolean;
   force?: boolean;
 }
 
 export async function seedDatabase(options: SeedOptions = {}): Promise<{ skipped: boolean; message: string }> {
+  assertSafeDatabaseUrl(process.env.DATABASE_URL, 'database seed');
+
   const isProd = options.isProd ?? process.argv.includes('--prod');
   const force = options.force ?? process.argv.includes('--force');
 

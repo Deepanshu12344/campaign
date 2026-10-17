@@ -611,9 +611,15 @@ export class AdminService {
 
     try {
       if (foundSeed) {
-        execSync(`"${nodeBin}" "${foundSeed}" --prod --force`, { stdio: 'inherit' });
+        execSync(`"${nodeBin}" "${foundSeed}" --prod --force`, {
+          stdio: 'inherit',
+          env: { ...process.env, I_KNOW_THIS_IS_PRODUCTION: 'true' },
+        });
       } else {
-        execSync(`npx tsx "${tsxSeed}" --force`, { stdio: 'inherit' });
+        execSync(`npx tsx "${tsxSeed}" --force`, {
+          stdio: 'inherit',
+          env: { ...process.env, I_KNOW_THIS_IS_PRODUCTION: 'true' },
+        });
       }
       return { success: true, message: 'Demo database has been successfully reset to initial seed state.' };
     } catch (err) {
