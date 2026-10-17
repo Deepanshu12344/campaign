@@ -6,6 +6,7 @@ import pinoHttp from 'pino-http';
 import { envConfig } from './config/env';
 import { logger } from './utils/logger';
 import apiV1Router from './routes';
+import { uploadRoutes } from './routes/upload.routes.js';
 import { errorHandler } from './middlewares/error.middleware';
 import { jobsService } from './services/jobs.service';
 import { prisma } from './utils/prisma';
@@ -79,6 +80,9 @@ app.get('/health', (_req: Request, res: Response) => {
 
 // Static uploads serving (for local fallback)
 app.use('/uploads', express.static(envConfig.UPLOADS_DIR));
+
+// Also mount uploadRoutes at root so POST /uploads works directly
+app.use(uploadRoutes);
 
 // Mount API v1 router
 app.use('/api/v1', apiV1Router);

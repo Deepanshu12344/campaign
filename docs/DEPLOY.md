@@ -136,14 +136,29 @@ Click **Save Changes**. Render will automatically trigger an initial deployment.
 
 ## 5. Step 4: Seed the Database
 
-Once the deploy completes and migrations have applied:
+Once the deploy completes, the database must be migrated and seeded with initial demo data.
 
-1. In Render, navigate to your web service and click the **Shell** tab (or connect via SSH).
+### Method A: One-Liner from Local Terminal (Using `DIRECT_URL` from `.env`)
+If you configured your production `DIRECT_URL` in `apps/api/.env`, run this command from the repository root (this securely extracts `DIRECT_URL` without printing your secret in terminal logs):
+
+```bash
+# 1. Apply Prisma migrations
+DATABASE_URL="$(grep '^DIRECT_URL=' apps/api/.env | cut -d '=' -f2- | tr -d '\"'\')" npm run db:migrate:prod --workspace=apps/api
+
+# 2. Seed all 5 demo users, 13 campaigns, and exact contribution ledgers
+DATABASE_URL="$(grep '^DIRECT_URL=' apps/api/.env | cut -d '=' -f2- | tr -d '\"'\')" npm run db:seed:prod --workspace=apps/api
+
+# 3. Verify database integrity
+DATABASE_URL="$(grep '^DIRECT_URL=' apps/api/.env | cut -d '=' -f2- | tr -d '\"'\')" npm run db:check --workspace=apps/api
+```
+
+### Method B: From the Render Web Service Shell
+1. In the Render Dashboard, navigate to your web service (`campaigns-api` or `campaign-admj`) and click the **Shell** tab.
 2. Run the safe production seed command:
    ```bash
    npm run db:seed:prod --workspace=apps/api
    ```
-   - If the database is empty, it will seed all 5 demo users, 13 campaigns across 10 categories, and exact contribution records.
+   - If the database is empty, it seeds all 5 demo users, 13 campaigns across 10 categories, and exact contribution records.
    - If the database already contains records, it safely aborts to protect data.
 3. *To force-reset the demo database at any time:*
    ```bash
@@ -155,17 +170,17 @@ Once the deploy completes and migrations have applied:
 
 ## 6. Step 5: Run Smoke Verification
 
-Run the included automated smoke test script against your newly deployed service:
+Run the included automated smoke test script against your deployed service:
 
 ```bash
-# From your local terminal
-./scripts/smoke.sh https://<your-service-name>.onrender.com
+# Run against verified live deployment
+./scripts/smoke.sh https://campaign-admj.onrender.com
 ```
 
-Expected output:
+Expected output once seeded:
 ```
 ================================================================
-  Running Smoke Tests Against: https://campaigns-api.onrender.com
+  Running Smoke Tests Against: https://campaign-admj.onrender.com
 ================================================================
 
 1. Health Check Endpoint (/health)...
@@ -191,11 +206,15 @@ Expected output:
 
 ## 7. Step 6: Connect the Mobile App
 
-1. In `apps/mobile/.env`, set `EXPO_PUBLIC_API_URL` to your deployed API:
+1. In `apps/mobile/.env`, set `EXPO_PUBLIC_API_URL` to your verified deployed API:
    ```env
-   EXPO_PUBLIC_API_URL=https://<your-service-name>.onrender.com/api/v1
+   EXPO_PUBLIC_API_URL=https://campaign-admj.onrender.com/api/v1
    ```
-2. Start the mobile app:
+2. In `apps/mobile/eas.json`, the `preview` and `production` profiles are configured with:
+   ```json
+   "EXPO_PUBLIC_API_URL": "https://campaign-admj.onrender.com/api/v1"
+   ```
+3. Start the mobile app:
    ```bash
    npm run dev:mobile
    ```

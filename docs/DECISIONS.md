@@ -938,3 +938,18 @@ This document records key design decisions and resolutions to ambiguities betwee
      - Added `UPLOADS_DIR` and `SUPABASE_STORAGE_BUCKET` to `apps/api/.env.example` and `render.yaml`.
      - Updated `docs/DEPLOY.md` with explicit Supabase bucket creation instructions (`campaign-uploads` public bucket, 5MB limit, image MIME types).
 - **Rationale**: Completely prevents startup crash loops on ephemeral or permission-constrained cloud hosts (Render, Railway, Fly.io, AWS ECS), ensures non-root security compliance, and guarantees graceful degradation under storage outages.
+
+---
+
+### Decision 38: Live Production Deployment Verification, Dual Upload Route Mounts, and Mobile Pointing
+- **Context**: The production API was deployed and verified live on Render at `https://campaign-admj.onrender.com`. All deployment checks were executed: smoke tests, database migration/seed readiness, upload endpoint paths, mobile app environment targeting, and cold-start resilience.
+- **Decision**:
+  1. **Dual Uploads Route Mounting (`apps/api/src/index.ts`)**:
+     - Mounted `uploadRoutes` at the root application level in addition to `/api/v1` so that both `POST /uploads` and `POST /api/v1/uploads` resolve to the same handler with standard `requireAuth` authentication and 5MB size limits.
+  2. **Mobile App Production Pointing**:
+     - Updated `apps/mobile/eas.json` pointing both `preview` and `production` build profiles to `https://campaign-admj.onrender.com/api/v1`.
+     - Set local `apps/mobile/.env` to `EXPO_PUBLIC_API_URL=https://campaign-admj.onrender.com/api/v1`.
+     - Confirmed `ServerWakeUpBanner.tsx` and `apiClient.onServerWakeUp` display the non-blocking *"Waking up the server... Free tier instances take a moment to spin up"* notice whenever any API request exceeds 8 seconds.
+  3. **Zero-Secret Database Migration & Seeding Runbook**:
+     - Documented one-liner production migration and seeding commands in `docs/DEPLOY.md` utilizing `DIRECT_URL` directly from local `.env` via subshell extraction without exposing credentials or secrets in terminal logs.
+- **Rationale**: Ensures complete parity across deployment configurations, provides convenient upload endpoint compatibility, and establishes a secure, repeatable production initialization runbook.
