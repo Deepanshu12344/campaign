@@ -600,15 +600,18 @@ export class AdminService {
 
   async resetDemo(): Promise<{ success: boolean; message: string }> {
     const nodeBin = process.execPath;
-    const distSeed = path.resolve(__dirname, '../seed.js');
-    const localDistSeed = path.resolve(process.cwd(), 'apps/api/dist/seed.js');
+    const candidates = [
+      path.resolve(__dirname, 'seed.js'),
+      path.resolve(__dirname, '../seed.js'),
+      path.resolve(process.cwd(), 'dist/seed.js'),
+      path.resolve(process.cwd(), 'apps/api/dist/seed.js'),
+    ];
+    const foundSeed = candidates.find((p) => fs.existsSync(p));
     const tsxSeed = path.resolve(__dirname, '../../prisma/seed.ts');
 
     try {
-      if (fs.existsSync(distSeed)) {
-        execSync(`"${nodeBin}" "${distSeed}" --prod --force`, { stdio: 'inherit' });
-      } else if (fs.existsSync(localDistSeed)) {
-        execSync(`"${nodeBin}" "${localDistSeed}" --prod --force`, { stdio: 'inherit' });
+      if (foundSeed) {
+        execSync(`"${nodeBin}" "${foundSeed}" --prod --force`, { stdio: 'inherit' });
       } else {
         execSync(`npx tsx "${tsxSeed}" --force`, { stdio: 'inherit' });
       }
