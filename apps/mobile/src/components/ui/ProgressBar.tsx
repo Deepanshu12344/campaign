@@ -5,6 +5,7 @@ import Animated, {
   useSharedValue,
   withTiming,
   Easing,
+  useReducedMotion,
 } from 'react-native-reanimated';
 import { theme } from '../../theme';
 
@@ -13,6 +14,8 @@ export interface ProgressBarProps extends ViewProps {
   progress?: number;
   /** Percentage value between 0 and 100 */
   value?: number;
+  /** Optional max value to calculate percentage (value / max * 100) */
+  max?: number;
   percentMode?: boolean;
   size?: 'sm' | 'md' | 'lg';
   height?: number;
@@ -22,6 +25,7 @@ export interface ProgressBarProps extends ViewProps {
 export function ProgressBar({
   progress,
   value,
+  max,
   percentMode = false,
   size = 'md',
   height,
@@ -29,6 +33,7 @@ export function ProgressBar({
   style,
   ...rest
 }: ProgressBarProps) {
+  const isReducedMotion = useReducedMotion();
   const resolvedHeight =
     height !== undefined
       ? height
@@ -38,7 +43,12 @@ export function ProgressBar({
           ? 12
           : 8;
 
-  const rawVal = value !== undefined ? value : (progress ?? 0);
+  const rawVal =
+    max !== undefined && max > 0 && value !== undefined
+      ? (value / max) * 100
+      : value !== undefined
+        ? value
+        : (progress ?? 0);
   const isPercent = value !== undefined || percentMode || rawVal > 1;
 
   // Normalize progress to 0-100%
@@ -46,14 +56,18 @@ export function ProgressBar({
     ? Math.min(Math.max(rawVal, 0), 100)
     : Math.min(Math.max(rawVal * 100, 0), 100);
 
-  const animatedWidth = useSharedValue(0);
+  const animatedWidth = useSharedValue(isReducedMotion ? normalizedProgress : 0);
 
   useEffect(() => {
-    animatedWidth.value = withTiming(normalizedProgress, {
-      duration: 600,
-      easing: Easing.out(Easing.cubic),
-    });
-  }, [normalizedProgress, animatedWidth]);
+    if (isReducedMotion) {
+      animatedWidth.value = normalizedProgress;
+    } else {
+      animatedWidth.value = withTiming(normalizedProgress, {
+        duration: 600,
+        easing: Easing.out(Easing.cubic),
+      });
+    }
+  }, [normalizedProgress, animatedWidth, isReducedMotion]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     width: `${animatedWidth.value}%`,

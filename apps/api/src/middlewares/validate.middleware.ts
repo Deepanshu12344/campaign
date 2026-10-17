@@ -38,3 +38,9 @@ export function validate(schemas: ValidationTargets) {
     }
   };
 }
+
+export function validateBody(schema: ZodSchema) {
+  return validate({ body: schema });
+}
+
+

@@ -6,6 +6,7 @@ import { UnauthorizedError, ForbiddenError } from '../utils/errors';
 export interface AuthUser {
   id: string;
   role: UserRole;
+  email?: string;
 }
 
 declare global {

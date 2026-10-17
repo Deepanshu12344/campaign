@@ -23,6 +23,7 @@ import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { ProgressBar } from '../ui/ProgressBar';
 import { CategoryChip } from '../ui/CategoryChip';
+import { StatusPill } from '../ui/StatusPill';
 import { DemoDataBadge } from '../ui/DemoDataBadge';
 import { ReachEstimateBadge } from '../ui/ReachEstimateBadge';
 import { Skeleton } from '../ui/Skeleton';
@@ -182,7 +183,12 @@ export function CampaignCard({
           )}
           {/* Badges on image overlay */}
           <View style={styles.overlayBadges}>
-            <CategoryChip category={campaign.category} />
+            <View style={styles.overlayBadgesLeft}>
+              <CategoryChip category={campaign.category} />
+              {campaign.status !== 'FUNDING' && (
+                <StatusPill status={campaign.status} style={styles.overlayStatusPill} />
+              )}
+            </View>
             {campaign.isDemo && <DemoDataBadge size="sm" />}
           </View>
         </View>
@@ -244,15 +250,28 @@ export function CampaignCard({
             <ProgressBar value={percent} size="md" />
           </View>
 
-          {/* Back button */}
+          {/* Action Area */}
           <View style={styles.actionWrap}>
-            <Button
-              title="Back This Campaign"
-              variant="primary"
-              size={isFeatured ? 'lg' : 'md'}
-              fullWidth
-              onPress={handleBackPress}
-            />
+            {campaign.status === 'FUNDING' ? (
+              <Button
+                title="Back This Campaign"
+                variant="primary"
+                size={isFeatured ? 'lg' : 'md'}
+                fullWidth
+                onPress={handleBackPress}
+              />
+            ) : (
+              <View style={styles.nonFundingActionRow}>
+                <StatusPill status={campaign.status} />
+                <Button
+                  title="View Campaign"
+                  variant="secondary"
+                  size={isFeatured ? 'lg' : 'md'}
+                  style={styles.viewDetailsButton}
+                  onPress={handleCardPress}
+                />
+              </View>
+            )}
           </View>
         </View>
       </Card>
@@ -345,6 +364,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  overlayBadgesLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  overlayStatusPill: {
+    paddingVertical: 2,
+    paddingHorizontal: 6,
+  },
   body: {
     padding: theme.spacing.base,
   },
@@ -420,6 +448,15 @@ const styles = StyleSheet.create({
   },
   actionWrap: {
     marginTop: theme.spacing.xxs,
+  },
+  nonFundingActionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: theme.spacing.sm,
+  },
+  viewDetailsButton: {
+    flex: 1,
   },
 
   // Compact variant styles

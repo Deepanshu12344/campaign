@@ -1,0 +1,60 @@
+# ==============================================================================
+# Render Blueprint Specification for Campaigns API
+# Docs: https://render.com/docs/blueprint-spec
+# ==============================================================================
+
+services:
+  - type: web
+    name: campaigns-api
+    runtime: node
+    plan: free
+    region: oregon
+    autoDeploy: true
+
+    # Build command: installs dependencies across workspaces, generates Prisma client,
+    # bundles apps/api to dist/index.js, and applies migrations via DIRECT_URL
+    buildCommand: npm install && npm run build --workspace=apps/api && npm run db:migrate:prod --workspace=apps/api
+
+    # Start command: launches compiled self-contained bundle
+    startCommand: npm run start --workspace=apps/api
+
+    # Health check route for zero-downtime deploys and restart health
+    healthCheckPath: /health
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+      # Port dynamically assigned by Render or defaulted to 10000
+      - key: PORT
+        value: 10000
+
+      # Pooled database connection string for runtime queries (e.g. Supabase connection pooler port 6543)
+      - key: DATABASE_URL
+        sync: false
+
+      # Direct connection string for Prisma schema migrations and DDL operations (port 5432)
+      - key: DIRECT_URL
+        sync: false
+
+      # Secret used to sign and verify JSON Web Tokens (auto-generated or user provided)
+      - key: JWT_SECRET
+        generateValue: true
+
+      # Comma-separated list of allowed browser origins for CORS (leave empty or specify web app origins)
+      - key: ALLOWED_ORIGINS
+        sync: false
+
+      # Optional Gemini AI API key for campaign copy & story generation
+      - key: GEMINI_API_KEY
+        sync: false
+
+      # Supabase Storage configuration for persistent production uploads
+      - key: SUPABASE_URL
+        sync: false
+
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+
+      - key: SUPABASE_BUCKET
+        value: campaign-uploads

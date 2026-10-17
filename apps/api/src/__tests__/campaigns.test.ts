@@ -9,6 +9,10 @@ describe('Campaigns & Config API (/api/v1)', () => {
   let fundingCampaignId: string;
   let promotingCampaignId: string;
   let draftCampaignId: string;
+  let submittedCampaignId: string;
+  let changesRequestedCampaignId: string;
+  let rejectedCampaignId: string;
+  let otherUserToken: string;
 
   beforeAll(async () => {
     // Authenticate creator
@@ -20,10 +24,24 @@ describe('Campaigns & Config API (/api/v1)', () => {
       });
     creatorToken = signInRes.body.tokens.accessToken;
 
+    // Authenticate non-owner backer
+    const backerRes = await request(app)
+      .post('/api/v1/auth/sign-in')
+      .send({
+        email: 'backer@demo.com',
+        password: 'Demo@1234',
+      });
+    otherUserToken = backerRes.body.tokens.accessToken;
+
     // Retrieve seeded campaign IDs
-    const fundingCamp = await prisma.campaign.findFirst({
+    const fundingCamp = (await prisma.campaign.findFirst({
+      where: {
+        status: 'FUNDING',
+        contributions: { some: { status: 'SUCCEEDED' } },
+      },
+    })) || (await prisma.campaign.findFirst({
       where: { status: 'FUNDING' },
-    });
+    }));
     fundingCampaignId = fundingCamp!.id;
 
     const promotingCamp = await prisma.campaign.findFirst({
@@ -35,6 +53,63 @@ describe('Campaigns & Config API (/api/v1)', () => {
       where: { status: 'DRAFT' },
     });
     draftCampaignId = draftCamp!.id;
+
+    // Ensure non-public status campaigns exist for visibility testing
+    const creatorUser = await prisma.user.findUniqueOrThrow({ where: { email: 'creator@demo.com' } });
+
+    let submittedCamp = await prisma.campaign.findFirst({ where: { status: 'SUBMITTED' } });
+    if (!submittedCamp) {
+      submittedCamp = await prisma.campaign.create({
+        data: {
+          creatorId: creatorUser.id,
+          title: 'Submitted Test Campaign',
+          category: 'EDUCATION',
+          creatorName: creatorUser.name,
+          summary: 'Testing submitted non-public visibility.',
+          status: 'SUBMITTED',
+          fundingGoalCents: 50000,
+          story: [],
+          sources: [],
+        },
+      });
+    }
+    submittedCampaignId = submittedCamp.id;
+
+    let changesCamp = await prisma.campaign.findFirst({ where: { status: 'CHANGES_REQUESTED' } });
+    if (!changesCamp) {
+      changesCamp = await prisma.campaign.create({
+        data: {
+          creatorId: creatorUser.id,
+          title: 'Changes Requested Test Campaign',
+          category: 'COMMUNITY',
+          creatorName: creatorUser.name,
+          summary: 'Testing changes requested non-public visibility.',
+          status: 'CHANGES_REQUESTED',
+          fundingGoalCents: 50000,
+          story: [],
+          sources: [],
+        },
+      });
+    }
+    changesRequestedCampaignId = changesCamp.id;
+
+    let rejectedCamp = await prisma.campaign.findFirst({ where: { status: 'REJECTED' } });
+    if (!rejectedCamp) {
+      rejectedCamp = await prisma.campaign.create({
+        data: {
+          creatorId: creatorUser.id,
+          title: 'Rejected Test Campaign',
+          category: 'OTHER',
+          creatorName: creatorUser.name,
+          summary: 'Testing rejected non-public visibility.',
+          status: 'REJECTED',
+          fundingGoalCents: 50000,
+          story: [],
+          sources: [],
+        },
+      });
+    }
+    rejectedCampaignId = rejectedCamp.id;
   });
 
   describe('GET /api/v1/config/estimates', () => {
@@ -49,7 +124,7 @@ describe('Campaigns & Config API (/api/v1)', () => {
   });
 
   describe('GET /api/v1/campaigns', () => {
-    it('returns public campaigns and NEVER returns DRAFT, SUBMITTED, or CHANGES_REQUESTED', async () => {
+    it('returns public campaigns and NEVER returns DRAFT, SUBMITTED, CHANGES_REQUESTED, or REJECTED', async () => {
       const res = await request(app).get('/api/v1/campaigns?limit=50');
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('items');
@@ -60,6 +135,7 @@ describe('Campaigns & Config API (/api/v1)', () => {
       expect(statuses).not.toContain('DRAFT');
       expect(statuses).not.toContain('SUBMITTED');
       expect(statuses).not.toContain('CHANGES_REQUESTED');
+      expect(statuses).not.toContain('REJECTED');
 
       for (const item of res.body.items) {
         expect(['FUNDING', 'PROMOTING', 'COMPLETED', 'FUNDING_CLOSED', 'DISTRIBUTION_PREP']).toContain(
@@ -96,11 +172,13 @@ describe('Campaigns & Config API (/api/v1)', () => {
       }
     });
 
-    it('returns empty items when anonymous user requests a non-public status like DRAFT', async () => {
-      const res = await request(app).get('/api/v1/campaigns?status=DRAFT');
-      expect(res.status).toBe(200);
-      expect(res.body.items.length).toBe(0);
-      expect(res.body.total).toBe(0);
+    it('returns empty items when anonymous user requests non-public statuses (DRAFT, SUBMITTED, CHANGES_REQUESTED, REJECTED)', async () => {
+      for (const nonPublic of ['DRAFT', 'SUBMITTED', 'CHANGES_REQUESTED', 'REJECTED']) {
+        const res = await request(app).get(`/api/v1/campaigns?status=${nonPublic}`);
+        expect(res.status).toBe(200);
+        expect(res.body.items.length).toBe(0);
+        expect(res.body.total).toBe(0);
+      }
     });
 
     it('filters by min and max funding goal', async () => {
@@ -135,6 +213,18 @@ describe('Campaigns & Config API (/api/v1)', () => {
       expect(res.body.items.length).toBeGreaterThan(0);
     });
 
+    it('sorts by trending (default sort)', async () => {
+      const res = await request(app).get('/api/v1/campaigns?sort=trending&limit=5');
+      expect(res.status).toBe(200);
+      expect(res.body.items.length).toBeGreaterThan(0);
+    });
+
+    it('sorts by ending_soon', async () => {
+      const res = await request(app).get('/api/v1/campaigns?sort=ending_soon&limit=5');
+      expect(res.status).toBe(200);
+      expect(res.body.items.length).toBeGreaterThan(0);
+    });
+
     it('sorts by closest_to_goal', async () => {
       const res = await request(app).get('/api/v1/campaigns?sort=closest_to_goal&limit=5');
       expect(res.status).toBe(200);
@@ -148,6 +238,58 @@ describe('Campaigns & Config API (/api/v1)', () => {
       expect(res.body.categoryCounts).toHaveProperty('Environment');
       expect(res.body.categoryCounts).toHaveProperty('Public Policy');
       expect(res.body.categoryCounts).toHaveProperty('Education');
+    });
+
+    it('filters by creatorType', async () => {
+      const res = await request(app).get('/api/v1/campaigns?creatorType=nonprofit');
+      expect(res.status).toBe(200);
+      for (const item of res.body.items) {
+        expect(item.creatorType).toBe('nonprofit');
+      }
+    });
+
+    it('filters by progressRange (under_25, 25_75, over_75)', async () => {
+      const under25Res = await request(app).get('/api/v1/campaigns?progressRange=under_25');
+      expect(under25Res.status).toBe(200);
+      for (const item of under25Res.body.items) {
+        expect(item.percentFunded).toBeLessThan(25);
+      }
+
+      const betweenRes = await request(app).get('/api/v1/campaigns?progressRange=25_75');
+      expect(betweenRes.status).toBe(200);
+      for (const item of betweenRes.body.items) {
+        expect(item.percentFunded).toBeGreaterThanOrEqual(25);
+        expect(item.percentFunded).toBeLessThanOrEqual(75);
+      }
+
+      const over75Res = await request(app).get('/api/v1/campaigns?progressRange=over_75');
+      expect(over75Res.status).toBe(200);
+      for (const item of over75Res.body.items) {
+        expect(item.percentFunded).toBeGreaterThan(75);
+      }
+    });
+
+    it('filters by goalRange (under_1000, 1000_5000, over_5000)', async () => {
+      const under1kRes = await request(app).get('/api/v1/campaigns?goalRange=under_1000');
+      expect(under1kRes.status).toBe(200);
+      for (const item of under1kRes.body.items) {
+        expect(item.fundingGoalCents).toBeLessThanOrEqual(100000);
+      }
+
+      const over5kRes = await request(app).get('/api/v1/campaigns?goalRange=over_5000');
+      expect(over5kRes.status).toBe(200);
+      for (const item of over5kRes.body.items) {
+        expect(item.fundingGoalCents).toBeGreaterThanOrEqual(500000);
+      }
+    });
+
+    it('combines search, category, and progressRange filters correctly', async () => {
+      const res = await request(app).get('/api/v1/campaigns?category=Health&progressRange=over_75');
+      expect(res.status).toBe(200);
+      for (const item of res.body.items) {
+        expect(item.category).toBe('Health');
+        expect(item.percentFunded).toBeGreaterThan(75);
+      }
     });
   });
 
@@ -195,14 +337,38 @@ describe('Campaigns & Config API (/api/v1)', () => {
       expect(res.body.error.code).toBe('NOT_FOUND');
     });
 
-    it('returns 200 when creator requests their own DRAFT campaign', async () => {
-      const res = await request(app)
+    it('returns 404 when unauthenticated user or other user requests SUBMITTED, CHANGES_REQUESTED, or REJECTED campaign', async () => {
+      for (const id of [submittedCampaignId, changesRequestedCampaignId, rejectedCampaignId]) {
+        // Unauthenticated
+        const unauthRes = await request(app).get(`/api/v1/campaigns/${id}`);
+        expect(unauthRes.status).toBe(404);
+        expect(unauthRes.body.error.code).toBe('NOT_FOUND');
+
+        // Other non-owner backer user
+        const otherRes = await request(app)
+          .get(`/api/v1/campaigns/${id}`)
+          .set('Authorization', `Bearer ${otherUserToken}`);
+        expect(otherRes.status).toBe(404);
+        expect(otherRes.body.error.code).toBe('NOT_FOUND');
+      }
+    });
+
+    it('returns 200 when creator requests their own DRAFT or SUBMITTED campaign', async () => {
+      const draftRes = await request(app)
         .get(`/api/v1/campaigns/${draftCampaignId}`)
         .set('Authorization', `Bearer ${creatorToken}`);
 
-      expect(res.status).toBe(200);
-      expect(res.body.id).toBe(draftCampaignId);
-      expect(res.body.status).toBe('DRAFT');
+      expect(draftRes.status).toBe(200);
+      expect(draftRes.body.id).toBe(draftCampaignId);
+      expect(draftRes.body.status).toBe('DRAFT');
+
+      const submitRes = await request(app)
+        .get(`/api/v1/campaigns/${submittedCampaignId}`)
+        .set('Authorization', `Bearer ${creatorToken}`);
+
+      expect(submitRes.status).toBe(200);
+      expect(submitRes.body.id).toBe(submittedCampaignId);
+      expect(submitRes.body.status).toBe('SUBMITTED');
     });
 
     it('returns 404 for non-existent campaign uuid', async () => {

@@ -17,6 +17,7 @@ export const ContributionSchema = z.object({
   campaignId: z.string().uuid(),
   userId: z.string().optional().nullable(),
   guestEmail: z.string().email().optional().nullable(),
+  guestReceiptToken: z.string().optional().nullable(),
   amountCents: z.number().int().min(100), // Min $1.00
   feeCents: z.number().int(),
   totalCents: z.number().int(),
@@ -24,6 +25,7 @@ export const ContributionSchema = z.object({
   publicName: z.string().optional().nullable(),
   isAnonymous: z.boolean().default(true),
   receiptNo: z.string(),
+  isDemo: z.boolean().default(true),
   createdAt: z.coerce.date(),
 });
 
@@ -48,3 +50,30 @@ export const PayContributionInputSchema = z.object({
 });
 
 export type PayContributionInput = z.infer<typeof PayContributionInputSchema>;
+
+export const ContributionReceiptDtoSchema = z.object({
+  id: z.string().uuid(),
+  receiptNo: z.string(),
+  campaignId: z.string().uuid(),
+  campaignTitle: z.string(),
+  amountCents: z.number().int(),
+  feeCents: z.number().int(),
+  totalCents: z.number().int(),
+  status: ContributionStatusSchema,
+  isAnonymous: z.boolean(),
+  publicName: z.string().nullable().optional(),
+  cardBrand: z.string().nullable().optional(),
+  cardLast4: z.string().nullable().optional(),
+  guestEmail: z.string().nullable().optional(),
+  createdAt: z.coerce.date(),
+  isDemo: z.boolean().default(true),
+});
+
+export type ContributionReceiptDto = z.infer<typeof ContributionReceiptDtoSchema>;
+
+export const ClaimContributionsInputSchema = z.object({
+  tokens: z.array(z.string().min(1)).min(1, 'At least one receipt token is required'),
+});
+
+export type ClaimContributionsInput = z.infer<typeof ClaimContributionsInputSchema>;
+

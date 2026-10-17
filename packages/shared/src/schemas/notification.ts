@@ -40,6 +40,7 @@ export const NotificationPrefsSchema = z.object({
   contributions: z.boolean().default(true),
   campaignUpdates: z.boolean().default(true),
   securityAlerts: z.boolean().default(true),
+  emailNotifications: z.boolean().default(true),
 });
 
 export type NotificationPrefs = z.infer<typeof NotificationPrefsSchema>;

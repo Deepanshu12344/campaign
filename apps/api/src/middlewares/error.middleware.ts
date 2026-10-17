@@ -46,7 +46,13 @@ export function errorHandler(
   }
 
   // Unknown/internal error
-  const message = err instanceof Error ? err.message : 'Internal Server Error';
+  const isProd = process.env.NODE_ENV === 'production';
+  const message = isProd
+    ? 'An internal server error occurred. Please try again later.'
+    : err instanceof Error
+      ? err.message
+      : 'Internal Server Error';
+
   console.error('Unhandled server error:', err);
 
   res.status(500).json({

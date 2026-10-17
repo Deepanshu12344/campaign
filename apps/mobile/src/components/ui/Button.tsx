@@ -24,12 +24,14 @@ export type ButtonSize = 'lg' | 'md' | 'sm';
 
 export interface ButtonProps extends Omit<PressableProps, 'style'> {
   title?: string;
+  label?: string;
   children?: React.ReactNode;
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
   disabled?: boolean;
   fullWidth?: boolean;
+  icon?: React.ReactNode;
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
   style?: StyleProp<ViewStyle>;
@@ -40,12 +42,14 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export function Button({
   title,
+  label,
   children,
   variant = 'primary',
   size = 'md',
   loading = false,
   disabled = false,
   fullWidth = false,
+  icon,
   iconLeft,
   iconRight,
   style,
@@ -53,6 +57,8 @@ export function Button({
   onPress,
   ...rest
 }: ButtonProps) {
+  const resolvedTitle = title ?? label;
+  const resolvedIconLeft = iconLeft ?? icon;
   const scale = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -119,7 +125,7 @@ export function Button({
         textStyle,
       ]}
     >
-      {title}
+      {resolvedTitle}
     </Text>
   );
 
@@ -150,7 +156,7 @@ export function Button({
         />
       ) : (
         <View style={styles.innerRow}>
-          {iconLeft && <View style={styles.iconMargin}>{iconLeft}</View>}
+          {resolvedIconLeft && <View style={styles.iconMargin}>{resolvedIconLeft}</View>}
           {content}
           {iconRight && <View style={styles.iconMargin}>{iconRight}</View>}
         </View>

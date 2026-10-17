@@ -3,6 +3,7 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
   PlusJakartaSans_400Regular,
   PlusJakartaSans_500Medium,
@@ -17,8 +18,23 @@ import {
 } from '@expo-google-fonts/newsreader';
 import { ToastProvider } from '../components/ui/Toast';
 import { theme } from '../theme';
+import { useAuthStore } from '../store/authStore';
+import { AuthGateProvider } from '../auth/requireAuth';
+import { GlobalErrorBoundary } from '../components/layout/GlobalErrorBoundary';
+import { OfflineBanner } from '../components/layout/OfflineBanner';
+import { ServerWakeUpBanner } from '../components/layout/ServerWakeUpBanner';
 
-// Hold splash screen visible while loading custom fonts
+// Singleton QueryClient
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      staleTime: 60 * 1000,
+    },
+  },
+});
+
+// Hold splash screen visible while loading custom fonts and hydrating state
 SplashScreen.preventAutoHideAsync().catch(() => {
   /* ignore on web/hot-reload */
 });
@@ -35,40 +51,48 @@ export default function RootLayout() {
     'Newsreader-Bold': Newsreader_700Bold,
   });
 
+  const isHydrated = useAuthStore((s) => s.isHydrated);
+  const hydrate = useAuthStore((s) => s.hydrate);
+
   useEffect(() => {
-    if (fontsLoaded || fontError) {
+    hydrate();
+  }, [hydrate]);
+
+  useEffect(() => {
+    if ((fontsLoaded || fontError) && isHydrated) {
       SplashScreen.hideAsync().catch(() => {
         /* ignore */
       });
     }
-  }, [fontsLoaded, fontError]);
+  }, [fontsLoaded, fontError, isHydrated]);
 
-  if (!fontsLoaded && !fontError) {
+  if ((!fontsLoaded && !fontError) || !isHydrated) {
     return null;
   }
 
   return (
-    <SafeAreaProvider>
-      <ToastProvider>
-        <Stack
-          screenOptions={{
-            headerStyle: {
-              backgroundColor: theme.colors.surface,
-            },
-            headerTintColor: theme.colors.ink900,
-            headerTitleStyle: {
-              fontFamily: theme.typography.fonts.uiSemiBold,
-              fontSize: theme.typography.styles.h3.fontSize,
-            },
-            contentStyle: {
-              backgroundColor: theme.colors.bg,
-            },
-          }}
-        >
-          <Stack.Screen name="index" options={{ title: 'Campaigns' }} />
-          <Stack.Screen name="dev/components" options={{ title: 'Design System Gallery' }} />
-        </Stack>
-      </ToastProvider>
-    </SafeAreaProvider>
+    <GlobalErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <SafeAreaProvider>
+          <AuthGateProvider>
+            <ToastProvider>
+              <OfflineBanner />
+              <ServerWakeUpBanner />
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                  contentStyle: {
+                    backgroundColor: theme.colors.bg,
+                  },
+                  animation: 'default',
+                }}
+              >
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              </Stack>
+            </ToastProvider>
+          </AuthGateProvider>
+        </SafeAreaProvider>
+      </QueryClientProvider>
+    </GlobalErrorBoundary>
   );
 }

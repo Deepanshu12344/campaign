@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, useRef } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
 import Animated, { FadeInUp, FadeOutUp } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CheckCircle2, AlertCircle, Info, AlertTriangle } from 'lucide-react-native';
@@ -7,22 +7,71 @@ import { theme } from '../../theme';
 
 export type ToastType = 'success' | 'info' | 'warning' | 'danger';
 
+export interface ToastAction {
+  label: string;
+  onPress?: () => void;
+  onClick?: () => void;
+}
+
 export interface ToastOptions {
   message: string;
   type?: ToastType;
   duration?: number;
+  action?: ToastAction;
 }
 
 export interface ToastContextValue {
   showToast: (options: ToastOptions) => void;
-  info: (message: string, duration?: number) => void;
-  success: (message: string, duration?: number) => void;
-  warning: (message: string, duration?: number) => void;
-  error: (message: string, duration?: number) => void;
-  danger: (message: string, duration?: number) => void;
+  info: (
+    message: string,
+    durationOrOptions?: number | { duration?: number; action?: ToastAction },
+    action?: ToastAction
+  ) => void;
+  success: (
+    message: string,
+    durationOrOptions?: number | { duration?: number; action?: ToastAction },
+    action?: ToastAction
+  ) => void;
+  warning: (
+    message: string,
+    durationOrOptions?: number | { duration?: number; action?: ToastAction },
+    action?: ToastAction
+  ) => void;
+  error: (
+    message: string,
+    durationOrOptions?: number | { duration?: number; action?: ToastAction },
+    action?: ToastAction
+  ) => void;
+  danger: (
+    message: string,
+    durationOrOptions?: number | { duration?: number; action?: ToastAction },
+    action?: ToastAction
+  ) => void;
 }
 
 const ToastContext = createContext<ToastContextValue | null>(null);
+
+function normalizeToastArgs(
+  message: string,
+  type: ToastType,
+  durationOrOptions?: number | { duration?: number; action?: ToastAction },
+  action?: ToastAction
+): ToastOptions {
+  if (typeof durationOrOptions === 'object' && durationOrOptions !== null) {
+    return {
+      message,
+      type,
+      duration: durationOrOptions.duration,
+      action: durationOrOptions.action,
+    };
+  }
+  return {
+    message,
+    type,
+    duration: durationOrOptions,
+    action,
+  };
+}
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const insets = useSafeAreaInsets();
@@ -41,36 +90,56 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const info = useCallback(
-    (message: string, duration?: number) => {
-      showToast({ message, type: 'info', duration });
+    (
+      message: string,
+      durationOrOptions?: number | { duration?: number; action?: ToastAction },
+      action?: ToastAction
+    ) => {
+      showToast(normalizeToastArgs(message, 'info', durationOrOptions, action));
     },
     [showToast]
   );
 
   const success = useCallback(
-    (message: string, duration?: number) => {
-      showToast({ message, type: 'success', duration });
+    (
+      message: string,
+      durationOrOptions?: number | { duration?: number; action?: ToastAction },
+      action?: ToastAction
+    ) => {
+      showToast(normalizeToastArgs(message, 'success', durationOrOptions, action));
     },
     [showToast]
   );
 
   const warning = useCallback(
-    (message: string, duration?: number) => {
-      showToast({ message, type: 'warning', duration });
+    (
+      message: string,
+      durationOrOptions?: number | { duration?: number; action?: ToastAction },
+      action?: ToastAction
+    ) => {
+      showToast(normalizeToastArgs(message, 'warning', durationOrOptions, action));
     },
     [showToast]
   );
 
   const error = useCallback(
-    (message: string, duration?: number) => {
-      showToast({ message, type: 'danger', duration });
+    (
+      message: string,
+      durationOrOptions?: number | { duration?: number; action?: ToastAction },
+      action?: ToastAction
+    ) => {
+      showToast(normalizeToastArgs(message, 'danger', durationOrOptions, action));
     },
     [showToast]
   );
 
   const danger = useCallback(
-    (message: string, duration?: number) => {
-      showToast({ message, type: 'danger', duration });
+    (
+      message: string,
+      durationOrOptions?: number | { duration?: number; action?: ToastAction },
+      action?: ToastAction
+    ) => {
+      showToast(normalizeToastArgs(message, 'danger', durationOrOptions, action));
     },
     [showToast]
   );
@@ -120,6 +189,25 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
         >
           <View style={styles.iconContainer}>{getToastIcon(toast.type)}</View>
           <Text style={styles.messageText}>{toast.message}</Text>
+          {toast.action && (
+            <Pressable
+              onPress={() => {
+                const act = toast.action;
+                setToast(null);
+                if (act?.onPress) {
+                  act.onPress();
+                } else if (act?.onClick) {
+                  act.onClick();
+                }
+              }}
+              style={styles.actionButton}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              accessibilityRole="button"
+              accessibilityLabel={toast.action.label}
+            >
+              <Text style={styles.actionText}>{toast.action.label}</Text>
+            </Pressable>
+          )}
         </Animated.View>
       )}
     </ToastContext.Provider>
@@ -162,5 +250,20 @@ const styles = StyleSheet.create({
     fontSize: theme.typography.styles.small.fontSize,
     lineHeight: theme.typography.styles.small.lineHeight,
     color: theme.colors.ink900,
+  },
+  actionButton: {
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    backgroundColor: theme.colors.primary50,
+    borderRadius: theme.radius.sm,
+    borderWidth: 1,
+    borderColor: theme.colors.primary100,
+    marginLeft: theme.spacing.xs,
+  },
+  actionText: {
+    fontFamily: theme.typography.fonts.uiMedium,
+    fontSize: theme.typography.styles.caption.fontSize,
+    lineHeight: theme.typography.styles.caption.lineHeight,
+    color: theme.colors.primary700,
   },
 });

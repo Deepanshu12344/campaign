@@ -95,6 +95,24 @@ export class CampaignController {
       next(err);
     }
   }
+
+  async listFollowing(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const result = await campaignService.getFollowedCampaigns(req.user!.id);
+      res.status(200).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async listSaved(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const result = await campaignService.getSavedCampaigns(req.user!.id);
+      res.status(200).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 export const campaignController = new CampaignController();

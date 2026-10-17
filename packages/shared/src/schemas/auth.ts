@@ -61,3 +61,17 @@ export const AuthResponseSchema = z.object({
 });
 
 export type AuthResponse = z.infer<typeof AuthResponseSchema>;
+
+export const UpdateProfileInputSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters').max(60).optional(),
+  avatarUrl: z.string().url('Avatar must be a valid URL').optional().nullable(),
+});
+
+export type UpdateProfileInput = z.infer<typeof UpdateProfileInputSchema>;
+
+export const ChangePasswordInputSchema = z.object({
+  currentPassword: z.string().min(1, 'Current password is required'),
+  newPassword: z.string().min(8, 'New password must be at least 8 characters'),
+});
+
+export type ChangePasswordInput = z.infer<typeof ChangePasswordInputSchema>;

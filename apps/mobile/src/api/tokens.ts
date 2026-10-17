@@ -79,3 +79,110 @@ export async function clearTokens(): Promise<void> {
     console.warn('Failed to delete tokens from SecureStore:', e);
   }
 }
+
+const GUEST_RECEIPT_TOKENS_KEY = 'campaigns_guest_receipt_tokens';
+const GUEST_TOKEN_MAP_KEY = 'campaigns_guest_token_map';
+let memoryGuestTokens: string[] = [];
+let memoryGuestTokenMap: Record<string, string> = {};
+
+export async function getGuestReceiptTokens(): Promise<string[]> {
+  if (Platform.OS === 'web') {
+    if (typeof localStorage !== 'undefined') {
+      const raw = localStorage.getItem(GUEST_RECEIPT_TOKENS_KEY);
+      return raw ? JSON.parse(raw) : [];
+    }
+    return memoryGuestTokens;
+  }
+  try {
+    const raw = await SecureStore.getItemAsync(GUEST_RECEIPT_TOKENS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return memoryGuestTokens;
+  }
+}
+
+export async function addGuestReceiptToken(token: string): Promise<void> {
+  const current = await getGuestReceiptTokens();
+  if (!current.includes(token)) {
+    const updated = [token, ...current];
+    memoryGuestTokens = updated;
+    const serialized = JSON.stringify(updated);
+    if (Platform.OS === 'web') {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem(GUEST_RECEIPT_TOKENS_KEY, serialized);
+      }
+      return;
+    }
+    try {
+      await SecureStore.setItemAsync(GUEST_RECEIPT_TOKENS_KEY, serialized);
+    } catch (e) {
+      console.warn('Failed to save guest receipt token:', e);
+    }
+  }
+}
+
+export async function getGuestTokenMap(): Promise<Record<string, string>> {
+  if (Platform.OS === 'web') {
+    if (typeof localStorage !== 'undefined') {
+      const raw = localStorage.getItem(GUEST_TOKEN_MAP_KEY);
+      return raw ? JSON.parse(raw) : {};
+    }
+    return memoryGuestTokenMap;
+  }
+  try {
+    const raw = await SecureStore.getItemAsync(GUEST_TOKEN_MAP_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return memoryGuestTokenMap;
+  }
+}
+
+export async function recordGuestReceiptToken(contributionId: string, token: string): Promise<void> {
+  await addGuestReceiptToken(token);
+  const currentMap = await getGuestTokenMap();
+  currentMap[contributionId] = token;
+  memoryGuestTokenMap = currentMap;
+  const serialized = JSON.stringify(currentMap);
+  if (Platform.OS === 'web') {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(GUEST_TOKEN_MAP_KEY, serialized);
+    }
+    return;
+  }
+  try {
+    await SecureStore.setItemAsync(GUEST_TOKEN_MAP_KEY, serialized);
+  } catch (e) {
+    console.warn('Failed to save guest contribution token map:', e);
+  }
+}
+
+export async function getGuestTokenForContribution(contributionId: string): Promise<string | null> {
+  const map = await getGuestTokenMap();
+  return map[contributionId] || null;
+}
+
+export async function getLatestGuestReceiptToken(): Promise<string | null> {
+  const tokens = await getGuestReceiptTokens();
+  return tokens.length > 0 ? tokens[0] : null;
+}
+
+export async function clearGuestReceiptTokens(): Promise<void> {
+  memoryGuestTokens = [];
+  memoryGuestTokenMap = {};
+  if (Platform.OS === 'web') {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem(GUEST_RECEIPT_TOKENS_KEY);
+      localStorage.removeItem(GUEST_TOKEN_MAP_KEY);
+    }
+    return;
+  }
+  try {
+    await Promise.all([
+      SecureStore.deleteItemAsync(GUEST_RECEIPT_TOKENS_KEY),
+      SecureStore.deleteItemAsync(GUEST_TOKEN_MAP_KEY),
+    ]);
+  } catch (e) {
+    console.warn('Failed to delete guest receipt tokens:', e);
+  }
+}
+

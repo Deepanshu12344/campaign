@@ -7,6 +7,8 @@ import {
   AuthResponse,
   UserProfile,
   UserRole,
+  UpdateProfileInput,
+  ChangePasswordInput,
 } from '@campaigns/shared';
 import { generateTokenPair, verifyRefreshToken } from '../utils/jwt';
 import { ConflictError, UnauthorizedError, NotFoundError } from '../utils/errors';
@@ -121,6 +123,55 @@ export class AuthService {
       notificationPrefs: user.notificationPrefs as Record<string, unknown> | null,
       createdAt: user.createdAt,
     };
+  }
+
+  async updateMe(userId: string, input: UpdateProfileInput): Promise<UserProfile> {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+
+    const updated = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        ...(input.name !== undefined ? { name: input.name } : {}),
+        ...(input.avatarUrl !== undefined ? { avatarUrl: input.avatarUrl } : {}),
+      },
+    });
+
+    return {
+      id: updated.id,
+      email: updated.email,
+      name: updated.name,
+      avatarUrl: updated.avatarUrl,
+      role: updated.role as UserRole,
+      notificationPrefs: updated.notificationPrefs as Record<string, unknown> | null,
+      createdAt: updated.createdAt,
+    };
+  }
+
+  async changePassword(userId: string, input: ChangePasswordInput): Promise<void> {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+
+    const isValid = await bcrypt.compare(input.currentPassword, user.passwordHash);
+    if (!isValid) {
+      throw new UnauthorizedError('Current password is incorrect', 'INVALID_CREDENTIALS');
+    }
+
+    const passwordHash = await bcrypt.hash(input.newPassword, 10);
+    await prisma.user.update({
+      where: { id: userId },
+      data: { passwordHash },
+    });
   }
 }
 

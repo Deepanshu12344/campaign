@@ -1,18 +1,37 @@
 import { ApiError, RequestOptions } from './types';
-import { getAccessToken, getRefreshToken, setTokens, clearTokens } from './tokens';
+import { getAccessToken, getRefreshToken, setTokens, clearTokens, getLatestGuestReceiptToken } from './tokens';
 import { AuthResponse } from '@campaigns/shared';
 
 const DEFAULT_BASE_URL = 'http://localhost:4000/api/v1';
-const DEFAULT_TIMEOUT_MS = 10000; // 10 seconds
+const DEFAULT_TIMEOUT_MS = 60000; // 60 seconds (accommodates free-tier cold starts)
+
+export type ServerWakeUpListener = (isWakingUp: boolean) => void;
 
 export class ApiClient {
   private baseUrl: string;
+  private wakeUpListeners: Set<ServerWakeUpListener> = new Set();
+  private pendingSlowRequests = 0;
 
   constructor(baseUrl?: string) {
     this.baseUrl = baseUrl || process.env.EXPO_PUBLIC_API_URL || DEFAULT_BASE_URL;
     // Strip trailing slash if present
     if (this.baseUrl.endsWith('/')) {
       this.baseUrl = this.baseUrl.slice(0, -1);
+    }
+  }
+
+  public onServerWakeUp(listener: ServerWakeUpListener): () => void {
+    this.wakeUpListeners.add(listener);
+    return () => this.wakeUpListeners.delete(listener);
+  }
+
+  private notifyWakeUp(isWakingUp: boolean) {
+    for (const listener of this.wakeUpListeners) {
+      try {
+        listener(isWakingUp);
+      } catch {
+        // ignore listener errors
+      }
     }
   }
 
@@ -33,16 +52,44 @@ export class ApiClient {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
 
+    let slowTimerTriggered = false;
+    const slowTimer = setTimeout(() => {
+      slowTimerTriggered = true;
+      this.pendingSlowRequests++;
+      if (this.pendingSlowRequests === 1) {
+        this.notifyWakeUp(true);
+      }
+    }, 8000);
+
+    const cleanupTimers = () => {
+      clearTimeout(timer);
+      clearTimeout(slowTimer);
+      if (slowTimerTriggered) {
+        this.pendingSlowRequests = Math.max(0, this.pendingSlowRequests - 1);
+        if (this.pendingSlowRequests === 0) {
+          this.notifyWakeUp(false);
+        }
+      }
+    };
+
     const headers: Record<string, string> = {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
-      ...(options.headers as Record<string, string>),
+      ...((options.headers as Record<string, string>) || {}),
     };
+
+    if (!(options.body instanceof FormData) && !headers['Content-Type']) {
+      headers['Content-Type'] = 'application/json';
+    }
 
     if (!options.skipAuth) {
       const token = await getAccessToken();
       if (token && !headers['Authorization']) {
         headers['Authorization'] = `Bearer ${token}`;
+      } else {
+        const guestToken = await getLatestGuestReceiptToken();
+        if (guestToken && !headers['x-guest-receipt-token']) {
+          headers['x-guest-receipt-token'] = guestToken;
+        }
       }
     }
 
@@ -53,7 +100,7 @@ export class ApiClient {
         signal: controller.signal,
       });
 
-      clearTimeout(timer);
+      cleanupTimers();
 
       // Handle 401 Unauthorized with token refresh if possible
       if (response.status === 401 && !options.skipAuth && !url.includes('/auth/refresh') && !isRetry) {
@@ -95,7 +142,7 @@ export class ApiClient {
 
       return (await response.json()) as T;
     } catch (error: unknown) {
-      clearTimeout(timer);
+      cleanupTimers();
 
       if (error instanceof ApiError) {
         throw error;
@@ -187,6 +234,16 @@ export class ApiClient {
       method: 'DELETE',
     });
   }
+
+  public async uploadFile<T>(path: string, formData: FormData, options: RequestOptions = {}): Promise<T> {
+    const cleanPath = path.startsWith('/') ? path : `/${path}`;
+    return this.executeFetch<T>(`${this.baseUrl}${cleanPath}`, {
+      ...options,
+      method: 'POST',
+      body: formData,
+    });
+  }
 }
 
 export const apiClient = new ApiClient();
+

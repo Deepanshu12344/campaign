@@ -27,6 +27,8 @@ const feedbackLimiter = rateLimit({
 
 router.get('/', validate({ query: CampaignQuerySchema }), campaignController.list);
 router.get('/featured', campaignController.featured);
+router.get('/following', requireAuth, campaignController.listFollowing);
+router.get('/saved', requireAuth, campaignController.listSaved);
 router.get('/:id', optionalAuth, campaignController.getById);
 
 router.post(

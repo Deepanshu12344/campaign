@@ -1,4 +1,4 @@
-import { Prisma, Category as PrismaCategory } from '@prisma/client';
+import { Prisma, Category as PrismaCategory, CreatorType as PrismaCreatorType } from '@prisma/client';
 import { prisma } from '../utils/prisma';
 import {
   CampaignCardDto,
@@ -33,7 +33,7 @@ export const PUBLIC_STATUSES: CampaignStatus[] = [
   'DISTRIBUTION_PREP',
 ];
 
-const CATEGORY_TO_PRISMA: Record<string, string> = {
+export const CATEGORY_TO_PRISMA: Record<string, string> = {
   Environment: 'ENVIRONMENT',
   Health: 'HEALTH',
   Science: 'SCIENCE',
@@ -56,7 +56,7 @@ const CATEGORY_TO_PRISMA: Record<string, string> = {
   OTHER: 'OTHER',
 };
 
-const PRISMA_TO_CATEGORY: Record<string, Category> = {
+export const PRISMA_TO_CATEGORY: Record<string, Category> = {
   ENVIRONMENT: 'Environment',
   HEALTH: 'Health',
   SCIENCE: 'Science',
@@ -69,7 +69,8 @@ const PRISMA_TO_CATEGORY: Record<string, Category> = {
   OTHER: 'Other',
 };
 
-function toCardDto(campaign: {
+export function toCardDto(campaign: {
+
   id: string;
   title: string;
   category: string;
@@ -98,7 +99,7 @@ function toCardDto(campaign: {
     title: campaign.title,
     category: canonicalCategory,
     creatorName: campaign.creatorName,
-    creatorType: campaign.creatorType as CreatorType,
+    creatorType: (campaign.creatorType.toLowerCase() as CreatorType),
     summary: campaign.summary,
     coverUrl: campaign.coverUrl,
     status: campaign.status as CampaignStatus,
@@ -171,16 +172,72 @@ export class CampaignService {
       }
     }
 
+    // Filter by progress range (under_25, 25_75, over_75)
+    if (query.progressRange) {
+      let progressMatches: { id: string }[] = [];
+      if (query.progressRange === 'under_25') {
+        progressMatches = await prisma.$queryRaw<{ id: string }[]>`
+          SELECT id FROM "campaigns"
+          WHERE ("raisedCents" * 100 < "fundingGoalCents" * 25)
+        `;
+      } else if (query.progressRange === '25_75') {
+        progressMatches = await prisma.$queryRaw<{ id: string }[]>`
+          SELECT id FROM "campaigns"
+          WHERE ("raisedCents" * 100 >= "fundingGoalCents" * 25 AND "raisedCents" * 100 <= "fundingGoalCents" * 75)
+        `;
+      } else if (query.progressRange === 'over_75') {
+        progressMatches = await prisma.$queryRaw<{ id: string }[]>`
+          SELECT id FROM "campaigns"
+          WHERE ("raisedCents" * 100 > "fundingGoalCents" * 75)
+        `;
+      }
+
+      const progressIds = progressMatches.map((m) => m.id);
+      if (matchingIds === null) {
+        matchingIds = progressIds;
+      } else {
+        matchingIds = matchingIds.filter((id) => progressIds.includes(id));
+      }
+
+      if (matchingIds.length === 0) {
+        const counts = await this.getCategoryCounts();
+        return {
+          items: [],
+          total: 0,
+          page,
+          limit,
+          totalPages: 0,
+          hasNextPage: false,
+          categoryCounts: counts,
+        };
+      }
+    }
+
+    // Goal range calculation
+    let minGoal = query.minGoal;
+    let maxGoal = query.maxGoal;
+    if (query.goalRange === 'under_1000') {
+      maxGoal = 100000;
+    } else if (query.goalRange === '1000_5000') {
+      minGoal = 100000;
+      maxGoal = 500000;
+    } else if (query.goalRange === 'over_5000') {
+      minGoal = 500000;
+    }
+
     const where: Prisma.CampaignWhereInput = {
       status: { in: statusFilter },
       ...(query.category
         ? { category: (CATEGORY_TO_PRISMA[query.category] || query.category) as PrismaCategory }
         : {}),
-      ...(query.minGoal !== undefined || query.maxGoal !== undefined
+      ...(query.creatorType
+        ? { creatorType: query.creatorType.toUpperCase() as PrismaCreatorType }
+        : {}),
+      ...(minGoal !== undefined || maxGoal !== undefined
         ? {
             fundingGoalCents: {
-              ...(query.minGoal !== undefined ? { gte: query.minGoal } : {}),
-              ...(query.maxGoal !== undefined ? { lte: query.maxGoal } : {}),
+              ...(minGoal !== undefined ? { gte: minGoal } : {}),
+              ...(maxGoal !== undefined ? { lte: maxGoal } : {}),
             },
           }
         : {}),
@@ -266,6 +323,9 @@ export class CampaignService {
         feedbacks: true,
         contributions: {
           where: { status: 'SUCCEEDED' },
+          orderBy: { createdAt: 'desc' },
+        },
+        reviewDecisions: {
           orderBy: { createdAt: 'desc' },
         },
       },
@@ -397,6 +457,13 @@ export class CampaignService {
       isSaved,
       isFollowing,
       isDemo: true,
+      reviewDecisions: campaign.reviewDecisions.map((d) => ({
+        id: d.id,
+        decision: d.decision,
+        notes: d.notes,
+        createdAt: d.createdAt,
+      })),
+      pendingRevision: (campaign.pendingRevision as Record<string, unknown>) || null,
       createdAt: campaign.createdAt,
       updatedAt: campaign.updatedAt,
     };
@@ -493,6 +560,24 @@ export class CampaignService {
       });
       return { following: false };
     }
+  }
+
+  async getFollowedCampaigns(userId: string): Promise<CampaignCardDto[]> {
+    const follows = await prisma.follow.findMany({
+      where: { userId },
+      include: { campaign: true },
+      orderBy: { createdAt: 'desc' },
+    });
+    return follows.map((f) => toCardDto(f.campaign));
+  }
+
+  async getSavedCampaigns(userId: string): Promise<CampaignCardDto[]> {
+    const saves = await prisma.savedCampaign.findMany({
+      where: { userId },
+      include: { campaign: true },
+      orderBy: { createdAt: 'desc' },
+    });
+    return saves.map((s) => toCardDto(s.campaign));
   }
 
   private async getCategoryCounts(): Promise<Record<string, number>> {

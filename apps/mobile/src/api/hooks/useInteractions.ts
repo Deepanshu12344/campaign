@@ -1,11 +1,13 @@
 import {
   useMutation,
+  useQuery,
   useQueryClient,
   UseMutationResult,
+  UseQueryResult,
 } from '@tanstack/react-query';
 import { apiClient } from '../client';
 import { ApiError } from '../types';
-import { FeedbackInput, CampaignDetailDto } from '@campaigns/shared';
+import { FeedbackInput, CampaignDetailDto, CampaignCardDto } from '@campaigns/shared';
 
 export function useSaveCampaign(
   campaignId: string
@@ -25,7 +27,18 @@ export function useSaveCampaign(
         if (!old) return old;
         return { ...old, isSaved: data.saved };
       });
+      queryClient.invalidateQueries({ queryKey: ['campaigns', 'saved'] });
     },
+  });
+}
+
+export function useSavedCampaigns(): UseQueryResult<CampaignCardDto[], ApiError> {
+  return useQuery<CampaignCardDto[], ApiError>({
+    queryKey: ['campaigns', 'saved'],
+    queryFn: async () => {
+      return apiClient.get<CampaignCardDto[]>('/campaigns/saved');
+    },
+    staleTime: 30 * 1000,
   });
 }
 
@@ -47,7 +60,18 @@ export function useFollowCampaign(
         if (!old) return old;
         return { ...old, isFollowing: data.following };
       });
+      queryClient.invalidateQueries({ queryKey: ['campaigns', 'following'] });
     },
+  });
+}
+
+export function useFollowedCampaigns(): UseQueryResult<CampaignCardDto[], ApiError> {
+  return useQuery<CampaignCardDto[], ApiError>({
+    queryKey: ['campaigns', 'following'],
+    queryFn: async () => {
+      return apiClient.get<CampaignCardDto[]>('/campaigns/following');
+    },
+    staleTime: 30 * 1000,
   });
 }
 

@@ -22,3 +22,28 @@ export const ReportSchema = z.object({
 });
 
 export type Report = z.infer<typeof ReportSchema>;
+
+export const AdminDecisionInputSchema = z.object({
+  decision: z.enum(['APPROVE', 'CHANGES_REQUESTED', 'REJECT']),
+  notes: z.string().default(''),
+});
+
+export type AdminDecisionInput = z.infer<typeof AdminDecisionInputSchema>;
+
+export const AdminAdvanceInputSchema = z.object({
+  notes: z.string().optional(),
+});
+
+export type AdminAdvanceInput = z.infer<typeof AdminAdvanceInputSchema>;
+
+export const SimulateReportInputSchema = z.object({
+  impressions: z.number().int().min(0).optional(),
+  reach: z.number().int().min(0).optional(),
+  reachType: ReachTypeSchema.default('MEASURED'),
+  clicks: z.number().int().min(0).optional(),
+  ctr: z.number().min(0).max(1).optional(),
+  notes: z.string().optional(),
+});
+
+export type SimulateReportInput = z.infer<typeof SimulateReportInputSchema>;
+

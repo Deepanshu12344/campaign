@@ -20,26 +20,31 @@ export interface TextFieldProps extends TextInputProps {
   showCounter?: boolean;
   disabled?: boolean;
   containerStyle?: StyleProp<ViewStyle>;
+  rightAccessory?: React.ReactNode;
 }
 
-export function TextField({
-  label,
-  required = false,
-  helper,
-  helperText,
-  error,
-  maxLength,
-  showCounter = false,
-  disabled = false,
-  value,
-  onChangeText,
-  containerStyle,
-  style,
-  onFocus,
-  onBlur,
-  editable,
-  ...rest
-}: TextFieldProps) {
+export const TextField = React.forwardRef<TextInput, TextFieldProps>(function TextField(
+  {
+    label,
+    required = false,
+    helper,
+    helperText,
+    error,
+    maxLength,
+    showCounter = false,
+    disabled = false,
+    value,
+    onChangeText,
+    containerStyle,
+    style,
+    onFocus,
+    onBlur,
+    editable,
+    rightAccessory,
+    ...rest
+  },
+  ref
+) {
   const [isFocused, setIsFocused] = useState(false);
 
   const characterCount = value ? value.length : 0;
@@ -62,29 +67,34 @@ export function TextField({
         </View>
       )}
 
-      <TextInput
-        value={value}
-        onChangeText={onChangeText}
-        maxLength={maxLength}
-        editable={isEditable}
-        onFocus={(e) => {
-          setIsFocused(true);
-          onFocus?.(e);
-        }}
-        onBlur={(e) => {
-          setIsFocused(false);
-          onBlur?.(e);
-        }}
-        placeholderTextColor={theme.colors.ink500}
+      <View
         style={[
-          styles.input,
+          styles.inputWrapper,
           isFocused && styles.focusedInput,
           Boolean(error) && styles.errorInput,
           disabled && styles.disabledInput,
-          style,
         ]}
-        {...rest}
-      />
+      >
+        <TextInput
+          ref={ref}
+          value={value}
+          onChangeText={onChangeText}
+          maxLength={maxLength}
+          editable={isEditable}
+          onFocus={(e) => {
+            setIsFocused(true);
+            onFocus?.(e);
+          }}
+          onBlur={(e) => {
+            setIsFocused(false);
+            onBlur?.(e);
+          }}
+          placeholderTextColor={theme.colors.ink500}
+          style={[styles.input, rightAccessory ? styles.inputWithAccessory : null, style]}
+          {...rest}
+        />
+        {rightAccessory && <View style={styles.rightAccessory}>{rightAccessory}</View>}
+      </View>
 
       {error ? (
         <Text style={styles.errorText}>{error}</Text>
@@ -93,7 +103,7 @@ export function TextField({
       ) : null}
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -121,17 +131,32 @@ const styles = StyleSheet.create({
     fontSize: theme.typography.styles.caption.fontSize,
     color: theme.colors.ink500,
   },
-  input: {
+  inputWrapper: {
     minHeight: theme.touchTargets.minTouchSize,
     backgroundColor: theme.colors.surface,
     borderWidth: 1,
     borderColor: theme.colors.line,
     borderRadius: theme.radius.input,
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  input: {
+    flex: 1,
+    minHeight: theme.touchTargets.minTouchSize,
     paddingHorizontal: theme.spacing.base,
     paddingVertical: theme.spacing.sm,
     fontSize: theme.typography.styles.body.fontSize,
     color: theme.colors.ink900,
     fontFamily: theme.typography.fonts.uiRegular,
+  },
+  inputWithAccessory: {
+    paddingRight: theme.spacing.xs,
+  },
+  rightAccessory: {
+    paddingRight: theme.spacing.sm,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   focusedInput: {
     borderColor: theme.colors.primary600,
@@ -141,7 +166,6 @@ const styles = StyleSheet.create({
   },
   disabledInput: {
     backgroundColor: theme.colors.bgMuted,
-    color: theme.colors.ink500,
   },
   helperText: {
     fontFamily: theme.typography.fonts.uiRegular,

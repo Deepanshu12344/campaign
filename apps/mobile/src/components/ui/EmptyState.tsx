@@ -9,6 +9,7 @@ export interface EmptyStateProps extends ViewProps {
   title: string;
   description: string;
   actionTitle?: string;
+  actionLabel?: string;
   onAction?: () => void;
   buttonTitle?: string;
   onPress?: () => void;
@@ -19,13 +20,14 @@ export function EmptyState({
   title,
   description,
   actionTitle,
+  actionLabel,
   onAction,
   buttonTitle,
   onPress,
   style,
   ...rest
 }: EmptyStateProps) {
-  const resolvedTitle = actionTitle ?? buttonTitle;
+  const resolvedTitle = actionTitle ?? actionLabel ?? buttonTitle;
   const resolvedAction = onAction ?? onPress;
 
   return (

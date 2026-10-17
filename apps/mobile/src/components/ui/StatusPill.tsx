@@ -15,11 +15,11 @@ import {
   RotateCcw,
   AlertTriangle,
 } from 'lucide-react-native';
-import { CampaignStatus } from '@campaigns/shared';
+import { CampaignStatus, ContributionStatus } from '@campaigns/shared';
 import { theme } from '../../theme';
 
 export interface StatusPillProps extends ViewProps {
-  status: CampaignStatus;
+  status: CampaignStatus | ContributionStatus;
 }
 
 export function StatusPill({ status, style, ...rest }: StatusPillProps) {
@@ -42,7 +42,7 @@ export function StatusPill({ status, style, ...rest }: StatusPillProps) {
   );
 }
 
-function getStatusConfig(status: CampaignStatus) {
+function getStatusConfig(status: CampaignStatus | ContributionStatus) {
   const iconSize = 13;
 
   switch (status) {
@@ -60,7 +60,7 @@ function getStatusConfig(status: CampaignStatus) {
         icon: <Clock size={iconSize} color={theme.colors.warning} />,
         textColor: theme.colors.warning,
         bgColor: theme.colors.warningBg,
-        borderColor: '#FDE68A',
+        borderColor: theme.colors.amber200,
       };
     case 'CHANGES_REQUESTED':
       return {
@@ -68,7 +68,7 @@ function getStatusConfig(status: CampaignStatus) {
         icon: <AlertCircle size={iconSize} color={theme.colors.warning} />,
         textColor: theme.colors.warning,
         bgColor: theme.colors.warningBg,
-        borderColor: '#FDE68A',
+        borderColor: theme.colors.amber200,
       };
     case 'APPROVED':
       return {
@@ -76,7 +76,7 @@ function getStatusConfig(status: CampaignStatus) {
         icon: <CheckCircle2 size={iconSize} color={theme.colors.info} />,
         textColor: theme.colors.info,
         bgColor: theme.colors.infoBg,
-        borderColor: '#BAE6FD',
+        borderColor: theme.colors.sky200,
       };
     case 'FUNDING':
       return {
@@ -84,7 +84,7 @@ function getStatusConfig(status: CampaignStatus) {
         icon: <CircleDollarSign size={iconSize} color={theme.colors.primary600} />,
         textColor: theme.colors.primary600,
         bgColor: theme.colors.primary50,
-        borderColor: '#C7D2FE',
+        borderColor: theme.colors.primary200,
       };
     case 'FUNDING_CLOSED':
       return {
@@ -100,7 +100,7 @@ function getStatusConfig(status: CampaignStatus) {
         icon: <SlidersHorizontal size={iconSize} color={theme.colors.info} />,
         textColor: theme.colors.info,
         bgColor: theme.colors.infoBg,
-        borderColor: '#BAE6FD',
+        borderColor: theme.colors.sky200,
       };
     case 'PROMOTING':
       return {
@@ -108,7 +108,7 @@ function getStatusConfig(status: CampaignStatus) {
         icon: <Megaphone size={iconSize} color={theme.colors.success} />,
         textColor: theme.colors.success,
         bgColor: theme.colors.successBg,
-        borderColor: '#BBF7D0',
+        borderColor: theme.colors.emerald100,
       };
     case 'COMPLETED':
       return {
@@ -116,7 +116,7 @@ function getStatusConfig(status: CampaignStatus) {
         icon: <CheckCheck size={iconSize} color={theme.colors.success} />,
         textColor: theme.colors.success,
         bgColor: theme.colors.successBg,
-        borderColor: '#BBF7D0',
+        borderColor: theme.colors.emerald100,
       };
     case 'REJECTED':
       return {
@@ -124,7 +124,7 @@ function getStatusConfig(status: CampaignStatus) {
         icon: <XCircle size={iconSize} color={theme.colors.danger} />,
         textColor: theme.colors.danger,
         bgColor: theme.colors.dangerBg,
-        borderColor: '#FECACA',
+        borderColor: theme.colors.red200,
       };
     case 'CANCELLED':
       return {
@@ -132,7 +132,7 @@ function getStatusConfig(status: CampaignStatus) {
         icon: <Ban size={iconSize} color={theme.colors.danger} />,
         textColor: theme.colors.danger,
         bgColor: theme.colors.dangerBg,
-        borderColor: '#FECACA',
+        borderColor: theme.colors.red200,
       };
     case 'REFUND_PENDING':
       return {
@@ -140,7 +140,7 @@ function getStatusConfig(status: CampaignStatus) {
         icon: <RotateCcw size={iconSize} color={theme.colors.warning} />,
         textColor: theme.colors.warning,
         bgColor: theme.colors.warningBg,
-        borderColor: '#FDE68A',
+        borderColor: theme.colors.amber200,
       };
     case 'FAILED':
       return {
@@ -148,7 +148,31 @@ function getStatusConfig(status: CampaignStatus) {
         icon: <AlertTriangle size={iconSize} color={theme.colors.danger} />,
         textColor: theme.colors.danger,
         bgColor: theme.colors.dangerBg,
-        borderColor: '#FECACA',
+        borderColor: theme.colors.red200,
+      };
+    case 'SUCCEEDED':
+      return {
+        label: 'Succeeded',
+        icon: <CheckCircle2 size={iconSize} color={theme.colors.success} />,
+        textColor: theme.colors.success,
+        bgColor: theme.colors.successBg,
+        borderColor: theme.colors.emerald100,
+      };
+    case 'PENDING':
+      return {
+        label: 'Pending',
+        icon: <Clock size={iconSize} color={theme.colors.warning} />,
+        textColor: theme.colors.warning,
+        bgColor: theme.colors.warningBg,
+        borderColor: theme.colors.amber200,
+      };
+    case 'REFUNDED':
+      return {
+        label: 'Refunded',
+        icon: <RotateCcw size={iconSize} color={theme.colors.ink500} />,
+        textColor: theme.colors.ink700,
+        bgColor: theme.colors.line,
+        borderColor: theme.colors.line,
       };
   }
 }

@@ -54,3 +54,16 @@ export class CampaignNotFundingError extends AppError {
     super(400, 'CAMPAIGN_NOT_FUNDING', message);
   }
 }
+
+export class IllegalTransitionError extends AppError {
+  constructor(message = 'Illegal lifecycle transition') {
+    super(409, 'ILLEGAL_TRANSITION', message);
+  }
+}
+
+export class PreconditionFailedError extends AppError {
+  constructor(message = 'Precondition failed', fields?: Record<string, string[]>) {
+    super(409, 'PRECONDITION_FAILED', message, fields);
+  }
+}
+

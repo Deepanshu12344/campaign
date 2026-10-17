@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import request from 'supertest';
+import jwt from 'jsonwebtoken';
 import app from '../index';
 
 describe('Auth API (/api/v1/auth & /api/v1/me)', () => {
@@ -135,5 +136,50 @@ describe('Auth API (/api/v1/auth & /api/v1/me)', () => {
     const res = await request(app).get('/api/v1/me');
     expect(res.status).toBe(401);
     expect(res.body.error.code).toBe('UNAUTHORIZED');
+  });
+
+  it('rejects GET /api/v1/me with an expired access token', async () => {
+    const secret = process.env.JWT_SECRET || 'dev-secret-campaigns-jwt-key';
+    const expiredToken = jwt.sign(
+      { userId: 'test-user-id', role: 'USER', type: 'access' },
+      secret,
+      { expiresIn: -10 } // Expired 10 seconds ago
+    );
+
+    const res = await request(app)
+      .get('/api/v1/me')
+      .set('Authorization', `Bearer ${expiredToken}`);
+
+    expect(res.status).toBe(401);
+    expect(res.body.error.code).toBe('UNAUTHORIZED');
+    expect(res.body.error.message).toContain('expired');
+  });
+
+  it('rejects sign-in with non-existent email', async () => {
+    const res = await request(app)
+      .post('/api/v1/auth/sign-in')
+      .send({
+        email: 'nobody_exists@demo.com',
+        password: 'Password@123',
+      });
+
+    expect(res.status).toBe(401);
+    expect(res.body.error.code).toBe('INVALID_CREDENTIALS');
+  });
+
+  it('rejects refresh with an expired refresh token', async () => {
+    const secret = process.env.JWT_SECRET || 'dev-secret-campaigns-jwt-key';
+    const expiredRefreshToken = jwt.sign(
+      { userId: 'test-user-id', role: 'USER', type: 'refresh' },
+      secret,
+      { expiresIn: -10 }
+    );
+
+    const res = await request(app)
+      .post('/api/v1/auth/refresh')
+      .send({ refreshToken: expiredRefreshToken });
+
+    expect(res.status).toBe(401);
+    expect(res.body.error.code).toBe('INVALID_REFRESH_TOKEN');
   });
 });

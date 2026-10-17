@@ -12,6 +12,7 @@ import {
   CampaignDetailDto,
   CampaignListResponse,
   CampaignQuery,
+  Report,
 } from '@campaigns/shared';
 
 function buildQueryString(params: Record<string, unknown>): string {
@@ -66,5 +67,16 @@ export function useCampaign(id: string): UseQueryResult<CampaignDetailDto, ApiEr
     },
     enabled: Boolean(id),
     staleTime: 30 * 1000,
+  });
+}
+
+export function useCampaignReport(campaignId: string): UseQueryResult<Report, ApiError> {
+  return useQuery<Report, ApiError>({
+    queryKey: ['campaigns', campaignId, 'report'],
+    queryFn: async () => {
+      return apiClient.get<Report>(`/campaigns/${campaignId}/report`);
+    },
+    enabled: Boolean(campaignId),
+    staleTime: 60 * 1000,
   });
 }

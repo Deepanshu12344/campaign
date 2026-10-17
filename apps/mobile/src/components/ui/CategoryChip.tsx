@@ -20,13 +20,16 @@ import {
   Palette,
   Briefcase,
   Sparkles,
+  Layers,
+  Check,
 } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 import { Category } from '@campaigns/shared';
 import { theme } from '../../theme';
 
 export interface CategoryChipProps extends Omit<PressableProps, 'style'> {
-  category: Category;
+  category: Category | 'All';
+  label?: string;
   selected?: boolean;
   count?: number;
   style?: StyleProp<ViewStyle>;
@@ -34,6 +37,7 @@ export interface CategoryChipProps extends Omit<PressableProps, 'style'> {
 
 export function CategoryChip({
   category,
+  label,
   selected = false,
   count,
   onPress,
@@ -51,7 +55,7 @@ export function CategoryChip({
     <Pressable
       accessibilityRole="button"
       accessibilityState={{ selected }}
-      accessibilityLabel={`Category: ${category}${count !== undefined ? `, ${count} campaigns` : ''}`}
+      accessibilityLabel={`Category: ${label ?? category}${count !== undefined ? `, ${count} campaigns` : ''}`}
       onPress={handlePress}
       style={[
         styles.chip,
@@ -68,8 +72,13 @@ export function CategoryChip({
           selected ? styles.selectedLabel : styles.unselectedLabel,
         ]}
       >
-        {category}
+        {label ?? category}
       </Text>
+      {selected && (
+        <View style={styles.selectedCheckWrap}>
+          <Check size={12} color={theme.colors.primary600} strokeWidth={2.5} />
+        </View>
+      )}
       {count !== undefined && (
         <View
           style={[
@@ -91,10 +100,12 @@ export function CategoryChip({
   );
 }
 
-export function getCategoryIcon(category: Category, selected = false, size = 16) {
+export function getCategoryIcon(category: Category | 'All', selected = false, size = 16) {
   const color = selected ? theme.colors.primary600 : theme.colors.ink500;
 
   switch (category) {
+    case 'All':
+      return <Layers size={size} color={color} />;
     case 'Environment':
       return <Leaf size={size} color={color} />;
     case 'Health':
@@ -173,5 +184,8 @@ const styles = StyleSheet.create({
   },
   selectedCountText: {
     color: '#FFFFFF',
+  },
+  selectedCheckWrap: {
+    marginLeft: 4,
   },
 });

@@ -32,7 +32,25 @@ const CAMPAIGNS = {
   creatorChanges: '39012345-67ab-4cde-8890-bcdef0123456',
 };
 
-async function main() {
+export interface SeedOptions {
+  isProd?: boolean;
+  force?: boolean;
+}
+
+export async function seedDatabase(options: SeedOptions = {}): Promise<{ skipped: boolean; message: string }> {
+  const isProd = options.isProd ?? process.argv.includes('--prod');
+  const force = options.force ?? process.argv.includes('--force');
+
+  if (isProd && !force) {
+    const campaignCount = await prisma.campaign.count();
+    const userCount = await prisma.user.count();
+    if (campaignCount > 0 || userCount > 0) {
+      const msg = `Existing data detected (${campaignCount} campaigns, ${userCount} users). Production seed aborted to protect real data. Use --force to override.`;
+      console.log(`🛡️  ${msg}`);
+      return { skipped: true, message: msg };
+    }
+  }
+
   console.log('Seeding database with credible campaigns & exact contribution ledgers...');
 
   const passwordHash = await bcrypt.hash(DEMO_PASSWORD, 10);
@@ -140,13 +158,18 @@ async function main() {
         },
         {
           type: 'paragraph',
-          text: 'For over three decades, residents of West Jackson have navigated intermittent boil-water notices, aged cast-iron mains, and uncertain lead filtration efficacy. While infrastructure funds are allocated, everyday residents frequently lack access to neighborhood-level lead sampling results.',
+          text: 'For over three decades, residents of West Jackson have navigated intermittent **boil-water notices**, aged cast-iron mains, and uncertain lead filtration efficacy. While infrastructure funds are allocated, everyday residents frequently lack access to neighborhood-level lead sampling results. Check the [official monitoring portal](https://www.epa.gov/ms/jackson-water-crisis-updates) for daily updates.',
         },
         {
           type: 'image',
           url: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=1000&q=80',
           caption: 'Community water sample collection and independent turbidity testing.',
           credit: 'Photo by CDC on Unsplash',
+        },
+        {
+          type: 'quote',
+          text: 'Every family has the fundamental right to know exactly what comes out of their tap before they boil a kettle or fill a baby bottle.',
+          attribution: 'Dr. Evelyn Thomas, Jackson Community Health Director',
         },
         {
           type: 'stat',
@@ -156,7 +179,7 @@ async function main() {
         },
         {
           type: 'paragraph',
-          text: 'This campaign finances educational mobile and social ad distribution directly into Jackson zip codes, directing parents and local homeowners to free state-certified water test kits and filter replacement subsidies.',
+          text: 'This campaign finances educational mobile and social ad distribution directly into Jackson zip codes, directing parents and local homeowners to *free state-certified water test kits* and filter replacement subsidies.\n\nKey campaign milestones:\n- Distribute 100,000 targeted ad impressions\n- Drive direct kit requests to local health clinics\n- Publish verified monthly reach figures',
         },
         {
           type: 'actions',
@@ -1067,6 +1090,13 @@ async function main() {
 
   let totalContributionsSeeded = 0;
 
+  // Delete any non-seeded campaigns from previous ad-hoc test runs
+  await prisma.campaign.deleteMany({
+    where: {
+      id: { notIn: Object.values(CAMPAIGNS) },
+    },
+  });
+
   for (const c of campaignsData) {
     const { contributions, report, reviewDecision, ...campaignFields } = c;
 
@@ -1265,13 +1295,22 @@ async function main() {
 
   console.log('✓ Seeded campaign updates, audit events, notifications, follows, saves, and feedback');
   console.log('Database seeding successfully finished!');
+  return { skipped: false, message: 'Database seeding successfully finished!' };
 }
 
-main()
-  .catch((e) => {
-    console.error('Error during seeding:', e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+// Standalone CLI execution
+if (process.argv[1]?.includes('seed')) {
+  seedDatabase()
+    .then((res) => {
+      if (res.skipped) {
+        process.exit(0);
+      }
+    })
+    .catch((e) => {
+      console.error('Error during seeding:', e);
+      process.exit(1);
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
+}
