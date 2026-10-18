@@ -1008,8 +1008,9 @@ function renderStatusActionButton({
 function getCreatorTypeIcon(type: CreatorType) {
   const iconSize = 13;
   const color = theme.colors.textSecondary;
+  const normalized = typeof type === 'string' ? type.toLowerCase() : type;
 
-  switch (type) {
+  switch (normalized) {
     case 'individual':
       return <User size={iconSize} color={color} />;
     case 'creator':
@@ -1026,7 +1027,8 @@ function getCreatorTypeIcon(type: CreatorType) {
 }
 
 function getCreatorTypeLabel(type: CreatorType): string {
-  switch (type) {
+  const normalized = typeof type === 'string' ? type.toLowerCase() : type;
+  switch (normalized) {
     case 'individual':
       return 'Individual';
     case 'creator':

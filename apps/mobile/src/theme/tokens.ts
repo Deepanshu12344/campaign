@@ -40,11 +40,11 @@ export const colors = {
   limePressed: '#8BD65C',
   onLime: '#163300',
 
-  // Dark Green Tinted Pill ("Upload" style)
-  tintedPillBg: '#163300',
+  // Tinted Pill / Tag / Action Backgrounds (Neutral Grey with Brand Lime Accent)
+  tintedPillBg: '#2A2D29',
   tintedPillText: '#9FE870',
-  darkGreen: '#163300',
-  promoCardBg: '#122606',
+  darkGreen: '#2A2D29',
+  promoCardBg: '#1F221E',
 
   // Secondary Dark Pill
   darkPillBg: '#2A2D29',
@@ -70,11 +70,11 @@ export const colors = {
   ink200: '#2A2D29',
   ink100: '#1B1E19',
 
-  // Primary Shades (Lime to forest green)
-  primary50: '#163300',
-  primary100: '#1F4700',
-  primary200: '#2F6B00',
-  primary300: '#489E00',
+  // Primary Shades (Lime to neutral slate darks)
+  primary50: '#2A2D29',
+  primary100: '#2A2D29',
+  primary200: '#3F423E',
+  primary300: '#9FE870',
   primary400: '#76CC35',
   primary500: '#9FE870',
   primary600: '#9FE870',
@@ -93,9 +93,9 @@ export const colors = {
   slate800: '#1B1E19',
   slate900: '#121511',
 
-  // Semantic Status (Strict dark green, lime, surface and off-white only; zero red/amber/blue)
+  // Semantic Status (Strict neutral grey, lime, surface and off-white only; zero dark green bg)
   success: '#9FE870',
-  successBg: '#163300',
+  successBg: '#2A2D29',
   warning: '#F2F5EE',
   warningBg: '#2A2D29',
   danger: '#F2F5EE', // Forms & errors use off-white outline and text
@@ -104,15 +104,15 @@ export const colors = {
   infoBg: '#2A2D29',
 
   // Legacy scale compatibility mapped strictly to approved palette
-  emerald50: '#163300',
-  emerald100: '#163300',
-  emerald200: '#163300',
+  emerald50: '#2A2D29',
+  emerald100: '#2A2D29',
+  emerald200: '#2A2D29',
   emerald300: '#9FE870',
   emerald500: '#9FE870',
   emerald600: '#9FE870',
   emerald700: '#9FE870',
   emerald800: '#9FE870',
-  emerald900: '#163300',
+  emerald900: '#2A2D29',
 
   amber50: '#2A2D29',
   amber100: '#2A2D29',

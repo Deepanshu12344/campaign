@@ -404,7 +404,7 @@ export class CampaignService {
       title: campaign.title,
       category: (PRISMA_TO_CATEGORY[campaign.category] || campaign.category) as Category,
       creatorName: campaign.creatorName,
-      creatorType: campaign.creatorType as CreatorType,
+      creatorType: (campaign.creatorType.toLowerCase() as CreatorType),
       summary: campaign.summary,
       coverUrl: campaign.coverUrl,
       story: (campaign.story as unknown as StoryBlock[]) || [],

@@ -122,21 +122,24 @@ export function Button({
 
   const isInteractiveDisabled = disabled || loading;
 
-  const content = children || (
-    <Text
-      numberOfLines={numberOfLines ?? 1}
-      ellipsizeMode="tail"
-      style={[
-        styles.baseText,
-        sizeTextStyle,
-        variantTextStyle,
-        isInteractiveDisabled && styles.textDisabled,
-        textStyle,
-      ]}
-    >
-      {resolvedTitle}
-    </Text>
-  );
+  const content =
+    typeof children === 'string' || (!children && resolvedTitle) ? (
+      <Text
+        numberOfLines={numberOfLines ?? 1}
+        ellipsizeMode="tail"
+        style={[
+          styles.baseText,
+          sizeTextStyle,
+          variantTextStyle,
+          isInteractiveDisabled && styles.textDisabled,
+          textStyle,
+        ]}
+      >
+        {typeof children === 'string' ? children : resolvedTitle}
+      </Text>
+    ) : (
+      children
+    );
 
   const spinnerColor =
     variant === 'primary'

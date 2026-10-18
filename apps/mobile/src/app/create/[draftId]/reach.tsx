@@ -8,7 +8,7 @@ import {
   TextInput,
 } from 'react-native';
 import { Image } from 'expo-image';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter, Href } from 'expo-router';
 import {
   MapPin,
   Search,
@@ -46,6 +46,7 @@ import {
 import { useDraftStore } from '../../../store/draftStore';
 import {
   Card,
+  Button,
   Segmented,
   InfoTip,
   ReachEstimateBadge,
@@ -65,6 +66,7 @@ const CHANNEL_COLORS: Record<string, string> = {
 };
 
 export default function CreateReachScreen() {
+  const router = useRouter();
   const { draftId } = useLocalSearchParams<{ draftId: string }>();
   const toast = useToast();
 
@@ -159,6 +161,44 @@ export default function CreateReachScreen() {
     if (typeof y === 'number' && scrollViewRef.current) {
       scrollViewRef.current.scrollTo({ y: Math.max(0, y - 20), animated: true });
     }
+  };
+
+  const handleManualSave = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+    try {
+      const ok = await saveDraftNow(draftId as string);
+      if (ok) {
+        toast.success('Draft saved');
+      } else {
+        toast.info('Draft saved locally (offline)');
+      }
+    } catch {
+      toast.error('Failed to save draft');
+    }
+  };
+
+  const handleContinue = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+    const stepErrors = getStepErrors(draft, 'reach');
+    if (stepErrors.length > 0) {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error).catch(() => {});
+      toast.error(stepErrors[0] || 'Please resolve all required reach settings before continuing');
+
+      const firstErr = stepErrors[0] || '';
+      if (firstErr.includes('location')) {
+        scrollToSection('locations');
+      } else if (firstErr.includes('channel')) {
+        scrollToSection('channels');
+      } else if (firstErr.includes('allocation')) {
+        scrollToSection('allocation');
+      } else if (firstErr.includes('duration')) {
+        scrollToSection('duration');
+      }
+      return;
+    }
+
+    await saveDraftNow(draftId as string);
+    router.push(`/create/${draftId}/submit` as Href);
   };
 
   // ---------------------------------------------------------------------------
@@ -1193,6 +1233,24 @@ export default function CreateReachScreen() {
           )}
         </View>
       </Card>
+
+      {/* Bottom Form Actions (Save as Draft & Continue) */}
+      <View style={styles.bottomFormActions}>
+        <Button
+          title="Save as Draft"
+          variant="secondary"
+          size="lg"
+          fullWidth
+          onPress={handleManualSave}
+        />
+        <Button
+          title="Continue to Submit"
+          variant="primary"
+          size="lg"
+          fullWidth
+          onPress={handleContinue}
+        />
+      </View>
     </ScrollView>
   );
 }
@@ -1206,6 +1264,13 @@ const styles = StyleSheet.create({
     padding: theme.spacing.base,
     paddingBottom: 48,
     gap: theme.spacing.md,
+  },
+  bottomFormActions: {
+    flexDirection: 'column',
+    gap: 12,
+    width: '100%',
+    marginTop: theme.spacing.lg,
+    paddingBottom: 40,
   },
   headerBox: {
     marginBottom: 4,

@@ -378,7 +378,8 @@ export default function CreatePreviewScreen() {
 }
 
 function getCreatorTypeIcon(type?: CreatorType) {
-  switch (type) {
+  const normalized = typeof type === 'string' ? type.toLowerCase() : type;
+  switch (normalized) {
     case 'nonprofit':
       return <HeartHandshake size={14} color={theme.colors.lime} />;
     case 'business':
@@ -394,7 +395,8 @@ function getCreatorTypeIcon(type?: CreatorType) {
 }
 
 function getCreatorTypeLabel(type?: CreatorType) {
-  switch (type) {
+  const normalized = typeof type === 'string' ? type.toLowerCase() : type;
+  switch (normalized) {
     case 'nonprofit':
       return 'Nonprofit';
     case 'business':

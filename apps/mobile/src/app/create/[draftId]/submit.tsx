@@ -819,25 +819,14 @@ export default function CreateSubmitScreen() {
 
       {/* 6. BOTTOM ACTIONS */}
       <View style={styles.actionSection}>
-        <View style={styles.actionRowTop}>
-          <Button
-            title="Back to Reach"
-            variant="ghost"
-            size="md"
-            iconLeft={<ArrowLeft size={16} color={theme.colors.textSecondary} />}
-            onPress={() => router.push(`/create/${draftId}/reach` as Href)}
-            style={{ flex: 1 }}
-          />
-
-          <Button
-            title="Save as Draft"
-            variant="secondary"
-            size="md"
-            iconLeft={<Save size={16} color={theme.colors.textSecondary} />}
-            onPress={handleSaveDraft}
-            style={{ flex: 1.2 }}
-          />
-        </View>
+        <Button
+          title="Save as Draft"
+          variant="secondary"
+          size="lg"
+          fullWidth
+          iconLeft={<Save size={16} color={theme.colors.textSecondary} />}
+          onPress={handleSaveDraft}
+        />
 
         <Button
           title="Preview Campaign"
@@ -865,6 +854,15 @@ export default function CreateSubmitScreen() {
             Please tick all 4 confirmations above to enable submission.
           </Text>
         )}
+
+        <Button
+          title="Back to Reach"
+          variant="ghost"
+          size="md"
+          fullWidth
+          iconLeft={<ArrowLeft size={16} color={theme.colors.textSecondary} />}
+          onPress={() => router.push(`/create/${draftId}/reach` as Href)}
+        />
       </View>
 
       {/* Policy and Guidelines Modal Sheet */}
@@ -1309,10 +1307,6 @@ const styles = StyleSheet.create({
   actionSection: {
     gap: theme.spacing.sm,
     marginTop: theme.spacing.xs,
-  },
-  actionRowTop: {
-    flexDirection: 'row',
-    gap: theme.spacing.sm,
   },
   previewBtn: {
     borderColor: theme.colors.line,

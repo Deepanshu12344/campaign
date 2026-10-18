@@ -11,9 +11,10 @@ import {
   UIManager,
 } from 'react-native';
 import { Image } from 'expo-image';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter, Href } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import * as Haptics from 'expo-haptics';
+import { uploadImage } from '../../../utils/fileUpload';
 import {
   CheckCircle2,
   AlertCircle,
@@ -40,7 +41,6 @@ import {
   AiAdCopyResponse,
 } from '@campaigns/shared';
 import { useDraftStore } from '../../../store/draftStore';
-import { apiClient } from '../../../api/client';
 import { useAiAdCopy } from '../../../api';
 import { useRequireAuth } from '../../../auth/requireAuth';
 import {
@@ -96,7 +96,8 @@ const AI_IMAGE_IDEAS = [
 ];
 
 export default function CreateVisualsScreen() {
-  const { draftId } = useLocalSearchParams<{ draftId: string }>();
+  const router = useRouter();
+  const { draftId, returnTo } = useLocalSearchParams<{ draftId: string; returnTo?: string }>();
   const toast = useToast();
   const { requireAuth } = useRequireAuth();
 
@@ -116,7 +117,7 @@ export default function CreateVisualsScreen() {
   const coverUrl = typeof draft.coverUrl === 'string' ? draft.coverUrl : '';
   const [isUploadingCover, setIsUploadingCover] = useState(false);
   const [coverUploadError, setCoverUploadError] = useState<string | null>(null);
-  const lastCoverAssetRef = useRef<{ uri: string; name: string; mimeType: string } | null>(null);
+  const lastCoverAssetRef = useRef<{ uri: string; name: string; mimeType: string; file?: unknown } | null>(null);
 
   // Ad Creative state
   const rawAdCreative = draft.adCreative as AdCreative | null | undefined;
@@ -132,7 +133,7 @@ export default function CreateVisualsScreen() {
   const [isUploadingAdImage, setIsUploadingAdImage] = useState(false);
   const [adUploadError, setAdUploadError] = useState<string | null>(null);
   const [lowResWarning, setLowResWarning] = useState<string | null>(null);
-  const lastAdAssetRef = useRef<{ uri: string; name: string; mimeType: string } | null>(null);
+  const lastAdAssetRef = useRef<{ uri: string; name: string; mimeType: string; file?: unknown } | null>(null);
 
   // Pre-fill Headline from Title tracking
   const [isHeadlineDefault, setIsHeadlineDefault] = useState(() => {
@@ -235,6 +236,37 @@ export default function CreateVisualsScreen() {
     };
   }, [draft, setStepContinueHandler, saveDraftNow, toast]);
 
+  const handleManualSave = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+    try {
+      const ok = await saveDraftNow();
+      if (ok) {
+        toast.success('Draft saved');
+      } else {
+        toast.info('Draft saved locally (offline)');
+      }
+    } catch {
+      toast.error('Failed to save draft');
+    }
+  };
+
+  const handleContinue = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+    const stepErrors = getStepErrors(draft, 'visuals');
+    if (stepErrors.length > 0) {
+      toast.error(stepErrors[0]);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(() => {});
+      scrollToField('cover');
+      return;
+    }
+    await saveDraftNow();
+    if (returnTo === 'submit') {
+      router.push(`/create/${draftId}/submit` as Href);
+      return;
+    }
+    router.push(`/create/${draftId}/reach` as Href);
+  };
+
   // COVER IMAGE HANDLERS
   const handlePickCoverImage = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
@@ -275,8 +307,15 @@ export default function CreateVisualsScreen() {
         return;
       }
 
-      lastCoverAssetRef.current = { uri: asset.uri, name: filename, mimeType };
-      await uploadCoverImage(asset.uri, filename, mimeType);
+      const assetPayload = {
+        uri: asset.uri,
+        name: filename,
+        fileName: filename,
+        mimeType,
+        file: (asset as { file?: unknown }).file,
+      };
+      lastCoverAssetRef.current = assetPayload;
+      await uploadCoverImage(assetPayload);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Unable to select image';
       setCoverUploadError(msg);
@@ -284,23 +323,12 @@ export default function CreateVisualsScreen() {
     }
   };
 
-  const uploadCoverImage = async (uri: string, filename: string, mimeType: string) => {
+  const uploadCoverImage = async (asset: { uri: string; name?: string; fileName?: string; mimeType?: string; file?: unknown }) => {
     setIsUploadingCover(true);
     setCoverUploadError(null);
 
     try {
-      const formData = new FormData();
-      formData.append('file', {
-        uri,
-        name: filename,
-        type: mimeType,
-      } as unknown as Blob);
-
-      const res = await apiClient.uploadFile<{ url: string }>('/uploads', formData);
-      const fullUrl = res.url.startsWith('http')
-        ? res.url
-        : `${apiClient.getBaseUrl().replace(/\/api\/v1$/, '')}${res.url}`;
-
+      const { fullUrl } = await uploadImage(asset);
       updateDraftField('coverUrl', fullUrl);
       lastCoverAssetRef.current = null;
       toast.success('Campaign cover updated');
@@ -315,11 +343,7 @@ export default function CreateVisualsScreen() {
 
   const handleRetryCoverUpload = () => {
     if (!lastCoverAssetRef.current) return;
-    uploadCoverImage(
-      lastCoverAssetRef.current.uri,
-      lastCoverAssetRef.current.name,
-      lastCoverAssetRef.current.mimeType
-    );
+    uploadCoverImage(lastCoverAssetRef.current);
   };
 
   const handleRemoveCover = () => {
@@ -381,8 +405,15 @@ export default function CreateVisualsScreen() {
         setLowResWarning(null);
       }
 
-      lastAdAssetRef.current = { uri: asset.uri, name: filename, mimeType };
-      await uploadAdImage(asset.uri, filename, mimeType);
+      const assetPayload = {
+        uri: asset.uri,
+        name: filename,
+        fileName: filename,
+        mimeType,
+        file: (asset as { file?: unknown }).file,
+      };
+      lastAdAssetRef.current = assetPayload;
+      await uploadAdImage(assetPayload);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Unable to select image';
       setAdUploadError(msg);
@@ -390,22 +421,12 @@ export default function CreateVisualsScreen() {
     }
   };
 
-  const uploadAdImage = async (uri: string, filename: string, mimeType: string) => {
+  const uploadAdImage = async (asset: { uri: string; name?: string; fileName?: string; mimeType?: string; file?: unknown }) => {
     setIsUploadingAdImage(true);
     setAdUploadError(null);
 
     try {
-      const formData = new FormData();
-      formData.append('file', {
-        uri,
-        name: filename,
-        type: mimeType,
-      } as unknown as Blob);
-
-      const res = await apiClient.uploadFile<{ url: string }>('/uploads', formData);
-      const fullUrl = res.url.startsWith('http')
-        ? res.url
-        : `${apiClient.getBaseUrl().replace(/\/api\/v1$/, '')}${res.url}`;
+      const { fullUrl } = await uploadImage(asset);
 
       updateDraftField('adCreative', {
         ...adCreative,
@@ -424,11 +445,7 @@ export default function CreateVisualsScreen() {
 
   const handleRetryAdUpload = () => {
     if (!lastAdAssetRef.current) return;
-    uploadAdImage(
-      lastAdAssetRef.current.uri,
-      lastAdAssetRef.current.name,
-      lastAdAssetRef.current.mimeType
-    );
+    uploadAdImage(lastAdAssetRef.current);
   };
 
   const handleRemoveAdImage = (index: number) => {
@@ -707,7 +724,9 @@ export default function CreateVisualsScreen() {
               <Camera size={18} color={theme.colors.lime} />
             </View>
             <View style={styles.sectionTitleCol}>
-              <Text style={styles.sectionHeading}>Campaign Cover Image</Text>
+              <Text style={styles.sectionHeading}>
+                Campaign Cover Image <Text style={styles.requiredAsterisk}>*</Text>
+              </Text>
               <Text style={styles.sectionHelper}>
                 Hero image for the top of your reading page. Synced with Step 1.
               </Text>
@@ -794,7 +813,9 @@ export default function CreateVisualsScreen() {
             </View>
             <View style={styles.sectionTitleCol}>
               <View style={styles.titleWithCountRow}>
-                <Text style={styles.sectionHeading}>Social & Display Ad Images</Text>
+                <Text style={styles.sectionHeading}>
+                  Social & Display Ad Images <Text style={styles.requiredAsterisk}>*</Text>
+                </Text>
                 <View style={styles.counterBadge}>
                   <Text style={styles.counterBadgeText}>{adImages.length} / 5</Text>
                 </View>
@@ -1380,6 +1401,24 @@ export default function CreateVisualsScreen() {
           </Card>
         </View>
       </Modal>
+
+      {/* Bottom Form Actions (Save as Draft & Continue) */}
+      <View style={styles.bottomFormActions}>
+        <Button
+          title="Save as Draft"
+          variant="secondary"
+          size="lg"
+          fullWidth
+          onPress={handleManualSave}
+        />
+        <Button
+          title="Continue to Reach"
+          variant="primary"
+          size="lg"
+          fullWidth
+          onPress={handleContinue}
+        />
+      </View>
     </ScrollView>
   );
 }
@@ -1393,6 +1432,13 @@ const styles = StyleSheet.create({
     padding: theme.spacing.base,
     paddingBottom: 60,
     gap: theme.spacing.base,
+  },
+  bottomFormActions: {
+    flexDirection: 'column',
+    gap: 12,
+    width: '100%',
+    marginTop: theme.spacing.lg,
+    paddingBottom: 40,
   },
   flex1: {
     flex: 1,

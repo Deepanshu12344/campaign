@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   CampaignDetailDto,
+  CreatorType,
   DraftUpdateInput,
 } from '@campaigns/shared';
 import { apiClient } from '../api/client';
@@ -13,6 +14,17 @@ export type DraftModel = Partial<Omit<CampaignDetailDto, 'adCreative' | 'reach'>
   reach?: DraftUpdateInput['reach'];
   [key: string]: unknown;
 };
+
+export function normalizeDraftData<T extends DraftModel | Partial<CampaignDetailDto>>(draft: T): T {
+  if (!draft || typeof draft !== 'object') return draft;
+  const normalized = { ...draft };
+  if (typeof (normalized as Record<string, unknown>).creatorType === 'string') {
+    (normalized as Record<string, unknown>).creatorType = (
+      (normalized as Record<string, unknown>).creatorType as string
+    ).toLowerCase() as CreatorType;
+  }
+  return normalized;
+}
 
 export interface DraftStoreState {
   drafts: Record<string, DraftModel>;
@@ -80,8 +92,13 @@ export const useDraftStore = create<DraftStoreState>((set, get) => ({
       const stored = await AsyncStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
+        const hydratedDrafts = { ...(parsed.drafts || {}) };
+        for (const id of Object.keys(hydratedDrafts)) {
+          hydratedDrafts[id] = normalizeDraftData(hydratedDrafts[id]);
+        }
+
         set((state) => ({
-          drafts: { ...state.drafts, ...(parsed.drafts || {}) },
+          drafts: { ...state.drafts, ...hydratedDrafts },
           dirtyFields: { ...state.dirtyFields, ...(parsed.dirtyFields || {}) },
           syncedState: { ...state.syncedState, ...(parsed.syncedState || {}) },
           syncStatus: { ...state.syncStatus, ...(parsed.syncStatus || {}) },
@@ -121,12 +138,16 @@ export const useDraftStore = create<DraftStoreState>((set, get) => ({
         if (!existingDraft || serverUpdatedAt >= localUpdatedAt) {
           // If we have local dirty fields that have not been synced yet, preserve them!
           const pendingDirty = state.dirtyFields[draftId] || {};
-          mergedDraft = {
+          mergedDraft = normalizeDraftData({
             ...initialData,
             ...existingDraft,
             ...pendingDirty,
-          };
+          });
+        } else {
+          mergedDraft = normalizeDraftData(mergedDraft);
         }
+      } else {
+        mergedDraft = normalizeDraftData(mergedDraft);
       }
 
       return {
@@ -180,19 +201,24 @@ export const useDraftStore = create<DraftStoreState>((set, get) => ({
       return;
     }
 
+    const normalizedValue =
+      field === 'creatorType' && typeof value === 'string'
+        ? value.toLowerCase()
+        : value;
+
     // 1. Immediate local state update
     set((state) => {
       const draft = state.drafts[targetId] || {};
       const updatedDraft: DraftModel = {
         ...draft,
-        [field]: value,
+        [field]: normalizedValue,
         updatedAt: new Date(),
       };
 
       const dirty = state.dirtyFields[targetId] || {};
       const updatedDirty = {
         ...dirty,
-        [field]: value,
+        [field]: normalizedValue,
       };
 
       const nextDrafts = { ...state.drafts, [targetId]: updatedDraft };
@@ -230,18 +256,23 @@ export const useDraftStore = create<DraftStoreState>((set, get) => ({
       throw new Error('No active draft to update. Call setActiveDraft first.');
     }
 
+    const normalizedFields = { ...fields };
+    if (typeof normalizedFields.creatorType === 'string') {
+      normalizedFields.creatorType = normalizedFields.creatorType.toLowerCase() as CreatorType;
+    }
+
     set((state) => {
       const draft = state.drafts[targetId] || {};
       const updatedDraft: DraftModel = {
         ...draft,
-        ...fields,
+        ...normalizedFields,
         updatedAt: new Date(),
       };
 
       const dirty = state.dirtyFields[targetId] || {};
       const updatedDirty = {
         ...dirty,
-        ...fields,
+        ...normalizedFields,
       };
 
       const nextDrafts = { ...state.drafts, [targetId]: updatedDraft };
@@ -328,11 +359,15 @@ export const useDraftStore = create<DraftStoreState>((set, get) => ({
         };
 
         // If backend returned updated campaign, merge updated server fields
-        const updatedDraft: DraftModel = {
+        const normalizedRes = res && typeof res === 'object'
+          ? normalizeDraftData(res as DraftModel)
+          : res;
+
+        const updatedDraft: DraftModel = normalizeDraftData({
           ...(state.drafts[targetId] || {}),
-          ...res,
+          ...normalizedRes,
           ...remainingDirty, // Keep any very new edits typed during in-flight network call
-        };
+        });
 
         persistDraftStore({
           drafts: { ...state.drafts, [targetId]: updatedDraft },
@@ -466,4 +501,8 @@ function persistDraftStore(data: {
   } catch {
     // Ignore storage write error
   }
+}
+
+if (typeof window !== 'undefined') {
+  (window as unknown as { __draftStore?: typeof useDraftStore }).__draftStore = useDraftStore;
 }

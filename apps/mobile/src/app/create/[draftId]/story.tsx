@@ -12,10 +12,11 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter, Href } from 'expo-router';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import * as Haptics from 'expo-haptics';
+import { uploadImage } from '../../../utils/fileUpload';
 import {
   CheckCircle2,
   AlertCircle,
@@ -42,6 +43,7 @@ import {
   FileCheck2,
   ShieldAlert,
   Check,
+  X,
 } from 'lucide-react-native';
 import {
   getStepErrors,
@@ -59,7 +61,6 @@ import {
   AiDraftStoryResponse,
 } from '@campaigns/shared';
 import { useDraftStore } from '../../../store/draftStore';
-import { apiClient } from '../../../api/client';
 import { useAiDraftStory } from '../../../api';
 import { useRequireAuth } from '../../../auth/requireAuth';
 import {
@@ -91,7 +92,8 @@ const MAX_IMAGE_BYTES = 5 * 1024 * 1024; // 5MB
 const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 export default function CreateStoryScreen() {
-  const { draftId } = useLocalSearchParams<{ draftId: string }>();
+  const router = useRouter();
+  const { draftId, returnTo } = useLocalSearchParams<{ draftId: string; returnTo?: string }>();
   const draft = useDraftStore((s) => s.getDraft(draftId as string)) || {};
   const updateDraftField = useDraftStore((s) => s.updateDraftField);
   const saveDraftNow = useDraftStore((s) => s.saveDraftNow);
@@ -248,6 +250,36 @@ export default function CreateStoryScreen() {
     } catch {
       toast.error('Failed to save draft');
     }
+  };
+
+  const handleContinue = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+    const currentErrors = getStepErrors(draft, 'story');
+    if (currentErrors.length > 0) {
+      toast.error(currentErrors[0]);
+      if (currentErrors.some((e) => e.includes('source'))) {
+        sourcesSectionRef.current?.measureLayout(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (scrollRef.current as any)?.getScrollableNode?.() || 0,
+          (_left, top) => {
+            scrollRef.current?.scrollTo({ y: Math.max(0, top - 20), animated: true });
+          },
+          () => {
+            scrollRef.current?.scrollToEnd({ animated: true });
+          }
+        );
+      } else {
+        scrollRef.current?.scrollTo({ y: 0, animated: true });
+      }
+      return;
+    }
+
+    await saveDraftNow();
+    if (returnTo === 'submit') {
+      router.push(`/create/${draftId}/submit` as Href);
+      return;
+    }
+    router.push(`/create/${draftId}/visuals` as Href);
   };
 
   // Block updates
@@ -758,9 +790,11 @@ export default function CreateStoryScreen() {
 
           {/* STORY BLOCKS STREAM */}
           <View style={styles.blocksSectionHeader}>
-            <Text style={styles.sectionTitle}>Article Content Blocks</Text>
+            <Text style={styles.sectionTitle}>
+              Article Content Blocks <Text style={styles.requiredStar}>*</Text>
+            </Text>
             <Text style={styles.sectionSubtitle}>
-              Total written text: {totalWrittenChars} / 300 minimum characters required.
+              Story description text: {totalWrittenChars} / 300 min characters (write main details in Paragraphs below).
             </Text>
           </View>
 
@@ -804,11 +838,10 @@ export default function CreateStoryScreen() {
               <View style={styles.sourcesCardHeader}>
                 <View style={styles.sourcesHeaderLeft}>
                   <FileCheck2 size={20} color={theme.colors.lime} />
-                  <Text style={styles.sourcesCardTitle}>Verified Sources & Citations</Text>
+                  <Text style={styles.sourcesCardTitle}>
+                    Verified Sources & Citations <Text style={styles.requiredStar}>*</Text>
+                  </Text>
                 </View>
-                <Text style={styles.sourcesRequiredBadge}>
-                  {sources.length === 0 ? 'Required' : `${sources.length} added`}
-                </Text>
               </View>
 
               <Text style={styles.sourcesPublicNotice}>
@@ -852,13 +885,19 @@ export default function CreateStoryScreen() {
           {/* SAVE DRAFT & CONTINUE BUTTONS */}
           <View style={styles.bottomFormActions}>
             <Button
+              title="Save as Draft"
               variant="secondary"
               size="lg"
+              fullWidth
               onPress={handleSaveDraft}
-              style={styles.actionBtnSecondary}
-            >
-              Save as Draft
-            </Button>
+            />
+            <Button
+              title="Continue to Visuals"
+              variant="primary"
+              size="lg"
+              fullWidth
+              onPress={handleContinue}
+            />
           </View>
         </ScrollView>
       )}
@@ -967,11 +1006,38 @@ export default function CreateStoryScreen() {
         visible={isLinkModalOpen}
         transparent
         animationType="fade"
-        onRequestClose={() => setIsLinkModalOpen(false)}
+        onRequestClose={() => {
+          setIsLinkModalOpen(false);
+          setLinkUrlInput('');
+        }}
       >
-        <View style={styles.modalBackdrop}>
-          <Card style={styles.linkModalCard}>
-            <Text style={styles.linkModalTitle}>Insert External Link</Text>
+        <Pressable
+          style={styles.modalBackdrop}
+          onPress={() => {
+            setIsLinkModalOpen(false);
+            setLinkUrlInput('');
+          }}
+        >
+          <Pressable style={styles.linkModalCard} onPress={(e) => e.stopPropagation()}>
+            <View style={styles.linkModalHeader}>
+              <View style={styles.linkModalHeaderLeft}>
+                <Link2 size={18} color={theme.colors.lime} />
+                <Text style={styles.linkModalTitle}>Insert External Link</Text>
+              </View>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Close link modal"
+                onPress={() => {
+                  setIsLinkModalOpen(false);
+                  setLinkUrlInput('');
+                }}
+                style={styles.linkModalCloseBtn}
+                hitSlop={8}
+              >
+                <X size={18} color={theme.colors.textSecondary} />
+              </Pressable>
+            </View>
+
             <TextField
               label="URL"
               placeholder="https://example.org/report"
@@ -981,10 +1047,12 @@ export default function CreateStoryScreen() {
               keyboardType="url"
               helper="Must start with http:// or https://"
             />
+
             <View style={styles.linkModalActions}>
               <Button
-                variant="ghost"
+                variant="secondary"
                 size="sm"
+                title="Cancel"
                 onPress={() => {
                   setIsLinkModalOpen(false);
                   setLinkUrlInput('');
@@ -995,14 +1063,15 @@ export default function CreateStoryScreen() {
               <Button
                 variant="primary"
                 size="sm"
+                title="Apply Link"
                 onPress={handleConfirmLink}
                 disabled={!validateSourceUrl(linkUrlInput)}
               >
                 Apply Link
               </Button>
             </View>
-          </Card>
-        </View>
+          </Pressable>
+        </Pressable>
       </Modal>
 
       {/* AI REVIEW BOTTOM SHEET */}
@@ -1300,8 +1369,9 @@ const StoryBlockComposerItem = React.memo(function StoryBlockComposerItem({
           <TextInput
             value={block.text}
             onChangeText={(text) => onUpdate({ text })}
-            placeholder="Section Heading..."
+            placeholder="Section Heading (Short title, max 80 chars)..."
             placeholderTextColor={theme.colors.textSecondary}
+            maxLength={80}
             style={[
               styles.blockTextInput,
               block.level === 1
@@ -1311,6 +1381,11 @@ const StoryBlockComposerItem = React.memo(function StoryBlockComposerItem({
                 : styles.h3Input,
             ]}
           />
+          <View style={styles.headingCounterRow}>
+            <Text style={styles.headingCounterText}>
+              {(block.text || '').length} / 80
+            </Text>
+          </View>
         </View>
       )}
 
@@ -1321,7 +1396,7 @@ const StoryBlockComposerItem = React.memo(function StoryBlockComposerItem({
             onChangeText={(text) => onUpdate({ text })}
             onFocus={() => block.id && onParagraphFocus(block.id)}
             onSelectionChange={(e) => onParagraphSelectionChange(e.nativeEvent.selection)}
-            placeholder="Write paragraph text here..."
+            placeholder="Write story paragraph description here..."
             placeholderTextColor={theme.colors.textSecondary}
             style={styles.paragraphInput}
             multiline
@@ -1455,17 +1530,12 @@ function ImageBlockComposer({ url, caption, credit, onUpdate }: ImageBlockCompos
 
       // Upload via POST /uploads
       setIsUploading(true);
-      const formData = new FormData();
-      formData.append('file', {
+      const { fullUrl } = await uploadImage({
         uri: asset.uri,
-        name: asset.fileName || 'story-image.jpg',
-        type: mime,
-      } as unknown as Blob);
-
-      const res = await apiClient.uploadFile<{ url: string }>('/uploads', formData);
-      const fullUrl = res.url.startsWith('http')
-        ? res.url
-        : `${apiClient.getBaseUrl().replace(/\/api\/v1$/, '')}${res.url}`;
+        fileName: asset.fileName || 'story-image.jpg',
+        mimeType: mime,
+        file: (asset as { file?: unknown }).file,
+      });
 
       onUpdate({ url: fullUrl });
       toast.success('Image uploaded');
@@ -1701,7 +1771,7 @@ function SourceComposerItem({
       <TextInput
         value={source.title}
         onChangeText={(val) => onUpdate({ title: val })}
-        placeholder="Source title or publication name (Required)"
+        placeholder="Source title or publication name *"
         placeholderTextColor={theme.colors.textSecondary}
         style={styles.sourceTextInput}
       />
@@ -1709,7 +1779,7 @@ function SourceComposerItem({
       <TextInput
         value={source.url}
         onChangeText={(val) => onUpdate({ url: val })}
-        placeholder="https://..."
+        placeholder="Source URL * (https://...)"
         placeholderTextColor={theme.colors.textSecondary}
         autoCapitalize="none"
         keyboardType="url"
@@ -1823,7 +1893,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: theme.radius.full,
-    backgroundColor: theme.colors.tintedPillBg,
+    backgroundColor: theme.colors.surfaceRaised,
     borderWidth: 1,
     borderColor: theme.colors.line,
   },
@@ -2012,7 +2082,7 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.border,
   },
   headingLevelChipActive: {
-    backgroundColor: theme.colors.tintedPillBg,
+    backgroundColor: theme.colors.surfaceRaised,
     borderColor: theme.colors.lime,
   },
   headingLevelChipText: {
@@ -2041,6 +2111,16 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 16,
     lineHeight: 22,
+  },
+  headingCounterRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 2,
+  },
+  headingCounterText: {
+    fontFamily: theme.typography.fonts.uiRegular,
+    fontSize: 11,
+    color: theme.colors.textSecondary,
   },
   paragraphInput: {
     fontFamily: theme.typography.fonts.serifRegular,
@@ -2302,14 +2382,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: theme.colors.textPrimary,
   },
-  sourcesRequiredBadge: {
-    fontFamily: theme.typography.fonts.uiMedium,
-    fontSize: 12,
+  requiredStar: {
+    fontFamily: theme.typography.fonts.uiBold,
+    fontSize: 14,
     color: theme.colors.lime,
-    backgroundColor: theme.colors.tintedPillBg,
-    paddingVertical: 2,
-    paddingHorizontal: 8,
-    borderRadius: theme.radius.full,
   },
   sourcesPublicNotice: {
     fontFamily: theme.typography.fonts.uiRegular,
@@ -2389,10 +2465,11 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   bottomFormActions: {
-    marginTop: theme.spacing.sm,
-  },
-  actionBtnSecondary: {
+    flexDirection: 'column',
+    gap: 12,
     width: '100%',
+    marginTop: theme.spacing.lg,
+    paddingBottom: 40,
   },
   floatingToolbar: {
     position: 'absolute',
@@ -2433,7 +2510,7 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingVertical: 6,
     paddingHorizontal: 10,
-    backgroundColor: theme.colors.tintedPillBg,
+    backgroundColor: theme.colors.surfaceRaised,
     borderRadius: 6,
     marginLeft: 'auto',
   },
@@ -2491,6 +2568,25 @@ const styles = StyleSheet.create({
     gap: 12,
     backgroundColor: theme.colors.surface,
     borderColor: theme.colors.border,
+  },
+  linkModalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 4,
+  },
+  linkModalHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  linkModalCloseBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: theme.colors.surfaceRaised,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   linkModalTitle: {
     fontFamily: theme.typography.fonts.uiBold,

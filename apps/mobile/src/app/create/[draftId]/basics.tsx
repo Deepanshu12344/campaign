@@ -51,9 +51,9 @@ import {
   AiDraftBasicsResponse,
 } from '@campaigns/shared';
 import { useDraftStore } from '../../../store/draftStore';
-import { apiClient } from '../../../api/client';
 import { useAiDraftBasics } from '../../../api';
 import { useRequireAuth } from '../../../auth/requireAuth';
+import { uploadImage } from '../../../utils/fileUpload';
 import {
   TextField,
   TextArea,
@@ -178,7 +178,7 @@ export default function CreateBasicsScreen() {
 
   const handleCreatorTypeSelect = (type: CreatorType) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
-    updateDraftField('creatorType', type);
+    updateDraftField('creatorType', type.toLowerCase() as CreatorType);
     clearError('creatorType');
   };
 
@@ -241,7 +241,12 @@ export default function CreateBasicsScreen() {
       }
 
       // Proceed to upload
-      await uploadCoverImage(asset.uri, filename, mimeType);
+      await uploadCoverImage({
+        uri: asset.uri,
+        fileName: filename,
+        mimeType,
+        file: (asset as { file?: unknown }).file,
+      });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Unable to select image';
       setCoverUploadError(msg);
@@ -249,23 +254,12 @@ export default function CreateBasicsScreen() {
     }
   };
 
-  const uploadCoverImage = async (uri: string, filename: string, mimeType: string) => {
+  const uploadCoverImage = async (asset: { uri: string; fileName?: string; mimeType?: string; file?: unknown }) => {
     setIsUploadingCover(true);
     setCoverUploadError(null);
 
     try {
-      const formData = new FormData();
-      formData.append('file', {
-        uri,
-        name: filename,
-        type: mimeType,
-      } as unknown as Blob);
-
-      const res = await apiClient.uploadFile<{ url: string }>('/uploads', formData);
-      const fullUrl = res.url.startsWith('http')
-        ? res.url
-        : `${apiClient.getBaseUrl().replace(/\/api\/v1$/, '')}${res.url}`;
-
+      const { fullUrl } = await uploadImage(asset);
       updateDraftField('coverUrl', fullUrl);
       toast.success('Cover image uploaded');
     } catch (err: unknown) {
@@ -300,7 +294,10 @@ export default function CreateBasicsScreen() {
       const currentSummary = typeof draft.summary === 'string' ? draft.summary : undefined;
       const currentCategory = draft.category as Category | undefined;
       const currentCreatorName = typeof draft.creatorName === 'string' ? draft.creatorName : undefined;
-      const currentCreatorType = draft.creatorType as CreatorType | undefined;
+      const currentCreatorType =
+        typeof draft.creatorType === 'string'
+          ? (draft.creatorType.toLowerCase() as CreatorType)
+          : undefined;
 
       const res = await aiBasicsMutation.mutateAsync({
         currentTitle,
@@ -409,7 +406,9 @@ export default function CreateBasicsScreen() {
       errs.creatorName = 'Creator name cannot exceed 80 characters';
     }
 
-    if (!draft.creatorType || !CREATOR_TYPES.includes(draft.creatorType as CreatorType)) {
+    const currentCreatorType =
+      typeof draft.creatorType === 'string' ? draft.creatorType.toLowerCase() : '';
+    if (!currentCreatorType || !CREATOR_TYPES.includes(currentCreatorType as CreatorType)) {
       errs.creatorType = 'Please select your creator or organization type';
     }
 
@@ -753,7 +752,11 @@ export default function CreateBasicsScreen() {
 
             <View style={styles.creatorTypeGrid}>
               {CREATOR_TYPE_OPTIONS.map((opt) => {
-                const isSelected = draft.creatorType === opt.type;
+                const normalizedType =
+                  typeof draft.creatorType === 'string'
+                    ? draft.creatorType.toLowerCase()
+                    : draft.creatorType;
+                const isSelected = normalizedType === opt.type;
                 const Icon = opt.icon;
 
                 return (
@@ -922,15 +925,15 @@ export default function CreateBasicsScreen() {
             title="Save as Draft"
             variant="secondary"
             size="lg"
+            fullWidth
             onPress={handleManualSave}
-            style={styles.actionBtnSecondary}
           />
           <Button
             title="Continue to Story"
             variant="primary"
             size="lg"
+            fullWidth
             onPress={handleContinue}
-            style={styles.actionBtnPrimary}
           />
         </View>
       </ScrollView>
@@ -1464,7 +1467,7 @@ const styles = StyleSheet.create({
   },
   creatorTypeCardSelected: {
     borderColor: theme.colors.lime,
-    backgroundColor: theme.colors.tintedPillBg,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   creatorTypeCardHeader: {
     flexDirection: 'row',
@@ -1596,15 +1599,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   bottomFormActions: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     gap: 12,
-    marginTop: theme.spacing.sm,
-  },
-  actionBtnSecondary: {
-    flex: 1,
-  },
-  actionBtnPrimary: {
-    flex: 1.4,
+    width: '100%',
+    marginTop: theme.spacing.lg,
+    paddingBottom: 40,
   },
   sheetScroll: {
     maxHeight: 500,

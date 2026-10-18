@@ -48,6 +48,31 @@ describe('Step Completeness Model (getStepErrors)', () => {
       expect(isStepComplete(validBasics, 'basics')).toBe(true);
       expect(isStepComplete(validBasics, 1)).toBe(true);
     });
+
+    it('accepts uppercase creatorType values without reporting validation errors', () => {
+      const uppercaseBasics: Partial<DraftUpdateInput> = {
+        title: 'Save the Rainforest',
+        category: 'Environment',
+        creatorName: 'Rainforest Alliance',
+        creatorType: 'NONPROFIT' as any,
+        summary: 'Protecting tropical forests through community action.',
+      };
+      const errors = getStepErrors(uppercaseBasics, 'basics');
+      expect(errors).toHaveLength(0);
+      expect(isStepComplete(uppercaseBasics, 'basics')).toBe(true);
+    });
+
+    it('rejects invalid creatorType with specific error message', () => {
+      const invalidBasics: Partial<DraftUpdateInput> = {
+        title: 'Save the Rainforest',
+        category: 'Environment',
+        creatorName: 'Rainforest Alliance',
+        creatorType: 'alien_organization' as any,
+        summary: 'Protecting tropical forests through community action.',
+      };
+      const errors = getStepErrors(invalidBasics, 'basics');
+      expect(errors).toContain('A valid creator type must be selected');
+    });
   });
 
   describe('Step 2: Story', () => {

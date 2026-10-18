@@ -149,4 +149,58 @@ describe('Draft Engine Store (useDraftStore)', () => {
       expect(dirty).not.toHaveProperty('summary');
     });
   });
+
+  describe('Creator Type Normalization & Persistence', () => {
+    it('normalizes uppercase creatorType to lowercase on updateDraftField', () => {
+      const store = useDraftStore.getState();
+      store.setActiveDraft('draft-201', { id: 'draft-201' });
+
+      store.updateDraftField('creatorType', 'INDIVIDUAL' as any);
+
+      const active = useDraftStore.getState().getActiveDraft();
+      expect(active?.creatorType).toBe('individual');
+    });
+
+    it('normalizes uppercase creatorType to lowercase on updateDraftFields', () => {
+      const store = useDraftStore.getState();
+      store.setActiveDraft('draft-202', { id: 'draft-202' });
+
+      store.updateDraftFields({
+        creatorType: 'NONPROFIT' as any,
+      });
+
+      const active = useDraftStore.getState().getActiveDraft();
+      expect(active?.creatorType).toBe('nonprofit');
+    });
+
+    it('normalizes uppercase creatorType when loading initial draft from server', () => {
+      const store = useDraftStore.getState();
+      store.setActiveDraft('draft-203', {
+        id: 'draft-203',
+        creatorType: 'COMMUNITY' as any,
+      });
+
+      const active = useDraftStore.getState().getActiveDraft();
+      expect(active?.creatorType).toBe('community');
+    });
+
+    it('normalizes creatorType in saveDraftNow server response', async () => {
+      const store = useDraftStore.getState();
+      store.setActiveDraft('draft-204', { id: 'draft-204' });
+      store.updateDraftField('title', 'Saved Campaign');
+
+      const { apiClient } = await import('../api/client');
+      vi.mocked(apiClient.patch).mockResolvedValueOnce({
+        id: 'draft-204',
+        title: 'Saved Campaign',
+        creatorType: 'BUSINESS',
+      });
+
+      const success = await store.saveDraftNow('draft-204');
+      expect(success).toBe(true);
+
+      const active = useDraftStore.getState().getActiveDraft();
+      expect(active?.creatorType).toBe('business');
+    });
+  });
 });

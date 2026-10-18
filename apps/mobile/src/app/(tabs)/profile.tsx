@@ -34,7 +34,7 @@ import { Button } from '../../components/ui/Button';
 import { useToast } from '../../components/ui/Toast';
 import { useAuthStore } from '../../store/authStore';
 import { useUpdateProfile } from '../../api';
-import { apiClient } from '../../api/client';
+import { uploadImage } from '../../utils/fileUpload';
 
 interface HelpTopic {
   id: string;
@@ -148,17 +148,12 @@ export default function ProfileScreen() {
       const filename = asset.fileName || `avatar-${Date.now()}.jpg`;
       const mimeType = asset.mimeType || 'image/jpeg';
 
-      const formData = new FormData();
-      formData.append('file', {
+      const { fullUrl } = await uploadImage({
         uri: asset.uri,
-        name: filename,
-        type: mimeType,
-      } as unknown as Blob);
-
-      const res = await apiClient.uploadFile<{ url: string }>('/uploads', formData);
-      const fullUrl = res.url.startsWith('http')
-        ? res.url
-        : `${apiClient.getBaseUrl().replace(/\/api\/v1$/, '')}${res.url}`;
+        fileName: filename,
+        mimeType,
+        file: (asset as { file?: unknown }).file,
+      });
 
       const updatedUser = await updateProfileMutation.mutateAsync({ avatarUrl: fullUrl });
       setUser(updatedUser);

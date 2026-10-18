@@ -15,7 +15,6 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   ChevronLeft,
-  ArrowLeft,
   Save,
   CheckCircle2,
   CloudOff,
@@ -25,7 +24,7 @@ import {
 import * as Haptics from 'expo-haptics';
 import { useDraftStore, SyncStatus } from '../../../store/draftStore';
 import { useCampaign } from '../../../api';
-import { StepIndicator, Button, IconButton, useToast, Sheet } from '../../../components/ui';
+import { StepIndicator, Button, useToast, Sheet } from '../../../components/ui';
 import { theme } from '../../../theme';
 
 const STEP_PATHS = [
@@ -63,7 +62,6 @@ export default function CreationLayout() {
   // Determine current route mode & step
   const isPreview = pathname.endsWith('/preview');
   const isSubmitted = pathname.endsWith('/submitted');
-  const isSubmitStep = pathname.endsWith('/submit');
   const currentStepName = STEP_PATHS.find((step) => pathname.endsWith(`/${step}`)) || 'basics';
   const currentStepIndex = STEP_PATHS.indexOf(currentStepName);
 
@@ -133,31 +131,6 @@ export default function CreationLayout() {
 
     // On Step 1: prompt before exiting
     setExitSheetVisible(true);
-  };
-
-  const handleContinue = async () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
-    const stepHandler = useDraftStore.getState().stepContinueHandler;
-    if (stepHandler) {
-      const allowed = await stepHandler();
-      if (!allowed) return;
-    }
-
-    // Trigger save on advance
-    await saveDraftNow(draftId as string);
-
-    if (returnTo === 'submit') {
-      router.push(`/create/${draftId}/submit` as Href);
-      return;
-    }
-
-    if (currentStepIndex < STEP_PATHS.length - 1) {
-      const nextStep = STEP_PATHS[currentStepIndex + 1];
-      router.push(`/create/${draftId}/${nextStep}` as Href);
-    } else if (currentStepIndex === STEP_PATHS.length - 1) {
-      // From step 5 (submit), advance to preview
-      router.push(`/create/${draftId}/preview` as Href);
-    }
   };
 
   const handleConfirmExit = async () => {
@@ -246,39 +219,6 @@ export default function CreationLayout() {
       <View style={styles.contentArea}>
         <Slot />
       </View>
-
-      {/* Sticky Bottom Bar (steps 1–4 only; step 5 and preview manage their dedicated actions) */}
-      {!isSubmitted && !isPreview && !isSubmitStep && (
-        <View style={[styles.bottomBar, { paddingBottom: Math.max(insets.bottom, 12) }]}>
-          <IconButton
-            icon={<ArrowLeft size={18} color={theme.colors.textPrimary} />}
-            size={44}
-            variant="surface"
-            accessibilityLabel={currentStepIndex === 0 ? 'Exit' : 'Back'}
-            onPress={handleBack}
-          />
-
-          <Button
-            title="Save draft"
-            variant="secondary"
-            size="md"
-            onPress={handleManualSave}
-            style={styles.bottomBarSaveBtn}
-            textStyle={styles.bottomBarBtnText}
-            numberOfLines={1}
-          />
-
-          <Button
-            title={returnTo === 'submit' ? 'Return to Submit' : 'Continue'}
-            variant="primary"
-            size="md"
-            onPress={handleContinue}
-            style={styles.bottomBarPrimaryBtn}
-            textStyle={styles.bottomBarBtnText}
-            numberOfLines={1}
-          />
-        </View>
-      )}
 
       {/* Exit Confirmation Sheet */}
       <Sheet
@@ -388,13 +328,13 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.pill,
   },
   modePillPreview: {
-    backgroundColor: theme.colors.tintedPillBg,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   modePillSubmitting: {
     backgroundColor: theme.colors.surfaceRaised,
   },
   modePillSubmitted: {
-    backgroundColor: theme.colors.tintedPillBg,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   modePillText: {
     fontFamily: theme.typography.fonts.uiBold,
@@ -428,7 +368,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: theme.colors.tintedPillBg,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -447,27 +387,6 @@ const styles = StyleSheet.create({
   },
   contentArea: {
     flex: 1,
-  },
-  bottomBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: theme.colors.surface,
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.line,
-    paddingTop: theme.spacing.sm,
-    paddingHorizontal: theme.spacing.base,
-    gap: theme.spacing.sm,
-    ...theme.shadows.elevated,
-  },
-  bottomBarSaveBtn: {
-    flex: 1,
-  },
-  bottomBarPrimaryBtn: {
-    flex: 1.2,
-  },
-  bottomBarBtnText: {
-    fontSize: 13,
   },
   exitSheetContent: {
     paddingVertical: theme.spacing.sm,

@@ -11,14 +11,18 @@ export const CREATOR_TYPES = [
 ] as const;
 
 export type CreatorType = (typeof CREATOR_TYPES)[number];
-export const CreatorTypeSchema = z.enum(CREATOR_TYPES);
+export const CreatorTypeSchema = z.preprocess((val) => {
+  if (typeof val !== 'string') return val;
+  const match = CREATOR_TYPES.find((ct) => ct.toLowerCase() === val.toLowerCase());
+  return match || val;
+}, z.enum(CREATOR_TYPES));
 
 // Story Blocks
 export const HeadingBlockSchema = z.object({
   id: z.string().optional(),
   type: z.literal('heading'),
   level: z.union([z.literal(1), z.literal(2), z.literal(3)]).default(2),
-  text: z.string().min(1),
+  text: z.string().min(1).max(100),
 });
 
 export const ParagraphBlockSchema = z.object({
@@ -636,10 +640,12 @@ export function getStepErrors(
         errors.push('Creator name cannot exceed 80 characters');
       }
 
-      if (!draft.creatorType) {
+      const rawCreatorType =
+        typeof draft.creatorType === 'string' ? draft.creatorType.trim() : draft.creatorType;
+      if (!rawCreatorType) {
         errors.push('Creator type is required');
       } else {
-        const typeResult = CreatorTypeSchema.safeParse(draft.creatorType);
+        const typeResult = CreatorTypeSchema.safeParse(rawCreatorType);
         if (!typeResult.success) {
           errors.push('A valid creator type must be selected');
         }
@@ -665,6 +671,15 @@ export function getStepErrors(
       );
       if (!hasHeading) {
         errors.push('Story must contain at least one heading block');
+      }
+
+      for (const block of story) {
+        if (!block || typeof block !== 'object') continue;
+        const b = block as Record<string, unknown>;
+        if (b.type === 'heading' && typeof b.text === 'string' && b.text.trim().length > 100) {
+          errors.push('Section headings cannot exceed 100 characters');
+          break;
+        }
       }
 
       let totalStoryChars = 0;
