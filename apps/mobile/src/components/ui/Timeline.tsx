@@ -34,9 +34,9 @@ export function Timeline({ items, style, ...rest }: TimelineProps) {
                 ]}
               >
                 {item.status === 'completed' ? (
-                  <Check size={12} color="#FFFFFF" strokeWidth={3} />
+                  <Check size={12} color={theme.colors.onLime} strokeWidth={3} />
                 ) : item.status === 'current' ? (
-                  <Circle size={8} color="#FFFFFF" fill="#FFFFFF" />
+                  <Circle size={8} color={theme.colors.lime} fill={theme.colors.lime} />
                 ) : (
                   <View style={styles.upcomingDot} />
                 )}
@@ -99,10 +99,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   nodeCompleted: {
-    backgroundColor: theme.colors.success,
+    backgroundColor: theme.colors.lime,
   },
   nodeCurrent: {
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.tintedPillBg,
+    borderWidth: 1.5,
+    borderColor: theme.colors.lime,
   },
   nodeUpcoming: {
     backgroundColor: theme.colors.line,
@@ -111,7 +113,7 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: theme.radius.pill,
-    backgroundColor: theme.colors.ink500,
+    backgroundColor: theme.colors.textMuted,
   },
   connectorLine: {
     flex: 1,
@@ -119,7 +121,7 @@ const styles = StyleSheet.create({
     marginVertical: 4,
   },
   lineCompleted: {
-    backgroundColor: theme.colors.success,
+    backgroundColor: theme.colors.lime,
   },
   lineUpcoming: {
     backgroundColor: theme.colors.line,

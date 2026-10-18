@@ -568,7 +568,7 @@ export default function CreateStoryScreen() {
           >
             <Edit3
               size={15}
-              color={activeTab === 'edit' ? theme.colors.primary700 : theme.colors.ink600}
+              color={activeTab === 'edit' ? theme.colors.lime : theme.colors.textSecondary}
             />
             <Text
               style={[
@@ -591,7 +591,7 @@ export default function CreateStoryScreen() {
           >
             <Eye
               size={15}
-              color={activeTab === 'preview' ? theme.colors.primary700 : theme.colors.ink600}
+              color={activeTab === 'preview' ? theme.colors.lime : theme.colors.textSecondary}
             />
             <Text
               style={[
@@ -612,7 +612,7 @@ export default function CreateStoryScreen() {
             onPress={handleLaunchAiStory}
             style={styles.aiHeaderBtn}
           >
-            <Sparkles size={14} color={theme.colors.primary600} />
+            <Sparkles size={14} color={theme.colors.lime} />
             <Text style={styles.aiHeaderBtnText}>AI Assistant</Text>
           </Pressable>
         )}
@@ -691,15 +691,15 @@ export default function CreateStoryScreen() {
           >
             {isComplete ? (
               <>
-                <CheckCircle2 size={16} color={theme.colors.success} />
-                <Text style={[styles.statusBannerText, { color: theme.colors.success }]}>
+                <CheckCircle2 size={16} color={theme.colors.lime} />
+                <Text style={[styles.statusBannerText, { color: theme.colors.lime }]}>
                   Story ready — heading, {totalWrittenChars} characters, and {sources.length} sources verified.
                 </Text>
               </>
             ) : (
               <>
-                <AlertCircle size={16} color={theme.colors.warning} />
-                <Text style={[styles.statusBannerText, { color: theme.colors.warning }]}>
+                <AlertCircle size={16} color={theme.colors.textSecondary} />
+                <Text style={[styles.statusBannerText, { color: theme.colors.textSecondary }]}>
                   {errors[0]}
                 </Text>
               </>
@@ -713,7 +713,7 @@ export default function CreateStoryScreen() {
               <View style={styles.labelRightGroup}>
                 {aiAcceptedFields['headline'] && (
                   <View style={styles.aiTagPill}>
-                    <Sparkles size={10} color={theme.colors.primary600} />
+                    <Sparkles size={10} color={theme.colors.lime} />
                     <Text style={styles.aiTagText}>AI-suggested</Text>
                   </View>
                 )}
@@ -724,7 +724,7 @@ export default function CreateStoryScreen() {
               value={headline}
               onChangeText={handleHeadlineChange}
               placeholder="e.g. Why Clean Water Cannot Wait"
-              placeholderTextColor={theme.colors.ink400}
+              placeholderTextColor={theme.colors.textSecondary}
               maxLength={60}
               style={styles.headlineInput}
               multiline
@@ -737,7 +737,7 @@ export default function CreateStoryScreen() {
               <View style={styles.labelRightGroup}>
                 {aiAcceptedFields['intro'] && (
                   <View style={styles.aiTagPill}>
-                    <Sparkles size={10} color={theme.colors.primary600} />
+                    <Sparkles size={10} color={theme.colors.lime} />
                     <Text style={styles.aiTagText}>AI-suggested</Text>
                   </View>
                 )}
@@ -748,7 +748,7 @@ export default function CreateStoryScreen() {
               value={intro}
               onChangeText={handleIntroChange}
               placeholder="A brief opening statement setting the urgency and thesis of your article..."
-              placeholderTextColor={theme.colors.ink400}
+              placeholderTextColor={theme.colors.textSecondary}
               maxLength={160}
               style={styles.introInput}
               multiline
@@ -794,7 +794,7 @@ export default function CreateStoryScreen() {
             }}
             style={styles.addBlockTrigger}
           >
-            <Plus size={18} color={theme.colors.primary600} />
+            <Plus size={18} color={theme.colors.lime} />
             <Text style={styles.addBlockTriggerText}>Add Content Block</Text>
           </Pressable>
 
@@ -803,7 +803,7 @@ export default function CreateStoryScreen() {
             <Card style={styles.sourcesCard}>
               <View style={styles.sourcesCardHeader}>
                 <View style={styles.sourcesHeaderLeft}>
-                  <FileCheck2 size={20} color={theme.colors.primary600} />
+                  <FileCheck2 size={20} color={theme.colors.lime} />
                   <Text style={styles.sourcesCardTitle}>Verified Sources & Citations</Text>
                 </View>
                 <Text style={styles.sourcesRequiredBadge}>
@@ -817,7 +817,7 @@ export default function CreateStoryScreen() {
 
               {missingSourcesForStats && (
                 <View style={styles.warningBox}>
-                  <ShieldAlert size={16} color={theme.colors.warning} />
+                  <ShieldAlert size={16} color={theme.colors.textSecondary} />
                   <Text style={styles.warningBoxText}>
                     This story includes statistic blocks, but no verified sources have been added. Add sources to substantiate your statistics.
                   </Text>
@@ -841,7 +841,7 @@ export default function CreateStoryScreen() {
                 variant="secondary"
                 size="sm"
                 onPress={handleAddSource}
-                iconLeft={<Plus size={14} color={theme.colors.ink800} />}
+                iconLeft={<Plus size={14} color={theme.colors.textPrimary} />}
                 style={styles.addSourceBtn}
               >
                 Add Another Source
@@ -872,7 +872,7 @@ export default function CreateStoryScreen() {
             onPress={() => handleFormatParagraph('bold')}
             style={styles.formatBtn}
           >
-            <Bold size={16} color={theme.colors.ink800} />
+            <Bold size={16} color={theme.colors.textPrimary} />
           </Pressable>
 
           <Pressable
@@ -881,7 +881,7 @@ export default function CreateStoryScreen() {
             onPress={() => handleFormatParagraph('italic')}
             style={styles.formatBtn}
           >
-            <Italic size={16} color={theme.colors.ink800} />
+            <Italic size={16} color={theme.colors.textPrimary} />
           </Pressable>
 
           <Pressable
@@ -890,7 +890,7 @@ export default function CreateStoryScreen() {
             onPress={() => handleFormatParagraph('link')}
             style={styles.formatBtn}
           >
-            <Link2 size={16} color={theme.colors.ink800} />
+            <Link2 size={16} color={theme.colors.textPrimary} />
           </Pressable>
 
           <Pressable
@@ -899,7 +899,7 @@ export default function CreateStoryScreen() {
             onPress={() => handleFormatParagraph('bullet')}
             style={styles.formatBtn}
           >
-            <List size={16} color={theme.colors.ink800} />
+            <List size={16} color={theme.colors.textPrimary} />
           </Pressable>
 
           <View style={styles.toolbarDivider} />
@@ -910,7 +910,7 @@ export default function CreateStoryScreen() {
             onPress={() => handleLaunchAiImproveParagraph(focusedParagraphId)}
             style={styles.formatAiBtn}
           >
-            <Sparkles size={13} color={theme.colors.primary600} />
+            <Sparkles size={13} color={theme.colors.tintedPillText} />
             <Text style={styles.formatAiText}>Improve</Text>
           </Pressable>
         </View>
@@ -924,37 +924,37 @@ export default function CreateStoryScreen() {
       >
         <View style={styles.addBlockSheetContent}>
           <BlockTypeOption
-            icon={<AlignLeft size={20} color={theme.colors.primary600} />}
+            icon={<AlignLeft size={20} color={theme.colors.lime} />}
             title="Paragraph"
             description="Editorial narrative with bold, italic, links, and bullet lists"
             onPress={() => handleAddBlock('paragraph')}
           />
           <BlockTypeOption
-            icon={<Heading size={20} color={theme.colors.primary600} />}
+            icon={<Heading size={20} color={theme.colors.lime} />}
             title="Heading"
             description="Section title to organize your narrative"
             onPress={() => handleAddBlock('heading')}
           />
           <BlockTypeOption
-            icon={<ImageIcon size={20} color={theme.colors.primary600} />}
+            icon={<ImageIcon size={20} color={theme.colors.lime} />}
             title="Image"
             description="Photograph or diagram with optional caption and credit"
             onPress={() => handleAddBlock('image')}
           />
           <BlockTypeOption
-            icon={<BarChart3 size={20} color={theme.colors.primary600} />}
+            icon={<BarChart3 size={20} color={theme.colors.lime} />}
             title="Statistic"
             description="Key verified number or percentage with citation"
             onPress={() => handleAddBlock('stat')}
           />
           <BlockTypeOption
-            icon={<QuoteIcon size={20} color={theme.colors.primary600} />}
+            icon={<QuoteIcon size={20} color={theme.colors.lime} />}
             title="Quote"
             description="Testimonial, expert opinion, or prominent excerpt"
             onPress={() => handleAddBlock('quote')}
           />
           <BlockTypeOption
-            icon={<ListOrdered size={20} color={theme.colors.primary600} />}
+            icon={<ListOrdered size={20} color={theme.colors.lime} />}
             title="Audience Actions"
             description="Up to 3 specific actions readers can take"
             onPress={() => handleAddBlock('actions')}
@@ -1014,7 +1014,7 @@ export default function CreateStoryScreen() {
         <ScrollView style={styles.aiSheetScroll} showsVerticalScrollIndicator={false}>
           {aiMutation.isPending ? (
             <View style={styles.aiLoadingContainer}>
-              <ActivityIndicator size="large" color={theme.colors.primary600} />
+              <ActivityIndicator size="large" color={theme.colors.lime} />
               <Text style={styles.aiLoadingText}>
                 {targetImproveBlockId
                   ? 'Polishing paragraph for clarity and punch...'
@@ -1047,7 +1047,7 @@ export default function CreateStoryScreen() {
                       variant="primary"
                       size="sm"
                       onPress={handleAcceptImprovedParagraph}
-                      iconLeft={<Check size={14} color="#FFFFFF" />}
+                      iconLeft={<Check size={14} color={theme.colors.onLime} />}
                     >
                       Accept Polish
                     </Button>
@@ -1097,7 +1097,7 @@ export default function CreateStoryScreen() {
                   {aiResponse.suggestedSourceTypes && (
                     <Card style={styles.aiPieceCard}>
                       <View style={styles.aiSourceTypesHeader}>
-                        <FileCheck2 size={16} color={theme.colors.primary600} />
+                        <FileCheck2 size={16} color={theme.colors.lime} />
                         <Text style={styles.aiPieceLabel}>Recommended Sources to Research</Text>
                       </View>
                       <Text style={styles.aiSourceTypesNotice}>
@@ -1151,7 +1151,7 @@ export default function CreateStoryScreen() {
                         variant="primary"
                         size="md"
                         onPress={handleAcceptAiFullStory}
-                        iconLeft={<Check size={16} color="#FFFFFF" />}
+                        iconLeft={<Check size={16} color={theme.colors.onLime} />}
                         style={styles.flex1}
                       >
                         Accept Story Draft
@@ -1209,7 +1209,7 @@ const StoryBlockComposerItem = React.memo(function StoryBlockComposerItem({
           <Text style={styles.blockTypeBadgeText}>{block.type.toUpperCase()}</Text>
           {isAiSuggested && (
             <View style={styles.aiTagPill}>
-              <Sparkles size={9} color={theme.colors.primary600} />
+              <Sparkles size={9} color={theme.colors.lime} />
               <Text style={styles.aiTagText}>AI-suggested</Text>
             </View>
           )}
@@ -1225,7 +1225,7 @@ const StoryBlockComposerItem = React.memo(function StoryBlockComposerItem({
           >
             <ArrowUp
               size={15}
-              color={isFirst ? theme.colors.ink400 : theme.colors.ink700}
+              color={isFirst ? theme.colors.textMuted : theme.colors.textPrimary}
             />
           </Pressable>
 
@@ -1238,7 +1238,7 @@ const StoryBlockComposerItem = React.memo(function StoryBlockComposerItem({
           >
             <ArrowDown
               size={15}
-              color={isLast ? theme.colors.ink400 : theme.colors.ink700}
+              color={isLast ? theme.colors.textMuted : theme.colors.textPrimary}
             />
           </Pressable>
 
@@ -1248,7 +1248,7 @@ const StoryBlockComposerItem = React.memo(function StoryBlockComposerItem({
             onPress={onDuplicate}
             style={styles.blockIconBtn}
           >
-            <Copy size={15} color={theme.colors.ink700} />
+            <Copy size={15} color={theme.colors.textPrimary} />
           </Pressable>
 
           {block.type === 'paragraph' && (
@@ -1258,7 +1258,7 @@ const StoryBlockComposerItem = React.memo(function StoryBlockComposerItem({
               onPress={onLaunchAiImprove}
               style={styles.blockIconBtn}
             >
-              <Sparkles size={14} color={theme.colors.primary600} />
+              <Sparkles size={14} color={theme.colors.lime} />
             </Pressable>
           )}
 
@@ -1268,7 +1268,7 @@ const StoryBlockComposerItem = React.memo(function StoryBlockComposerItem({
             onPress={onDelete}
             style={styles.blockIconBtn}
           >
-            <Trash2 size={15} color={theme.colors.danger} />
+            <Trash2 size={15} color={theme.colors.textPrimary} />
           </Pressable>
         </View>
       </View>
@@ -1301,7 +1301,7 @@ const StoryBlockComposerItem = React.memo(function StoryBlockComposerItem({
             value={block.text}
             onChangeText={(text) => onUpdate({ text })}
             placeholder="Section Heading..."
-            placeholderTextColor={theme.colors.ink400}
+            placeholderTextColor={theme.colors.textSecondary}
             style={[
               styles.blockTextInput,
               block.level === 1
@@ -1322,7 +1322,7 @@ const StoryBlockComposerItem = React.memo(function StoryBlockComposerItem({
             onFocus={() => block.id && onParagraphFocus(block.id)}
             onSelectionChange={(e) => onParagraphSelectionChange(e.nativeEvent.selection)}
             placeholder="Write paragraph text here..."
-            placeholderTextColor={theme.colors.ink400}
+            placeholderTextColor={theme.colors.textSecondary}
             style={styles.paragraphInput}
             multiline
           />
@@ -1347,7 +1347,7 @@ const StoryBlockComposerItem = React.memo(function StoryBlockComposerItem({
                 value={block.value}
                 onChangeText={(val) => onUpdate({ value: val })}
                 placeholder="e.g. 10°F or $4.2B"
-                placeholderTextColor={theme.colors.ink400}
+                placeholderTextColor={theme.colors.textSecondary}
                 style={styles.statValueInput}
               />
             </View>
@@ -1357,7 +1357,7 @@ const StoryBlockComposerItem = React.memo(function StoryBlockComposerItem({
                 value={block.label}
                 onChangeText={(lbl) => onUpdate({ label: lbl })}
                 placeholder="e.g. Temperature differential"
-                placeholderTextColor={theme.colors.ink400}
+                placeholderTextColor={theme.colors.textSecondary}
                 style={styles.statLabelInput}
               />
             </View>
@@ -1367,7 +1367,7 @@ const StoryBlockComposerItem = React.memo(function StoryBlockComposerItem({
             value={block.source || ''}
             onChangeText={(src) => onUpdate({ source: src })}
             placeholder="e.g. Metropolitan Climate Alliance Report"
-            placeholderTextColor={theme.colors.ink400}
+            placeholderTextColor={theme.colors.textSecondary}
             style={styles.statSourceInput}
           />
         </View>
@@ -1380,7 +1380,7 @@ const StoryBlockComposerItem = React.memo(function StoryBlockComposerItem({
             value={block.text}
             onChangeText={(txt) => onUpdate({ text: txt })}
             placeholder="A compelling quote from an expert or community member..."
-            placeholderTextColor={theme.colors.ink400}
+            placeholderTextColor={theme.colors.textSecondary}
             style={styles.quoteInput}
             multiline
           />
@@ -1389,7 +1389,7 @@ const StoryBlockComposerItem = React.memo(function StoryBlockComposerItem({
             value={block.attribution || ''}
             onChangeText={(att) => onUpdate({ attribution: att })}
             placeholder="e.g. Dr. Jane Smith, Research Director"
-            placeholderTextColor={theme.colors.ink400}
+            placeholderTextColor={theme.colors.textSecondary}
             style={styles.attributionInput}
           />
         </View>
@@ -1488,15 +1488,15 @@ function ImageBlockComposer({ url, caption, credit, onUpdate }: ImageBlockCompos
               variant="secondary"
               size="sm"
               onPress={handlePickImage}
-              iconLeft={<Camera size={13} color={theme.colors.ink800} />}
+              iconLeft={<Camera size={13} color={theme.colors.textPrimary} />}
             >
               Replace
             </Button>
             <Button
-              variant="danger"
+              variant="secondary"
               size="sm"
               onPress={() => onUpdate({ url: '' })}
-              iconLeft={<Trash2 size={13} color={theme.colors.danger} />}
+              iconLeft={<Trash2 size={13} color={theme.colors.textPrimary} />}
             >
               Remove
             </Button>
@@ -1512,12 +1512,12 @@ function ImageBlockComposer({ url, caption, credit, onUpdate }: ImageBlockCompos
         >
           {isUploading ? (
             <View style={styles.imageUploadingRow}>
-              <ActivityIndicator size="small" color={theme.colors.primary600} />
+              <ActivityIndicator size="small" color={theme.colors.lime} />
               <Text style={styles.imageUploadingText}>Uploading image...</Text>
             </View>
           ) : (
             <View style={styles.emptyImageInner}>
-              <Camera size={26} color={theme.colors.primary600} />
+              <Camera size={26} color={theme.colors.lime} />
               <Text style={styles.emptyImageTitle}>Upload Story Image</Text>
               <Text style={styles.emptyImageSubtitle}>JPG, PNG, WebP up to 5MB</Text>
             </View>
@@ -1527,13 +1527,13 @@ function ImageBlockComposer({ url, caption, credit, onUpdate }: ImageBlockCompos
 
       {uploadError && (
         <View style={styles.uploadErrorBox}>
-          <AlertCircle size={14} color={theme.colors.danger} />
+          <AlertCircle size={14} color={theme.colors.textPrimary} />
           <Text style={styles.uploadErrorText}>{uploadError}</Text>
           <Button
             variant="ghost"
             size="sm"
             onPress={handlePickImage}
-            iconLeft={<RefreshCw size={12} color={theme.colors.danger} />}
+            iconLeft={<RefreshCw size={12} color={theme.colors.textPrimary} />}
           >
             Retry
           </Button>
@@ -1547,7 +1547,7 @@ function ImageBlockComposer({ url, caption, credit, onUpdate }: ImageBlockCompos
             value={caption || ''}
             onChangeText={(txt) => onUpdate({ caption: txt })}
             placeholder="e.g. Solar panel installation on community center"
-            placeholderTextColor={theme.colors.ink400}
+            placeholderTextColor={theme.colors.textSecondary}
             style={styles.imageMetaInput}
           />
 
@@ -1556,7 +1556,7 @@ function ImageBlockComposer({ url, caption, credit, onUpdate }: ImageBlockCompos
             value={credit || ''}
             onChangeText={(txt) => onUpdate({ credit: txt })}
             placeholder="e.g. Photo by Alex Rivera / Clean Energy Lab"
-            placeholderTextColor={theme.colors.ink400}
+            placeholderTextColor={theme.colors.textSecondary}
             style={styles.imageMetaInput}
           />
         </View>
@@ -1607,7 +1607,7 @@ function ActionsBlockComposer({ items, onUpdate }: ActionsBlockComposerProps) {
             value={item}
             onChangeText={(val) => handleItemChange(idx, val)}
             placeholder="e.g. Read the municipal water report"
-            placeholderTextColor={theme.colors.ink400}
+            placeholderTextColor={theme.colors.textSecondary}
             style={styles.actionTextInput}
           />
           <Pressable
@@ -1628,7 +1628,7 @@ function ActionsBlockComposer({ items, onUpdate }: ActionsBlockComposerProps) {
           onPress={handleAddItem}
           style={styles.addActionButton}
         >
-          <Plus size={14} color={theme.colors.primary600} />
+          <Plus size={14} color={theme.colors.lime} />
           <Text style={styles.addActionButtonText}>Add Action Item</Text>
         </Pressable>
       )}
@@ -1672,7 +1672,7 @@ function SourceComposerItem({
           >
             <ArrowUp
               size={14}
-              color={index === 0 ? theme.colors.ink400 : theme.colors.ink700}
+              color={index === 0 ? theme.colors.textMuted : theme.colors.textPrimary}
             />
           </Pressable>
           <Pressable
@@ -1684,7 +1684,7 @@ function SourceComposerItem({
           >
             <ArrowDown
               size={14}
-              color={index === total - 1 ? theme.colors.ink400 : theme.colors.ink700}
+              color={index === total - 1 ? theme.colors.textMuted : theme.colors.textPrimary}
             />
           </Pressable>
           <Pressable
@@ -1693,7 +1693,7 @@ function SourceComposerItem({
             onPress={onDelete}
             style={styles.sourceIconBtn}
           >
-            <Trash2 size={14} color={theme.colors.danger} />
+            <Trash2 size={14} color={theme.colors.textPrimary} />
           </Pressable>
         </View>
       </View>
@@ -1702,7 +1702,7 @@ function SourceComposerItem({
         value={source.title}
         onChangeText={(val) => onUpdate({ title: val })}
         placeholder="Source title or publication name (Required)"
-        placeholderTextColor={theme.colors.ink400}
+        placeholderTextColor={theme.colors.textSecondary}
         style={styles.sourceTextInput}
       />
 
@@ -1710,7 +1710,7 @@ function SourceComposerItem({
         value={source.url}
         onChangeText={(val) => onUpdate({ url: val })}
         placeholder="https://..."
-        placeholderTextColor={theme.colors.ink400}
+        placeholderTextColor={theme.colors.textSecondary}
         autoCapitalize="none"
         keyboardType="url"
         style={[styles.sourceTextInput, !isUrlValid && Boolean(source.url) && styles.sourceTextInputError]}
@@ -1725,7 +1725,7 @@ function SourceComposerItem({
         value={source.publisher || ''}
         onChangeText={(val) => onUpdate({ publisher: val })}
         placeholder="Publisher or agency name (Optional)"
-        placeholderTextColor={theme.colors.ink400}
+        placeholderTextColor={theme.colors.textSecondary}
         style={styles.sourceTextInput}
       />
     </View>
@@ -1787,7 +1787,7 @@ const styles = StyleSheet.create({
   },
   segmentedControl: {
     flexDirection: 'row',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surface,
     padding: 3,
     borderRadius: theme.radius.sm,
   },
@@ -1800,7 +1800,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.xs,
   },
   segmentBtnActive: {
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.surfaceRaised,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.08,
@@ -1810,11 +1810,11 @@ const styles = StyleSheet.create({
   segmentText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   segmentTextActive: {
     fontFamily: theme.typography.fonts.uiSemiBold,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   aiHeaderBtn: {
     flexDirection: 'row',
@@ -1823,14 +1823,14 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: theme.radius.full,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.tintedPillBg,
     borderWidth: 1,
-    borderColor: '#C7D2FE',
+    borderColor: theme.colors.line,
   },
   aiHeaderBtnText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: theme.colors.primary700,
+    color: theme.colors.tintedPillText,
   },
   headerBox: {
     marginBottom: 4,
@@ -1839,13 +1839,13 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 22,
     lineHeight: 28,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   stepSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 20,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: 4,
   },
   statusBanner: {
@@ -1858,12 +1858,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   statusBannerSuccess: {
-    backgroundColor: theme.colors.successBg,
-    borderColor: '#BBF7D0',
+    backgroundColor: theme.colors.tintedPillBg,
+    borderColor: theme.colors.line,
   },
   statusBannerPending: {
-    backgroundColor: theme.colors.warningBg,
-    borderColor: '#FDE68A',
+    backgroundColor: theme.colors.surfaceRaised,
+    borderColor: theme.colors.line,
   },
   statusBannerText: {
     fontFamily: theme.typography.fonts.uiMedium,
@@ -1872,8 +1872,8 @@ const styles = StyleSheet.create({
   },
   articleCard: {
     padding: theme.spacing.lg,
-    backgroundColor: '#FCFCFD',
-    borderColor: theme.colors.line,
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.border,
   },
   fieldHeaderRow: {
     flexDirection: 'row',
@@ -1886,7 +1886,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     letterSpacing: 0.5,
     textTransform: 'uppercase',
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   labelRightGroup: {
     flexDirection: 'row',
@@ -1896,13 +1896,13 @@ const styles = StyleSheet.create({
   charCountText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   headlineInput: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 24,
     lineHeight: 32,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     paddingVertical: 4,
     minHeight: 40,
   },
@@ -1915,7 +1915,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.storyItalic,
     fontSize: 16,
     lineHeight: 24,
-    color: theme.colors.ink800,
+    color: theme.colors.textSecondary,
     paddingVertical: 4,
     minHeight: 50,
   },
@@ -1925,12 +1925,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   sectionSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   blocksList: {
@@ -1939,6 +1939,9 @@ const styles = StyleSheet.create({
   blockCard: {
     padding: theme.spacing.md,
     backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.border,
+    borderWidth: 1,
+    borderRadius: theme.radius.sm,
   },
   blockControlsRow: {
     flexDirection: 'row',
@@ -1947,7 +1950,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingBottom: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: theme.colors.line,
   },
   blockTypeBadge: {
     flexDirection: 'row',
@@ -1958,7 +1961,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 11,
     letterSpacing: 0.5,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   aiTagPill: {
     flexDirection: 'row',
@@ -1966,15 +1969,15 @@ const styles = StyleSheet.create({
     gap: 4,
     paddingVertical: 2,
     paddingHorizontal: 6,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.tintedPillBg,
     borderRadius: theme.radius.full,
     borderWidth: 1,
-    borderColor: '#C7D2FE',
+    borderColor: theme.colors.line,
   },
   aiTagText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 10,
-    color: theme.colors.primary700,
+    color: theme.colors.tintedPillText,
   },
   blockActionButtons: {
     flexDirection: 'row',
@@ -1985,7 +1988,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 6,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -2004,24 +2007,24 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     paddingHorizontal: 8,
     borderRadius: 4,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   headingLevelChipActive: {
-    backgroundColor: theme.colors.primary50,
-    borderColor: theme.colors.primary600,
+    backgroundColor: theme.colors.tintedPillBg,
+    borderColor: theme.colors.lime,
   },
   headingLevelChipText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 11,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   headingLevelChipTextActive: {
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   blockTextInput: {
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     paddingVertical: 4,
   },
   h1Input: {
@@ -2043,14 +2046,14 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.serifRegular,
     fontSize: 16,
     lineHeight: 26,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     minHeight: 80,
     paddingVertical: 4,
   },
   miniLabel: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginBottom: 2,
   },
   statInputRow: {
@@ -2066,54 +2069,54 @@ const styles = StyleSheet.create({
   statValueInput: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 18,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     borderRadius: 6,
     padding: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.colors.inputBg,
   },
   statLabelInput: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     borderRadius: 6,
     padding: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.colors.inputBg,
   },
   statSourceInput: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textSecondary,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     borderRadius: 6,
     padding: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.colors.inputBg,
   },
   quoteInput: {
     fontFamily: theme.typography.fonts.storyItalic,
     fontSize: 15,
     lineHeight: 22,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     borderLeftWidth: 3,
-    borderLeftColor: theme.colors.primary600,
+    borderLeftColor: theme.colors.lime,
     paddingLeft: 10,
     paddingVertical: 6,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: theme.colors.inputBg,
     borderRadius: 4,
   },
   attributionInput: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     borderRadius: 6,
     padding: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.colors.inputBg,
   },
   imageBlockContainer: {
     gap: 10,
@@ -2124,7 +2127,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.sm,
     overflow: 'hidden',
     position: 'relative',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surface,
   },
   imagePreview: {
     width: '100%',
@@ -2136,7 +2139,7 @@ const styles = StyleSheet.create({
     right: 8,
     flexDirection: 'row',
     gap: 6,
-    backgroundColor: 'rgba(255, 255, 255, 0.92)',
+    backgroundColor: theme.colors.surface,
     padding: 4,
     borderRadius: theme.radius.xs,
   },
@@ -2146,15 +2149,14 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.sm,
     borderWidth: 1.5,
     borderStyle: 'dashed',
-    borderColor: theme.colors.line,
-    backgroundColor: '#FAFAFA',
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
     padding: theme.spacing.base,
   },
   emptyImageBoxError: {
-    borderColor: theme.colors.danger,
-    backgroundColor: '#FEF2F2',
+    borderColor: theme.colors.textPrimary,
   },
   emptyImageInner: {
     alignItems: 'center',
@@ -2163,13 +2165,13 @@ const styles = StyleSheet.create({
   emptyImageTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
     marginTop: 6,
   },
   emptyImageSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   imageUploadingRow: {
@@ -2180,20 +2182,22 @@ const styles = StyleSheet.create({
   imageUploadingText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink700,
+    color: theme.colors.textPrimary,
   },
   uploadErrorBox: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
     padding: 8,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: theme.colors.surfaceRaised,
+    borderColor: theme.colors.border,
+    borderWidth: 1,
     borderRadius: 6,
   },
   uploadErrorText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.danger,
+    color: theme.colors.textPrimary,
     flex: 1,
   },
   imageMetaFields: {
@@ -2203,12 +2207,12 @@ const styles = StyleSheet.create({
   imageMetaInput: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     borderRadius: 6,
     padding: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.colors.inputBg,
   },
   actionsComposerBox: {
     gap: 8,
@@ -2222,25 +2226,25 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
   },
   actionItemNumberText: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 12,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   actionTextInput: {
     flex: 1,
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     borderRadius: 6,
     padding: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.colors.inputBg,
   },
   actionDeleteBtn: {
     padding: 6,
@@ -2255,7 +2259,7 @@ const styles = StyleSheet.create({
   addActionButtonText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   addBlockTrigger: {
     flexDirection: 'row',
@@ -2265,20 +2269,22 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderWidth: 1.5,
     borderStyle: 'dashed',
-    borderColor: '#C7D2FE',
+    borderColor: theme.colors.border,
     borderRadius: theme.radius.sm,
-    backgroundColor: '#FAFCFF',
+    backgroundColor: theme.colors.surfaceRaised,
   },
   addBlockTriggerText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   sourcesCardContainer: {
     marginTop: theme.spacing.sm,
   },
   sourcesCard: {
     padding: theme.spacing.lg,
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.border,
   },
   sourcesCardHeader: {
     flexDirection: 'row',
@@ -2294,13 +2300,13 @@ const styles = StyleSheet.create({
   sourcesCardTitle: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   sourcesRequiredBadge: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.primary700,
-    backgroundColor: theme.colors.primary50,
+    color: theme.colors.lime,
+    backgroundColor: theme.colors.tintedPillBg,
     paddingVertical: 2,
     paddingHorizontal: 8,
     borderRadius: theme.radius.full,
@@ -2309,7 +2315,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginBottom: 12,
   },
   warningBox: {
@@ -2317,25 +2323,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     padding: 10,
-    backgroundColor: theme.colors.warningBg,
+    backgroundColor: theme.colors.surfaceRaised,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#FDE68A',
+    borderColor: theme.colors.border,
     marginBottom: 12,
   },
   warningBoxText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 16,
-    color: theme.colors.ink800,
+    color: theme.colors.textSecondary,
     flex: 1,
   },
   sourceItemBox: {
     padding: 10,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: theme.colors.line,
-    backgroundColor: '#FCFCFD',
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.surfaceRaised,
     marginBottom: 10,
     gap: 6,
   },
@@ -2347,7 +2353,7 @@ const styles = StyleSheet.create({
   sourceItemNumber: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   sourceControlsRow: {
     flexDirection: 'row',
@@ -2357,28 +2363,27 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 4,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
   },
   sourceTextInput: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     borderRadius: 6,
     padding: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.colors.inputBg,
   },
   sourceTextInputError: {
-    borderColor: theme.colors.danger,
-    backgroundColor: '#FEF2F2',
+    borderColor: theme.colors.textPrimary,
   },
   sourceInputErrorText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.danger,
+    color: theme.colors.textPrimary,
   },
   addSourceBtn: {
     marginTop: 4,
@@ -2394,13 +2399,15 @@ const styles = StyleSheet.create({
     bottom: 12,
     left: 16,
     right: 16,
-    backgroundColor: '#1E293B',
+    backgroundColor: theme.colors.surfaceRaised,
     borderRadius: theme.radius.md,
     paddingVertical: 8,
     paddingHorizontal: 12,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
@@ -2411,14 +2418,14 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 6,
-    backgroundColor: '#334155',
+    backgroundColor: theme.colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
   },
   toolbarDivider: {
     width: 1,
     height: 20,
-    backgroundColor: '#475569',
+    backgroundColor: theme.colors.line,
   },
   formatAiBtn: {
     flexDirection: 'row',
@@ -2426,14 +2433,14 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingVertical: 6,
     paddingHorizontal: 10,
-    backgroundColor: '#312E81',
+    backgroundColor: theme.colors.tintedPillBg,
     borderRadius: 6,
     marginLeft: 'auto',
   },
   formatAiText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: '#E0E7FF',
+    color: theme.colors.tintedPillText,
   },
   addBlockSheetContent: {
     gap: 8,
@@ -2447,13 +2454,13 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.sm,
     backgroundColor: theme.colors.surface,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   blockTypeIconCircle: {
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -2463,12 +2470,12 @@ const styles = StyleSheet.create({
   blockTypeTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   blockTypeDescription: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   modalBackdrop: {
@@ -2482,11 +2489,13 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: theme.spacing.lg,
     gap: 12,
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.border,
   },
   linkModalTitle: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   linkModalActions: {
     flexDirection: 'row',
@@ -2507,7 +2516,7 @@ const styles = StyleSheet.create({
   aiLoadingText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     paddingHorizontal: 20,
   },
@@ -2518,9 +2527,9 @@ const styles = StyleSheet.create({
   demoSuggestionsBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     borderRadius: theme.radius.full,
     alignSelf: 'flex-start',
     paddingVertical: 2,
@@ -2530,12 +2539,12 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: theme.colors.amber500,
+    backgroundColor: theme.colors.textSecondary,
     marginRight: theme.spacing.xxs,
   },
   demoSuggestionsText: {
     fontFamily: theme.typography.fonts.uiMedium,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     fontSize: 10,
@@ -2545,21 +2554,21 @@ const styles = StyleSheet.create({
     padding: theme.spacing.md,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#C7D2FE',
-    backgroundColor: '#FAFCFF',
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.surfaceRaised,
     gap: 10,
   },
   aiSectionLabel: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 12,
     letterSpacing: 0.5,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   aiSuggestedParagraph: {
     fontFamily: theme.typography.fonts.serifRegular,
     fontSize: 15,
     lineHeight: 24,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   aiImproveActions: {
     flexDirection: 'row',
@@ -2573,31 +2582,31 @@ const styles = StyleSheet.create({
   aiReviewIntro: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   aiPieceCard: {
     padding: 12,
-    borderColor: '#C7D2FE',
-    backgroundColor: '#FAFCFF',
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.surfaceRaised,
     gap: 6,
   },
   aiPieceLabel: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 11,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   aiPieceHeadline: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   aiPieceIntro: {
     fontFamily: theme.typography.fonts.storyItalic,
     fontSize: 14,
     lineHeight: 20,
-    color: theme.colors.ink800,
+    color: theme.colors.textSecondary,
   },
   aiBlockPreviewRow: {
     flexDirection: 'row',
@@ -2608,13 +2617,13 @@ const styles = StyleSheet.create({
   aiBlockTypeTag: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 11,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
     width: 80,
   },
   aiBlockSnippet: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textSecondary,
     flex: 1,
   },
   aiSourceTypesHeader: {
@@ -2625,32 +2634,32 @@ const styles = StyleSheet.create({
   aiSourceTypesNotice: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   aiSourceTypeItem: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
     marginTop: 4,
   },
   overwriteBox: {
     padding: 14,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: theme.colors.surfaceRaised,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: theme.colors.border,
     gap: 6,
   },
   overwriteTitle: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 14,
-    color: theme.colors.danger,
+    color: theme.colors.textPrimary,
   },
   overwriteDesc: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   overwriteActions: {
     flexDirection: 'row',
@@ -2672,7 +2681,7 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingVertical: 4,
     paddingHorizontal: 10,
-    backgroundColor: '#EEF2FF',
+    backgroundColor: theme.colors.surfaceRaised,
     borderRadius: theme.radius.full,
     alignSelf: 'flex-start',
     marginBottom: theme.spacing.md,
@@ -2681,26 +2690,26 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
   },
   previewModeText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 11,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
     letterSpacing: 0.3,
   },
   previewHeadline: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 27,
     lineHeight: 35,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: 8,
   },
   previewIntro: {
     fontFamily: theme.typography.fonts.storyItalic,
     fontSize: 16,
     lineHeight: 25,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     marginBottom: 16,
   },
   previewBylineRow: {
@@ -2713,24 +2722,24 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: theme.colors.primary100,
+    backgroundColor: theme.colors.tintedPillBg,
     alignItems: 'center',
     justifyContent: 'center',
   },
   previewAvatarText: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 16,
-    color: theme.colors.primary800,
+    color: theme.colors.tintedPillText,
   },
   previewCreatorName: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   previewCategoryDate: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   previewDivider: {

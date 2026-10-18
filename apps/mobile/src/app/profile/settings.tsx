@@ -179,7 +179,7 @@ export default function ProfileSettingsScreen() {
 
           {nameSuccess && (
             <View style={styles.inlineSuccess}>
-              <CheckCircle2 size={16} color={theme.colors.emerald600} />
+              <CheckCircle2 size={16} color={theme.colors.lime} />
               <Text style={styles.inlineSuccessText}>Name updated successfully</Text>
             </View>
           )}
@@ -201,7 +201,7 @@ export default function ProfileSettingsScreen() {
             value={user.email}
             editable={false}
             helperText="Primary contact and login identifier (read-only)"
-            rightAccessory={<Lock size={16} color={theme.colors.ink400} />}
+            rightAccessory={<Lock size={16} color={theme.colors.textSecondary} />}
           />
         </Card>
 
@@ -216,7 +216,7 @@ export default function ProfileSettingsScreen() {
             label="Change Password"
             variant="secondary"
             size="md"
-            icon={<KeyRound size={16} color={theme.colors.ink800} />}
+            icon={<KeyRound size={16} color={theme.colors.textPrimary} />}
             onPress={() => {
               setPasswordError(null);
               setPasswordSuccess(false);
@@ -240,7 +240,7 @@ export default function ProfileSettingsScreen() {
             label="Manage Notifications"
             variant="secondary"
             size="md"
-            icon={<Bell size={16} color={theme.colors.ink800} />}
+            icon={<Bell size={16} color={theme.colors.textPrimary} />}
             onPress={() => router.push('/profile/notifications-settings')}
             style={styles.actionRowButton}
           />
@@ -261,7 +261,7 @@ export default function ProfileSettingsScreen() {
               label="Sign Out"
               variant="secondary"
               size="sm"
-              icon={<LogOut size={16} color={theme.colors.ink800} />}
+              icon={<LogOut size={16} color={theme.colors.textPrimary} />}
               onPress={() => setShowSignOutModal(true)}
             />
           </View>
@@ -270,7 +270,7 @@ export default function ProfileSettingsScreen() {
 
           <View style={styles.dangerRow}>
             <View style={styles.actionTextContainer}>
-              <Text style={[styles.actionTitle, { color: theme.colors.red600 }]}>
+              <Text style={styles.actionTitle}>
                 Delete Account
               </Text>
               <Text style={styles.actionDescription}>
@@ -281,7 +281,7 @@ export default function ProfileSettingsScreen() {
               label="Delete"
               variant="danger"
               size="sm"
-              icon={<Trash2 size={16} color={theme.colors.white} />}
+              icon={<Trash2 size={16} color={theme.colors.textPrimary} />}
               onPress={() => setShowDeleteModal(true)}
             />
           </View>
@@ -305,13 +305,13 @@ export default function ProfileSettingsScreen() {
                 hitSlop={8}
                 style={styles.modalCloseButton}
               >
-                <X size={20} color={theme.colors.ink700} />
+                <X size={20} color={theme.colors.textSecondary} />
               </Pressable>
             </View>
 
             {passwordSuccess ? (
               <View style={styles.modalSuccessBox}>
-                <CheckCircle2 size={40} color={theme.colors.emerald600} />
+                <CheckCircle2 size={40} color={theme.colors.lime} />
                 <Text style={styles.modalSuccessText}>Password updated successfully!</Text>
               </View>
             ) : (
@@ -343,7 +343,7 @@ export default function ProfileSettingsScreen() {
 
                 {passwordError && (
                   <View style={styles.modalErrorBox}>
-                    <AlertTriangle size={16} color={theme.colors.red600} />
+                    <AlertTriangle size={16} color={theme.colors.textPrimary} />
                     <Text style={styles.modalErrorText}>{passwordError}</Text>
                   </View>
                 )}
@@ -414,7 +414,7 @@ export default function ProfileSettingsScreen() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.alertIconCircle}>
-              <AlertTriangle size={28} color={theme.colors.red600} />
+              <AlertTriangle size={28} color={theme.colors.textPrimary} />
             </View>
             <Text style={[styles.modalTitle, { textAlign: 'center', marginTop: theme.spacing.sm }]}>
               Delete Account (Demo)
@@ -449,7 +449,7 @@ export default function ProfileSettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.bg,
   },
   keyboardAvoid: {
     flex: 1,
@@ -467,13 +467,13 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: theme.typography.styles.h4.fontSize,
     lineHeight: theme.typography.styles.h4.lineHeight,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   sectionDescription: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.bodySm.fontSize,
     lineHeight: theme.typography.styles.bodySm.lineHeight,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginBottom: theme.spacing.xs,
   },
   avatarRow: {
@@ -488,8 +488,8 @@ const styles = StyleSheet.create({
   userRoleBadge: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 11,
-    color: theme.colors.primary700,
-    backgroundColor: theme.colors.primary50,
+    color: theme.colors.lime,
+    backgroundColor: theme.colors.tintedPillBg,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: theme.radius.sm,
@@ -499,7 +499,7 @@ const styles = StyleSheet.create({
   avatarSubtext: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   inlineSuccess: {
     flexDirection: 'row',
@@ -510,7 +510,7 @@ const styles = StyleSheet.create({
   inlineSuccessText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.emerald600,
+    color: theme.colors.lime,
   },
   actionRowButton: {
     alignSelf: 'flex-start',
@@ -518,7 +518,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: theme.colors.line,
+    backgroundColor: theme.colors.border,
     marginVertical: theme.spacing.md,
   },
   dangerRow: {
@@ -533,12 +533,12 @@ const styles = StyleSheet.create({
   actionTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 15,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   actionDescription: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   signedOutContainer: {
@@ -550,14 +550,14 @@ const styles = StyleSheet.create({
   signedOutTitle: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: theme.typography.styles.h3.fontSize,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: theme.spacing.sm,
     textAlign: 'center',
   },
   signedOutText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.body.fontSize,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     marginBottom: theme.spacing.xl,
     lineHeight: 22,
@@ -567,7 +567,7 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0,0,0,0.6)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: theme.spacing.lg,
@@ -579,7 +579,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.lg,
     padding: theme.spacing.xl,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   modalHeader: {
     flexDirection: 'row',
@@ -590,7 +590,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 18,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   modalCloseButton: {
     padding: 4,
@@ -598,7 +598,7 @@ const styles = StyleSheet.create({
   modalBody: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     lineHeight: 20,
     marginVertical: theme.spacing.base,
   },
@@ -610,13 +610,15 @@ const styles = StyleSheet.create({
   modalSuccessText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 16,
-    color: theme.colors.emerald600,
+    color: theme.colors.lime,
   },
   modalErrorBox: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: theme.colors.red50,
+    backgroundColor: theme.colors.surfaceRaised,
+    borderWidth: 1,
+    borderColor: theme.colors.textPrimary,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.md,
     marginTop: theme.spacing.xs,
@@ -625,7 +627,7 @@ const styles = StyleSheet.create({
   modalErrorText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.red600,
+    color: theme.colors.textPrimary,
     flex: 1,
   },
   modalButtonRow: {
@@ -637,7 +639,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: theme.colors.red50,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',

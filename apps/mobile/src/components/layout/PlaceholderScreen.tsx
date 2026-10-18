@@ -4,7 +4,7 @@ import { useRouter, Href } from 'expo-router';
 import { Layers } from 'lucide-react-native';
 import { theme } from '../../theme';
 import { SharedHeader } from './SharedHeader';
-import { Card, Button, DemoDataBadge } from '../ui';
+import { Card, Button } from '../ui';
 
 export interface PlaceholderAction {
   label: string;
@@ -16,7 +16,7 @@ export interface PlaceholderAction {
 export interface PlaceholderScreenProps {
   title: string;
   subtitle?: string;
-  routePath: string;
+  routePath?: string;
   description?: string;
   showBack?: boolean;
   fallbackRoute?: string;
@@ -32,7 +32,6 @@ export interface PlaceholderScreenProps {
 export function PlaceholderScreen({
   title,
   subtitle,
-  routePath,
   description = 'This screen structure is mounted as part of the Expo Router navigation shell. Feature implementations will be populated in subsequent phases.',
   showBack = true,
   fallbackRoute = '/(tabs)',
@@ -54,15 +53,9 @@ export function PlaceholderScreen({
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <Card style={styles.card}>
-          <View style={styles.badgeRow}>
-            <DemoDataBadge size="sm" />
-            <View style={styles.routePill}>
-              <Text style={styles.routeText}>{routePath}</Text>
-            </View>
-          </View>
 
           <View style={styles.iconCircle}>
-            <Layers size={28} color={theme.colors.primary600} />
+            <Layers size={28} color={theme.colors.lime} />
           </View>
 
           <Text style={styles.title}>{title}</Text>
@@ -121,23 +114,23 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.base,
   },
   routePill: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     paddingHorizontal: theme.spacing.sm,
     paddingVertical: 2,
     borderRadius: theme.radius.pill,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   routeText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.caption.fontSize,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   iconCircle: {
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: theme.spacing.base,
@@ -146,7 +139,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: theme.typography.styles.h2.fontSize,
     lineHeight: theme.typography.styles.h2.lineHeight,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     textAlign: 'center',
     marginBottom: theme.spacing.xs,
   },
@@ -154,7 +147,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.small.fontSize,
     lineHeight: theme.typography.styles.small.lineHeight,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     marginBottom: theme.spacing.xl,
   },

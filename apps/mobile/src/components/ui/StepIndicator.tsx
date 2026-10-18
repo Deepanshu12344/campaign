@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, Text, View, Pressable, ViewProps } from 'react-native';
-import { Check } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 import { theme } from '../../theme';
 
@@ -18,12 +17,14 @@ export interface StepIndicatorProps extends ViewProps {
   currentStepIndex?: number; // 0 to 4
   currentStep?: number; // 1 to 5
   onStepPress?: (step: number) => void;
+  showStepName?: boolean;
 }
 
 export function StepIndicator({
   currentStepIndex,
   currentStep,
   onStepPress,
+  showStepName = true,
   style,
   ...rest
 }: StepIndicatorProps) {
@@ -35,6 +36,8 @@ export function StepIndicator({
         ? currentStep - 1
         : 0;
 
+  const currentStepName = CREATION_STEPS[activeIndex] ?? 'Step';
+
   const handlePress = (index: number) => {
     // Only allow tapping steps that are already completed
     if (index < activeIndex && onStepPress) {
@@ -45,70 +48,42 @@ export function StepIndicator({
 
   return (
     <View style={[styles.container, style]} {...rest}>
-      <View style={styles.stepsRow}>
+      {/* Step Label Header */}
+      {showStepName && (
+        <View style={styles.headerRow}>
+          <Text style={styles.stepCounterText}>
+            STEP {activeIndex + 1} OF {CREATION_STEPS.length}
+          </Text>
+          <Text style={styles.stepTitleText}>{currentStepName}</Text>
+        </View>
+      )}
+
+      {/* 5-Segment Progress Bar */}
+      <View style={styles.segmentsRow}>
         {CREATION_STEPS.map((step, index) => {
           const isDone = index < activeIndex;
           const isCurrent = index === activeIndex;
           const isTappable = isDone && Boolean(onStepPress);
 
           return (
-            <React.Fragment key={step}>
-              {/* Connector line between steps */}
-              {index > 0 && (
-                <View
-                  style={[
-                    styles.connector,
-                    index <= activeIndex
-                      ? styles.connectorActive
-                      : styles.connectorInactive,
-                  ]}
-                />
-              )}
-
-              {/* Step circle & label */}
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={`Step ${index + 1}: ${step}, ${
-                  isDone ? 'completed' : isCurrent ? 'current' : 'upcoming'
-                }`}
-                disabled={!isTappable}
-                onPress={() => handlePress(index)}
-                style={styles.stepItem}
-                hitSlop={{ top: 8, bottom: 8, left: 4, right: 4 }}
-              >
-                <View
-                  style={[
-                    styles.circle,
-                    isDone && styles.circleDone,
-                    isCurrent && styles.circleCurrent,
-                    !isDone && !isCurrent && styles.circleUpcoming,
-                  ]}
-                >
-                  {isDone ? (
-                    <Check size={12} color="#FFFFFF" strokeWidth={3} />
-                  ) : (
-                    <Text
-                      style={[
-                        styles.stepNumber,
-                        isCurrent && styles.stepNumberCurrent,
-                      ]}
-                    >
-                      {index + 1}
-                    </Text>
-                  )}
-                </View>
-                <Text
-                  style={[
-                    styles.stepLabel,
-                    isCurrent && styles.stepLabelCurrent,
-                    isDone && styles.stepLabelDone,
-                  ]}
-                  numberOfLines={1}
-                >
-                  {step}
-                </Text>
-              </Pressable>
-            </React.Fragment>
+            <Pressable
+              key={step}
+              accessibilityRole="button"
+              accessibilityLabel={`Step ${index + 1} of ${CREATION_STEPS.length}: ${step}, ${
+                isDone ? 'completed' : isCurrent ? 'current' : 'upcoming'
+              }`}
+              disabled={!isTappable}
+              onPress={() => handlePress(index)}
+              style={styles.segmentTouch}
+              hitSlop={{ top: 8, bottom: 8, left: 2, right: 2 }}
+            >
+              <View
+                style={[
+                  styles.segmentBar,
+                  (isDone || isCurrent) ? styles.segmentActive : styles.segmentInactive,
+                ]}
+              />
+            </Pressable>
           );
         })}
       </View>
@@ -120,68 +95,45 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: theme.spacing.sm,
     paddingHorizontal: theme.spacing.base,
-    backgroundColor: theme.colors.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.line,
+    backgroundColor: theme.colors.bg,
   },
-  stepsRow: {
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    justifyContent: 'space-between',
+    marginBottom: theme.spacing.sm,
+  },
+  stepCounterText: {
+    fontFamily: theme.typography.fonts.uiBold,
+    fontSize: 12,
+    letterSpacing: 0.8,
+    color: theme.colors.lime,
+  },
+  stepTitleText: {
+    fontFamily: theme.typography.fonts.uiSemiBold,
+    fontSize: 13,
+    color: theme.colors.textSecondary,
+  },
+  segmentsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    gap: 6,
+    width: '100%',
   },
-  connector: {
+  segmentTouch: {
     flex: 1,
-    height: 2,
-    marginHorizontal: 4,
-    marginBottom: 16, // Align with circles
-  },
-  connectorActive: {
-    backgroundColor: theme.colors.primary600,
-  },
-  connectorInactive: {
-    backgroundColor: theme.colors.line,
-  },
-  stepItem: {
-    alignItems: 'center',
-  },
-  circle: {
-    width: 24,
-    height: 24,
-    borderRadius: theme.radius.pill,
-    alignItems: 'center',
+    height: 12,
     justifyContent: 'center',
-    marginBottom: 4,
   },
-  circleDone: {
-    backgroundColor: theme.colors.primary600,
+  segmentBar: {
+    height: 4,
+    borderRadius: 2,
+    width: '100%',
   },
-  circleCurrent: {
-    backgroundColor: theme.colors.primary600,
-    borderWidth: 2,
-    borderColor: theme.colors.primary50,
+  segmentActive: {
+    backgroundColor: theme.colors.lime,
   },
-  circleUpcoming: {
-    backgroundColor: theme.colors.line,
-  },
-  stepNumber: {
-    fontFamily: theme.typography.fonts.uiBold,
-    fontSize: 11,
-    color: theme.colors.ink500,
-  },
-  stepNumberCurrent: {
-    color: '#FFFFFF',
-  },
-  stepLabel: {
-    fontFamily: theme.typography.fonts.uiMedium,
-    fontSize: 11,
-    lineHeight: 14,
-    color: theme.colors.ink500,
-  },
-  stepLabelCurrent: {
-    fontFamily: theme.typography.fonts.uiBold,
-    color: theme.colors.primary600,
-  },
-  stepLabelDone: {
-    color: theme.colors.ink700,
+  segmentInactive: {
+    backgroundColor: theme.colors.surfaceRaised,
   },
 });

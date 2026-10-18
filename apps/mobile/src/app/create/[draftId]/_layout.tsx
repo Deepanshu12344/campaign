@@ -15,16 +15,17 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   ChevronLeft,
+  ArrowLeft,
   Save,
   CheckCircle2,
   CloudOff,
   RefreshCw,
-  LogOut,
+  X,
 } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 import { useDraftStore, SyncStatus } from '../../../store/draftStore';
 import { useCampaign } from '../../../api';
-import { StepIndicator, Button, useToast, Sheet } from '../../../components/ui';
+import { StepIndicator, Button, IconButton, useToast, Sheet } from '../../../components/ui';
 import { theme } from '../../../theme';
 
 const STEP_PATHS = [
@@ -178,7 +179,7 @@ export default function CreationLayout() {
             style={styles.headerIconButton}
             hitSlop={10}
           >
-            <ChevronLeft size={22} color={theme.colors.ink800} />
+            <ChevronLeft size={22} color={theme.colors.textPrimary} />
           </Pressable>
 
           {/* Mode Pill & Save Indicator */}
@@ -215,18 +216,18 @@ export default function CreationLayout() {
                 style={styles.saveDraftIconBtn}
                 hitSlop={8}
               >
-                <Save size={18} color={theme.colors.primary600} />
+                <Save size={18} color={theme.colors.lime} />
               </Pressable>
             )}
 
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Exit campaign creation"
+              accessibilityLabel="Exit"
               onPress={() => setExitSheetVisible(true)}
               style={styles.exitIconBtn}
               hitSlop={8}
             >
-              <LogOut size={18} color={theme.colors.ink500} />
+              <X size={20} color={theme.colors.textSecondary} />
             </Pressable>
           </View>
         </View>
@@ -249,20 +250,22 @@ export default function CreationLayout() {
       {/* Sticky Bottom Bar (steps 1–4 only; step 5 and preview manage their dedicated actions) */}
       {!isSubmitted && !isPreview && !isSubmitStep && (
         <View style={[styles.bottomBar, { paddingBottom: Math.max(insets.bottom, 12) }]}>
-          <Button
-            title={currentStepIndex === 0 ? 'Exit' : 'Back'}
-            variant="ghost"
-            size="md"
+          <IconButton
+            icon={<ArrowLeft size={18} color={theme.colors.textPrimary} />}
+            size={44}
+            variant="surface"
+            accessibilityLabel={currentStepIndex === 0 ? 'Exit' : 'Back'}
             onPress={handleBack}
-            style={styles.bottomBarSecondaryBtn}
           />
 
           <Button
-            title="Save Draft"
+            title="Save draft"
             variant="secondary"
             size="md"
             onPress={handleManualSave}
             style={styles.bottomBarSaveBtn}
+            textStyle={styles.bottomBarBtnText}
+            numberOfLines={1}
           />
 
           <Button
@@ -271,6 +274,8 @@ export default function CreationLayout() {
             size="md"
             onPress={handleContinue}
             style={styles.bottomBarPrimaryBtn}
+            textStyle={styles.bottomBarBtnText}
+            numberOfLines={1}
           />
         </View>
       )}
@@ -314,29 +319,29 @@ function renderSyncIndicator(status: SyncStatus) {
     case 'saving':
       return (
         <View style={styles.syncRow}>
-          <RefreshCw size={12} color={theme.colors.primary600} />
-          <Text style={[styles.syncText, { color: theme.colors.primary600 }]}>Saving...</Text>
+          <RefreshCw size={12} color={theme.colors.lime} />
+          <Text style={[styles.syncText, { color: theme.colors.lime }]}>Saving...</Text>
         </View>
       );
     case 'saved':
       return (
         <View style={styles.syncRow}>
-          <CheckCircle2 size={12} color={theme.colors.success} />
-          <Text style={[styles.syncText, { color: theme.colors.success }]}>Saved just now</Text>
+          <CheckCircle2 size={12} color={theme.colors.lime} />
+          <Text style={[styles.syncText, { color: theme.colors.lime }]}>Saved just now</Text>
         </View>
       );
     case 'offline_pending':
       return (
         <View style={styles.syncRow}>
-          <CloudOff size={12} color={theme.colors.warning} />
-          <Text style={[styles.syncText, { color: theme.colors.warning }]}>Offline - will sync</Text>
+          <CloudOff size={12} color={theme.colors.textSecondary} />
+          <Text style={[styles.syncText, { color: theme.colors.textSecondary }]}>Offline - will sync</Text>
         </View>
       );
     case 'error':
       return (
         <View style={styles.syncRow}>
-          <CloudOff size={12} color={theme.colors.danger} />
-          <Text style={[styles.syncText, { color: theme.colors.danger }]}>Save failed</Text>
+          <CloudOff size={12} color={theme.colors.textPrimary} />
+          <Text style={[styles.syncText, { color: theme.colors.textPrimary }]}>Save failed</Text>
         </View>
       );
     case 'idle':
@@ -365,40 +370,40 @@ const styles = StyleSheet.create({
     paddingBottom: theme.spacing.xs,
   },
   headerIconButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   headerCenterInfo: {
     alignItems: 'center',
     gap: 2,
   },
   modePill: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: theme.radius.pill,
   },
   modePillPreview: {
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.tintedPillBg,
   },
   modePillSubmitting: {
-    backgroundColor: theme.colors.warning,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   modePillSubmitted: {
-    backgroundColor: theme.colors.success,
+    backgroundColor: theme.colors.tintedPillBg,
   },
   modePillText: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 10,
     letterSpacing: 0.5,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   modePillTextLight: {
-    color: theme.colors.white,
+    color: theme.colors.lime,
   },
   syncIndicatorRow: {
     minHeight: 16,
@@ -420,18 +425,18 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   saveDraftIconBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: theme.colors.primary50,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: theme.colors.tintedPillBg,
     alignItems: 'center',
     justifyContent: 'center',
   },
   exitIconBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: theme.colors.bgMuted,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -455,14 +460,14 @@ const styles = StyleSheet.create({
     gap: theme.spacing.sm,
     ...theme.shadows.elevated,
   },
-  bottomBarSecondaryBtn: {
+  bottomBarSaveBtn: {
     flex: 1,
   },
-  bottomBarSaveBtn: {
+  bottomBarPrimaryBtn: {
     flex: 1.2,
   },
-  bottomBarPrimaryBtn: {
-    flex: 1.5,
+  bottomBarBtnText: {
+    fontSize: 13,
   },
   exitSheetContent: {
     paddingVertical: theme.spacing.sm,
@@ -472,7 +477,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 20,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   exitSheetButtons: {
     gap: theme.spacing.sm,

@@ -34,7 +34,6 @@ import {
   Timeline,
   TimelineItem,
   InfoTip,
-  DemoDataBadge,
   TextField,
   ErrorState,
 } from '../../components/ui';
@@ -136,7 +135,7 @@ export default function CreatorCampaignManageScreen() {
       <View style={styles.container}>
         <SharedHeader title="Campaign Hub" fallbackRoute="/creator/dashboard" />
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={theme.colors.primary600} />
+          <ActivityIndicator size="large" color={theme.colors.lime} />
           <Text style={styles.loadingText}>Loading campaign management hub...</Text>
         </View>
       </View>
@@ -244,7 +243,7 @@ export default function CreatorCampaignManageScreen() {
             accessibilityRole="button"
             accessibilityLabel="Share campaign link"
           >
-            <Share2 size={18} color={theme.colors.ink800} />
+            <Share2 size={18} color={theme.colors.textPrimary} />
           </Pressable>
         }
       />
@@ -257,7 +256,7 @@ export default function CreatorCampaignManageScreen() {
             <Text style={styles.categoryBadge}>{campaign.category}</Text>
             {campaign.daysRemaining !== null && (
               <View style={styles.daysBadge}>
-                <Clock size={12} color={theme.colors.ink600} />
+                <Clock size={12} color={theme.colors.textSecondary} />
                 <Text style={styles.daysBadgeText}>{campaign.daysRemaining} days remaining</Text>
               </View>
             )}
@@ -271,7 +270,7 @@ export default function CreatorCampaignManageScreen() {
               label="Public Page"
               variant="secondary"
               size="sm"
-              icon={<ExternalLink size={14} color={theme.colors.ink800} />}
+              icon={<ExternalLink size={14} color={theme.colors.textPrimary} />}
               onPress={() => router.push(`/campaign/${campaign.id}`)}
               style={styles.topBtn}
             />
@@ -280,7 +279,7 @@ export default function CreatorCampaignManageScreen() {
                 label="Final Report"
                 variant="primary"
                 size="sm"
-                icon={<FileCheck size={14} color={theme.colors.white} />}
+                icon={<FileCheck size={14} color={theme.colors.onLime} />}
                 onPress={() => router.push(`/campaign/${campaign.id}/report`)}
                 style={styles.topBtn}
               />
@@ -303,11 +302,7 @@ export default function CreatorCampaignManageScreen() {
             <View style={styles.feedbackHeader}>
               <AlertCircle
                 size={22}
-                color={
-                  campaign.status === 'CHANGES_REQUESTED'
-                    ? theme.colors.amber600
-                    : theme.colors.red600
-                }
+                color={theme.colors.textPrimary}
               />
               <Text style={styles.feedbackTitle}>
                 {campaign.status === 'CHANGES_REQUESTED'
@@ -354,9 +349,9 @@ export default function CreatorCampaignManageScreen() {
                     {showDecisionHistory ? 'Hide Decision History' : `View Decision History (${campaign.reviewDecisions.length})`}
                   </Text>
                   {showDecisionHistory ? (
-                    <ChevronUp size={16} color={theme.colors.primary700} />
+                    <ChevronUp size={16} color={theme.colors.lime} />
                   ) : (
-                    <ChevronDown size={16} color={theme.colors.primary700} />
+                    <ChevronDown size={16} color={theme.colors.lime} />
                   )}
                 </Pressable>
 
@@ -384,7 +379,7 @@ export default function CreatorCampaignManageScreen() {
         {isPublished && (
           <Card style={styles.controlledEditingCard}>
             <View style={styles.controlledEditingHeader}>
-              <Lock size={16} color={theme.colors.primary700} />
+              <Lock size={16} color={theme.colors.lime} />
               <Text style={styles.controlledEditingTitle}>Controlled Campaign Editing</Text>
             </View>
             <Text style={styles.controlledEditingText}>
@@ -393,7 +388,7 @@ export default function CreatorCampaignManageScreen() {
 
             {campaign.pendingRevision && (
               <View style={styles.pendingRevisionBanner}>
-                <Clock size={14} color={theme.colors.amber700} />
+                <Clock size={14} color={theme.colors.textSecondary} />
                 <Text style={styles.pendingRevisionText}>
                   A revision submitted on {typeof campaign.pendingRevision.createdAt === 'string' || campaign.pendingRevision.createdAt instanceof Date ? new Date(campaign.pendingRevision.createdAt as string).toLocaleDateString() : 'recently'} is currently pending reviewer verification.
                 </Text>
@@ -406,7 +401,7 @@ export default function CreatorCampaignManageScreen() {
         {campaign.status === 'PROMOTING' && (
           <Card style={styles.promotionCard}>
             <View style={styles.promotionHeader}>
-              <Sparkles size={18} color={theme.colors.primary700} />
+              <Sparkles size={18} color={theme.colors.lime} />
               <Text style={styles.promotionTitle}>Live Ad Distribution Progress</Text>
             </View>
             <Text style={styles.promotionSubtitle}>
@@ -445,7 +440,7 @@ export default function CreatorCampaignManageScreen() {
         {/* ========================================================= */}
         <View style={styles.analyticsSection}>
           <View style={styles.analyticsSectionHeader}>
-            <BarChart3 size={20} color={theme.colors.ink900} />
+            <BarChart3 size={20} color={theme.colors.textPrimary} />
             <Text style={styles.analyticsTitle}>Campaign Performance & Analytics</Text>
           </View>
 
@@ -518,7 +513,6 @@ export default function CreatorCampaignManageScreen() {
               <View style={styles.cardTitleLeft}>
                 <View style={styles.badgeRow}>
                   <Text style={styles.measuredCardCategory}>DELIVERED AUDIENCE</Text>
-                  <DemoDataBadge size="sm" />
                 </View>
                 <Text style={styles.reachCardTitle}>Measured Reach</Text>
               </View>
@@ -580,7 +574,7 @@ export default function CreatorCampaignManageScreen() {
           <Card style={styles.analyticsCard}>
             <View style={styles.durationRow}>
               <View style={styles.durationLeft}>
-                <Calendar size={16} color={theme.colors.ink600} />
+                <Calendar size={16} color={theme.colors.textSecondary} />
                 <Text style={styles.durationText}>Campaign Duration: {durationDays} days</Text>
               </View>
               <Text style={styles.averagePledgeText}>
@@ -589,7 +583,7 @@ export default function CreatorCampaignManageScreen() {
             </View>
 
             <View style={styles.privacyNoteBox}>
-              <Lock size={13} color={theme.colors.ink500} />
+              <Lock size={13} color={theme.colors.textSecondary} />
               <Text style={styles.privacyNoteText}>
                 Backer identities are aggregate and private by default to safeguard contributor privacy. Individual backer names and emails are never shared.
               </Text>
@@ -630,14 +624,14 @@ export default function CreatorCampaignManageScreen() {
 
           {updateError && (
             <View style={styles.updateErrorBox}>
-              <AlertCircle size={14} color={theme.colors.red600} />
+              <AlertCircle size={14} color={theme.colors.textPrimary} />
               <Text style={styles.updateErrorText}>{updateError}</Text>
             </View>
           )}
 
           {updateSuccess && (
             <View style={styles.updateSuccessBox}>
-              <CheckCircle2 size={16} color={theme.colors.emerald600} />
+              <CheckCircle2 size={16} color={theme.colors.lime} />
               <Text style={styles.updateSuccessText}>Update published to your public campaign page!</Text>
             </View>
           )}
@@ -646,7 +640,7 @@ export default function CreatorCampaignManageScreen() {
             label="Publish Update"
             variant="primary"
             size="md"
-            icon={<Send size={16} color={theme.colors.white} />}
+            icon={<Send size={16} color={theme.colors.onLime} />}
             loading={postUpdateMutation.isPending}
             onPress={handlePostUpdate}
             style={{ alignSelf: 'flex-start', marginTop: theme.spacing.xs }}
@@ -660,7 +654,7 @@ export default function CreatorCampaignManageScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.bg,
   },
   loadingContainer: {
     flex: 1,
@@ -671,7 +665,7 @@ const styles = StyleSheet.create({
   loadingText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 14,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: theme.spacing.base,
   },
   scrollContent: {
@@ -685,10 +679,10 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surface,
   },
   shareBtnPressed: {
-    backgroundColor: theme.colors.line,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   topCard: {
     padding: theme.spacing.base,
@@ -704,13 +698,13 @@ const styles = StyleSheet.create({
   categoryBadge: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   daysBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: theme.radius.sm,
@@ -718,19 +712,19 @@ const styles = StyleSheet.create({
   daysBadgeText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   campaignTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: theme.typography.styles.h3.fontSize,
     lineHeight: theme.typography.styles.h3.lineHeight,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   campaignSummary: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   topActionButtons: {
     flexDirection: 'row',
@@ -742,8 +736,9 @@ const styles = StyleSheet.create({
   },
   feedbackCard: {
     padding: theme.spacing.base,
-    backgroundColor: theme.colors.amber50,
-    borderColor: theme.colors.amber300,
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.surfaceRaised,
+    borderWidth: 1,
     gap: theme.spacing.sm,
   },
   feedbackHeader: {
@@ -754,16 +749,16 @@ const styles = StyleSheet.create({
   feedbackTitle: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 16,
-    color: theme.colors.amber900,
+    color: theme.colors.textPrimary,
   },
   feedbackNotes: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 20,
-    color: theme.colors.amber900,
+    color: theme.colors.textSecondary,
   },
   changesList: {
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.md,
     gap: 4,
@@ -771,7 +766,7 @@ const styles = StyleSheet.create({
   changesHeader: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: 2,
   },
   changeItemRow: {
@@ -781,7 +776,7 @@ const styles = StyleSheet.create({
   },
   changeBullet: {
     fontSize: 14,
-    color: theme.colors.amber800,
+    color: theme.colors.lime,
     lineHeight: 18,
   },
   changeItemText: {
@@ -789,7 +784,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink800,
+    color: theme.colors.textSecondary,
   },
   feedbackActionRow: {
     marginTop: theme.spacing.xs,
@@ -798,7 +793,7 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.xs,
     paddingTop: theme.spacing.xs,
     borderTopWidth: 1,
-    borderTopColor: theme.colors.amber200,
+    borderTopColor: theme.colors.border,
   },
   auditToggleRow: {
     flexDirection: 'row',
@@ -809,18 +804,18 @@ const styles = StyleSheet.create({
   auditToggleText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   auditDecisionsList: {
     gap: 8,
     marginTop: theme.spacing.xs,
   },
   decisionItem: {
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.inputBg,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.sm,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   decisionItemHeader: {
     flexDirection: 'row',
@@ -830,17 +825,17 @@ const styles = StyleSheet.create({
   decisionType: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 12,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   decisionDate: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   decisionNotes: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   controlledEditingCard: {
     padding: theme.spacing.base,
@@ -855,19 +850,19 @@ const styles = StyleSheet.create({
   controlledEditingTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   controlledEditingText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   pendingRevisionBanner: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: theme.colors.amber50,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.sm,
     marginTop: theme.spacing.xs,
@@ -875,7 +870,7 @@ const styles = StyleSheet.create({
   pendingRevisionText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.amber800,
+    color: theme.colors.textPrimary,
     flex: 1,
   },
   promotionCard: {
@@ -890,12 +885,12 @@ const styles = StyleSheet.create({
   promotionTitle: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 15,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   promotionSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   promotionStatRow: {
     flexDirection: 'row',
@@ -905,12 +900,12 @@ const styles = StyleSheet.create({
   promotionStatLabel: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   promotionStatValue: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   timelineCard: {
     padding: theme.spacing.base,
@@ -918,12 +913,12 @@ const styles = StyleSheet.create({
   sectionHeading: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   sectionSubheading: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
     marginBottom: theme.spacing.base,
   },
@@ -942,7 +937,7 @@ const styles = StyleSheet.create({
   analyticsTitle: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 17,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   analyticsCard: {
     padding: theme.spacing.base,
@@ -951,7 +946,7 @@ const styles = StyleSheet.create({
   cardHeaderSmall: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   fundingNumbersRow: {
     flexDirection: 'row',
@@ -962,12 +957,12 @@ const styles = StyleSheet.create({
   statLarge: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 22,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   statSub: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 1,
   },
   backersStatBox: {
@@ -994,30 +989,30 @@ const styles = StyleSheet.create({
   budgetAmount: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 17,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   budgetLabel: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
     textAlign: 'center',
   },
   budgetDivider: {
     width: 1,
     height: 32,
-    backgroundColor: theme.colors.line,
+    backgroundColor: theme.colors.border,
   },
   reachCardCategory: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 10,
-    color: theme.colors.ink400,
+    color: theme.colors.textSecondary,
     letterSpacing: 0.5,
   },
   measuredCardCategory: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 10,
-    color: theme.colors.emerald700,
+    color: theme.colors.lime,
     letterSpacing: 0.5,
   },
   badgeRow: {
@@ -1028,34 +1023,34 @@ const styles = StyleSheet.create({
   reachCardTitle: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginTop: 2,
   },
   reachValueText: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 24,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
     marginTop: theme.spacing.xs,
   },
   measuredReachCard: {
     borderLeftWidth: 4,
-    borderLeftColor: theme.colors.emerald500,
+    borderLeftColor: theme.colors.lime,
   },
   measuredValueText: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 24,
-    color: theme.colors.emerald700,
+    color: theme.colors.lime,
     marginTop: theme.spacing.xs,
   },
   reachDisclaimer: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     lineHeight: 16,
     marginTop: 4,
   },
   notAvailableBox: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.md,
     marginTop: theme.spacing.xs,
@@ -1064,12 +1059,12 @@ const styles = StyleSheet.create({
   notAvailableTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink700,
+    color: theme.colors.textPrimary,
   },
   notAvailableText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     lineHeight: 16,
   },
   engagementGrid: {
@@ -1085,18 +1080,18 @@ const styles = StyleSheet.create({
   engagementValue: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 18,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   engagementLabel: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   ctrNote: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: theme.spacing.xs,
     textAlign: 'center',
   },
@@ -1113,18 +1108,18 @@ const styles = StyleSheet.create({
   durationText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   averagePledgeText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   privacyNoteBox: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.sm,
     marginTop: theme.spacing.xs,
@@ -1133,7 +1128,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     lineHeight: 15,
   },
   composerCard: {
@@ -1144,26 +1139,30 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: theme.colors.red50,
+    backgroundColor: theme.colors.surfaceRaised,
+    borderWidth: 1,
+    borderColor: theme.colors.textPrimary,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.sm,
   },
   updateErrorText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.red600,
+    color: theme.colors.textPrimary,
   },
   updateSuccessBox: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: theme.colors.emerald50,
+    backgroundColor: theme.colors.tintedPillBg,
+    borderWidth: 1,
+    borderColor: theme.colors.lime,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.sm,
   },
   updateSuccessText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.emerald700,
+    color: theme.colors.lime,
   },
 });

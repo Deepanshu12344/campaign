@@ -138,7 +138,7 @@ export default function InfoSlugScreen() {
         <ScrollView contentContainerStyle={styles.centerContent}>
           <Card style={styles.notFoundCard}>
             <View style={styles.notFoundIconCircle}>
-              <Compass size={36} color={theme.colors.ink600} />
+              <Compass size={36} color={theme.colors.textSecondary} />
             </View>
             <Text style={styles.notFoundTitle}>Page Not Found</Text>
             <Text style={styles.notFoundDescription}>
@@ -197,7 +197,7 @@ export default function InfoSlugScreen() {
                   <View style={styles.stepBadge}>
                     <Text style={styles.stepBadgeText}>1</Text>
                   </View>
-                  <PenTool size={20} color={theme.colors.primary600} />
+                  <PenTool size={20} color={theme.colors.lime} />
                 </View>
                 <Text style={styles.stepTitle}>Create & Target</Text>
                 <Text style={styles.stepBody}>
@@ -211,7 +211,7 @@ export default function InfoSlugScreen() {
                   <View style={styles.stepBadge}>
                     <Text style={styles.stepBadgeText}>2</Text>
                   </View>
-                  <ShieldCheck size={20} color={theme.colors.primary600} />
+                  <ShieldCheck size={20} color={theme.colors.lime} />
                 </View>
                 <Text style={styles.stepTitle}>Editorial Review</Text>
                 <Text style={styles.stepBody}>
@@ -225,7 +225,7 @@ export default function InfoSlugScreen() {
                   <View style={styles.stepBadge}>
                     <Text style={styles.stepBadgeText}>3</Text>
                   </View>
-                  <Megaphone size={20} color={theme.colors.primary600} />
+                  <Megaphone size={20} color={theme.colors.lime} />
                 </View>
                 <Text style={styles.stepTitle}>Amplify & Distribute</Text>
                 <Text style={styles.stepBody}>
@@ -237,7 +237,7 @@ export default function InfoSlugScreen() {
 
             {/* Core Non-Negotiable Non-Donation Sentence */}
             <View style={styles.calloutBox}>
-              <ShieldCheck size={22} color={theme.colors.primary700} style={styles.calloutIcon} />
+              <ShieldCheck size={22} color={theme.colors.lime} style={styles.calloutIcon} />
               <View style={styles.calloutTextCol}>
                 <Text style={styles.calloutHeadline}>Fundamental Platform Principle</Text>
                 <Text style={styles.calloutTextPrimary}>
@@ -351,7 +351,7 @@ export default function InfoSlugScreen() {
 
               <Card style={styles.principleCard}>
                 <View style={styles.principleHeader}>
-                  <FileText size={18} color={theme.colors.primary600} />
+                  <FileText size={18} color={theme.colors.lime} />
                   <Text style={styles.principleTitle}>Sources Stay Visible</Text>
                 </View>
                 <Text style={styles.principleText}>
@@ -362,7 +362,7 @@ export default function InfoSlugScreen() {
 
               <Card style={styles.principleCard}>
                 <View style={styles.principleHeader}>
-                  <PieChart size={18} color={theme.colors.primary600} />
+                  <PieChart size={18} color={theme.colors.lime} />
                   <Text style={styles.principleTitle}>Funds Strictly for Distribution</Text>
                 </View>
                 <Text style={styles.principleText}>
@@ -373,7 +373,7 @@ export default function InfoSlugScreen() {
 
               <Card style={styles.principleCard}>
                 <View style={styles.principleHeader}>
-                  <ShieldCheck size={18} color={theme.colors.primary600} />
+                  <ShieldCheck size={18} color={theme.colors.lime} />
                   <Text style={styles.principleTitle}>Independent Review Before Launch</Text>
                 </View>
                 <Text style={styles.principleText}>
@@ -384,7 +384,7 @@ export default function InfoSlugScreen() {
 
               <Card style={styles.principleCard}>
                 <View style={styles.principleHeader}>
-                  <ShieldAlert size={18} color={theme.colors.primary600} />
+                  <ShieldAlert size={18} color={theme.colors.lime} />
                   <Text style={styles.principleTitle}>Privacy by Default</Text>
                 </View>
                 <Text style={styles.principleText}>
@@ -396,7 +396,7 @@ export default function InfoSlugScreen() {
 
             {/* Prototype Notice */}
             <View style={styles.prototypeBox}>
-              <Sparkles size={18} color="#92400E" style={{ marginTop: 2 }} />
+              <Sparkles size={18} color={theme.colors.lime} style={{ marginTop: 2 }} />
               <View style={{ flex: 1 }}>
                 <Text style={styles.prototypeHeadline}>Prototype Demonstration Notice</Text>
                 <Text style={styles.prototypeText}>
@@ -436,9 +436,6 @@ export default function InfoSlugScreen() {
                 <Card key={partner.id} style={styles.partnerCard}>
                   <View style={styles.partnerHeader}>
                     <Text style={styles.partnerName}>{partner.name}</Text>
-                    <View style={styles.demoBadge}>
-                      <Text style={styles.demoBadgeText}>{partner.badge}</Text>
-                    </View>
                   </View>
                   <Text style={styles.partnerRole}>{partner.role}</Text>
                   <Text style={styles.partnerDesc}>{partner.description}</Text>
@@ -448,7 +445,7 @@ export default function InfoSlugScreen() {
 
             {/* Non-Endorsement Callout */}
             <View style={styles.nonEndorsementBox}>
-              <AlertCircle size={18} color={theme.colors.ink600} style={{ marginTop: 2 }} />
+              <AlertCircle size={18} color={theme.colors.textSecondary} style={{ marginTop: 2 }} />
               <Text style={styles.nonEndorsementText}>
                 <Text style={{ fontFamily: theme.typography.fonts.uiSemiBold }}>Demonstration Notice:</Text> The partners
                 listed above are illustrative placeholders created for demonstration. Campaigns does not claim commercial
@@ -484,10 +481,10 @@ export default function InfoSlugScreen() {
                       accessibilityRole="button"
                       accessibilityLabel="Clear search"
                     >
-                      <X size={18} color={theme.colors.ink500} />
+                      <X size={18} color={theme.colors.textSecondary} />
                     </Pressable>
                   ) : (
-                    <Search size={18} color={theme.colors.ink500} />
+                    <Search size={18} color={theme.colors.textSecondary} />
                   )
                 }
               />
@@ -500,7 +497,7 @@ export default function InfoSlugScreen() {
                 description={`We couldn't find any questions matching "${faqSearchQuery}". Try using different search keywords or clear your query.`}
                 actionTitle="Clear Search"
                 onAction={() => setFaqSearchQuery('')}
-                icon={<HelpCircle size={32} color={theme.colors.ink400} />}
+                icon={<HelpCircle size={32} color={theme.colors.textSecondary} />}
               />
             ) : (
               <View style={styles.faqList}>
@@ -555,7 +552,7 @@ export default function InfoSlugScreen() {
                     title={prob.actionLabel}
                     variant="secondary"
                     size="sm"
-                    iconRight={<ChevronRight size={16} color={theme.colors.primary600} />}
+                    iconRight={<ChevronRight size={16} color={theme.colors.lime} />}
                     onPress={() => router.push(prob.targetRoute as Href)}
                     style={styles.problemButton}
                   />
@@ -566,7 +563,7 @@ export default function InfoSlugScreen() {
             {/* Direct Contact Prompt */}
             <Card style={styles.contactSupportCard}>
               <View style={styles.contactSupportHeader}>
-                <HelpCircle size={22} color={theme.colors.primary600} />
+                <HelpCircle size={22} color={theme.colors.lime} />
                 <View style={{ flex: 1 }}>
                   <Text style={styles.contactSupportTitle}>Still need assistance?</Text>
                   <Text style={styles.contactSupportBody}>
@@ -599,7 +596,7 @@ export default function InfoSlugScreen() {
 
             {contactTicket ? (
               <Card style={styles.contactSuccessCard}>
-                <CheckCircle2 size={48} color={theme.colors.emerald600} />
+                <CheckCircle2 size={48} color={theme.colors.lime} />
                 <Text style={styles.contactSuccessTitle}>Message Received!</Text>
                 <Text style={styles.contactSuccessBody}>
                   Thank you for reaching out. Your support inquiry has been submitted and registered under:
@@ -688,7 +685,7 @@ export default function InfoSlugScreen() {
                   size="lg"
                   fullWidth
                   loading={isSubmittingContact}
-                  iconRight={<Send size={18} color="#FFFFFF" />}
+                  iconRight={<Send size={18} color={theme.colors.onLime} />}
                   onPress={handleContactSubmit}
                   style={{ marginTop: theme.spacing.xs }}
                 />
@@ -710,7 +707,7 @@ export default function InfoSlugScreen() {
             </View>
 
             <View style={styles.legalNoticeBanner}>
-              <ShieldAlert size={16} color="#92400E" />
+              <ShieldAlert size={16} color={theme.colors.textPrimary} />
               <Text style={styles.legalNoticeText}>
                 Prototype Document — Not Legal Advice. Written for demonstration and architectural testing.
               </Text>
@@ -742,7 +739,7 @@ export default function InfoSlugScreen() {
             </View>
 
             <View style={styles.legalNoticeBanner}>
-              <ShieldAlert size={16} color="#92400E" />
+              <ShieldAlert size={16} color={theme.colors.textPrimary} />
               <Text style={styles.legalNoticeText}>
                 Prototype Document — Not Legal Advice. Written for demonstration and architectural testing.
               </Text>
@@ -774,7 +771,7 @@ export default function InfoSlugScreen() {
             </View>
 
             <View style={styles.legalNoticeBanner}>
-              <ShieldAlert size={16} color="#92400E" />
+              <ShieldAlert size={16} color={theme.colors.textPrimary} />
               <Text style={styles.legalNoticeText}>
                 Prototype Document — Not Legal Advice. Written for demonstration and architectural testing.
               </Text>
@@ -826,13 +823,13 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 24,
     lineHeight: 30,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   heroSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 20,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   stepsContainer: {
     gap: theme.spacing.md,
@@ -851,35 +848,35 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.tintedPillBg,
     borderWidth: 1,
-    borderColor: '#C7D2FE',
+    borderColor: theme.colors.border,
     alignItems: 'center',
     justifyContent: 'center',
   },
   stepBadgeText: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 13,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   stepTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   stepBody: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   calloutBox: {
     flexDirection: 'row',
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.lg,
     borderRadius: theme.radius.card,
-    borderWidth: 1.5,
-    borderColor: '#C7D2FE',
+    borderWidth: 1,
+    borderColor: theme.colors.border,
     gap: theme.spacing.sm,
   },
   calloutIcon: {
@@ -892,7 +889,7 @@ const styles = StyleSheet.create({
   calloutHeadline: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: theme.colors.primary800,
+    color: theme.colors.lime,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
@@ -900,13 +897,13 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 16,
     lineHeight: 22,
-    color: theme.colors.primary800,
+    color: theme.colors.textPrimary,
   },
   calloutTextSecondary: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 16,
-    color: theme.colors.primary700,
+    color: theme.colors.textSecondary,
   },
   infoCard: {
     padding: theme.spacing.lg,
@@ -915,19 +912,19 @@ const styles = StyleSheet.create({
   infoCardTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 17,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   infoCardNotice: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
     fontStyle: 'italic',
   },
   infoCardText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 21,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   actionRow: {
     flexDirection: 'row',
@@ -940,7 +937,7 @@ const styles = StyleSheet.create({
   sectionHeading: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 18,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginTop: theme.spacing.xs,
   },
   principlesContainer: {
@@ -958,34 +955,34 @@ const styles = StyleSheet.create({
   principleTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 15,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   principleText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   prototypeBox: {
     flexDirection: 'row',
-    backgroundColor: theme.colors.warningBg,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.md,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: '#FDE68A',
+    borderColor: theme.colors.border,
     gap: theme.spacing.sm,
   },
   prototypeHeadline: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: '#92400E',
+    color: theme.colors.textPrimary,
     marginBottom: 2,
   },
   prototypeText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 16,
-    color: '#78350F',
+    color: theme.colors.textSecondary,
   },
   partnersList: {
     gap: theme.spacing.md,
@@ -1002,39 +999,39 @@ const styles = StyleSheet.create({
   partnerName: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   demoBadge: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: theme.radius.pill,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   demoBadgeText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 10,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   partnerRole: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   partnerDesc: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   nonEndorsementBox: {
     flexDirection: 'row',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.md,
     borderRadius: theme.radius.input,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     gap: theme.spacing.sm,
   },
   nonEndorsementText: {
@@ -1042,7 +1039,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 16,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   searchContainer: {
     marginBottom: theme.spacing.xs,
@@ -1053,7 +1050,7 @@ const styles = StyleSheet.create({
   searchResultsCount: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   faqList: {
     gap: theme.spacing.sm,
@@ -1062,7 +1059,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     borderRadius: theme.radius.input,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   faqAnswerBox: {
     paddingHorizontal: theme.spacing.base,
@@ -1071,7 +1068,7 @@ const styles = StyleSheet.create({
   },
   faqCategoryBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: theme.radius.pill,
@@ -1079,13 +1076,13 @@ const styles = StyleSheet.create({
   faqCategoryText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 10,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   faqAnswerText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 19,
-    color: theme.colors.ink800,
+    color: theme.colors.textSecondary,
   },
   problemsList: {
     gap: theme.spacing.md,
@@ -1100,13 +1097,13 @@ const styles = StyleSheet.create({
   problemTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 15,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   problemDesc: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   problemButton: {
     alignSelf: 'flex-start',
@@ -1124,13 +1121,13 @@ const styles = StyleSheet.create({
   contactSupportTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   contactSupportBody: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   contactFormCard: {
     padding: theme.spacing.xl,
@@ -1142,7 +1139,7 @@ const styles = StyleSheet.create({
   formLabel: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   topicChipsScroll: {
     gap: theme.spacing.xs,
@@ -1152,21 +1149,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.md,
     paddingVertical: 6,
     borderRadius: theme.radius.pill,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   topicChipSelected: {
-    backgroundColor: theme.colors.primary600,
-    borderColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
+    borderColor: theme.colors.lime,
   },
   topicChipText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   topicChipTextSelected: {
-    color: '#FFFFFF',
+    color: theme.colors.onLime,
     fontFamily: theme.typography.fonts.uiSemiBold,
   },
   contactSuccessCard: {
@@ -1177,45 +1174,45 @@ const styles = StyleSheet.create({
   contactSuccessTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 20,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     textAlign: 'center',
   },
   contactSuccessBody: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 20,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
   },
   ticketPill: {
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.tintedPillBg,
     paddingHorizontal: theme.spacing.base,
     paddingVertical: theme.spacing.xs,
     borderRadius: theme.radius.pill,
     borderWidth: 1,
-    borderColor: '#C7D2FE',
+    borderColor: theme.colors.border,
     marginVertical: theme.spacing.xs,
   },
   ticketPillText: {
     fontFamily: 'monospace',
     fontSize: 14,
     fontWeight: '700',
-    color: theme.colors.primary800,
+    color: theme.colors.lime,
   },
   contactSuccessFootnote: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
   },
   legalNoticeBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.warningBg,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.input,
     borderWidth: 1,
-    borderColor: '#FDE68A',
+    borderColor: theme.colors.border,
     gap: theme.spacing.xs,
     marginBottom: theme.spacing.xs,
   },
@@ -1223,7 +1220,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: '#92400E',
+    color: theme.colors.textPrimary,
   },
   legalCard: {
     padding: theme.spacing.lg,
@@ -1232,13 +1229,13 @@ const styles = StyleSheet.create({
   legalSectionTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   legalParagraph: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 20,
-    color: theme.colors.ink800,
+    color: theme.colors.textSecondary,
   },
   notFoundCard: {
     width: '100%',
@@ -1251,26 +1248,26 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
   },
   notFoundTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 20,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     textAlign: 'center',
   },
   notFoundDescription: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 20,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
   },
   monoText: {
     fontFamily: 'monospace',
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   recoveryActions: {
     width: '100%',

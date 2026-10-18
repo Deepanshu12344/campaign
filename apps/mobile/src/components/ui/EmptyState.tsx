@@ -33,7 +33,7 @@ export function EmptyState({
   return (
     <View style={[styles.container, style]} {...rest}>
       <View style={styles.iconCircle}>
-        {icon || <FolderOpen size={36} color={theme.colors.ink500} />}
+        {icon || <FolderOpen size={36} color={theme.colors.textSecondary} />}
       </View>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.description}>{description}</Text>
@@ -61,7 +61,9 @@ const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: theme.radius.pill,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: theme.spacing.base,
@@ -70,7 +72,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: theme.typography.styles.h3.fontSize,
     lineHeight: theme.typography.styles.h3.lineHeight,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     textAlign: 'center',
     marginBottom: theme.spacing.xs,
   },
@@ -78,7 +80,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.small.fontSize,
     lineHeight: theme.typography.styles.small.lineHeight,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     maxWidth: 280,
   },

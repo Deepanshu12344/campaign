@@ -32,7 +32,7 @@ import {
 } from 'lucide-react-native';
 import { theme } from '../../theme';
 import { SharedHeader } from '../../components/layout/SharedHeader';
-import { Card, Button, DemoDataBadge, useToast } from '../../components/ui';
+import { Card, Button, useToast } from '../../components/ui';
 import { useCreateDraft, useAiDraftBasics } from '../../api';
 import { useDraftStore } from '../../store/draftStore';
 import { useAuthStore } from '../../store/authStore';
@@ -210,7 +210,6 @@ export default function VoiceIntakeScreen() {
           title="Voice Intake & Structuring"
           subtitle="Speak Your Campaign Idea"
           fallbackRoute="/(tabs)/create"
-          rightAction={<DemoDataBadge size="sm" />}
         />
 
         <ScrollView
@@ -236,9 +235,9 @@ export default function VoiceIntakeScreen() {
                 ]}
               >
                 {isRecording ? (
-                  <MicOff size={36} color={theme.colors.white} />
+                  <MicOff size={36} color={theme.colors.lime} />
                 ) : (
-                  <Mic size={36} color={theme.colors.white} />
+                  <Mic size={36} color={theme.colors.onLime} />
                 )}
               </Pressable>
             </View>
@@ -272,7 +271,7 @@ export default function VoiceIntakeScreen() {
           {/* 2. Sample In-App Prompts */}
           <View style={styles.sampleSection}>
             <View style={styles.sampleHeader}>
-              <Lightbulb size={16} color={theme.colors.amber600} />
+              <Lightbulb size={16} color={theme.colors.lime} />
               <Text style={styles.sampleTitle}>Or try a sample inspiration:</Text>
             </View>
             <ScrollView
@@ -303,7 +302,7 @@ export default function VoiceIntakeScreen() {
             <View style={styles.transcriptHeader}>
               <View style={styles.transcriptTitleCol}>
                 <View style={styles.transcriptTitleRow}>
-                  <Volume2 size={16} color={theme.colors.ink700} />
+                  <Volume2 size={16} color={theme.colors.textPrimary} />
                   <Text style={styles.transcriptTitle}>Spoken Notes & Narrative</Text>
                 </View>
                 <Text style={styles.transcriptHint}>
@@ -319,7 +318,7 @@ export default function VoiceIntakeScreen() {
                   hitSlop={8}
                   style={styles.clearBtn}
                 >
-                  <RotateCcw size={14} color={theme.colors.ink500} />
+                  <RotateCcw size={14} color={theme.colors.textSecondary} />
                   <Text style={styles.clearBtnText}>Clear</Text>
                 </Pressable>
               )}
@@ -330,7 +329,7 @@ export default function VoiceIntakeScreen() {
               value={transcript}
               onChangeText={setTranscript}
               placeholder="Your transcribed thoughts will appear here as you speak, or you can type directly..."
-              placeholderTextColor={theme.colors.ink400}
+              placeholderTextColor={theme.colors.textSecondary}
               multiline
               textAlignVertical="top"
               accessibilityLabel="Spoken notes transcript"
@@ -342,7 +341,7 @@ export default function VoiceIntakeScreen() {
               </Text>
               {transcript.trim().length >= 20 && (
                 <View style={styles.readyBadge}>
-                  <CheckCircle2 size={13} color={theme.colors.success} />
+                  <CheckCircle2 size={13} color={theme.colors.lime} />
                   <Text style={styles.readyBadgeText}>Ready to structure</Text>
                 </View>
               )}
@@ -358,8 +357,8 @@ export default function VoiceIntakeScreen() {
               fullWidth
               loading={isStructuring || createDraftMutation.isPending || aiDraftBasicsMutation.isPending}
               disabled={transcript.trim().length < 15 || isStructuring}
-              iconLeft={<Sparkles size={18} color={theme.colors.white} />}
-              iconRight={<ArrowRight size={18} color={theme.colors.white} />}
+              iconLeft={<Sparkles size={18} color={theme.colors.onLime} />}
+              iconRight={<ArrowRight size={18} color={theme.colors.onLime} />}
               onPress={handleStructureIntoCampaign}
             />
 
@@ -396,7 +395,7 @@ const styles = StyleSheet.create({
     padding: theme.spacing.xl,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     ...theme.shadows.card,
   },
   micCircleWrapper: {
@@ -412,19 +411,21 @@ const styles = StyleSheet.create({
     width: 96,
     height: 96,
     borderRadius: 48,
-    backgroundColor: theme.colors.primary200,
+    backgroundColor: theme.colors.tintedPillBg,
   },
   micButton: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
     alignItems: 'center',
     justifyContent: 'center',
     ...theme.shadows.card,
   },
   micButtonRecording: {
-    backgroundColor: theme.colors.danger,
+    backgroundColor: theme.colors.tintedPillBg,
+    borderWidth: 2,
+    borderColor: theme.colors.lime,
   },
   micButtonPressed: {
     transform: [{ scale: 0.95 }],
@@ -437,14 +438,14 @@ const styles = StyleSheet.create({
   statusHeading: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 18,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: 4,
     textAlign: 'center',
   },
   statusSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     lineHeight: 18,
   },
@@ -458,7 +459,7 @@ const styles = StyleSheet.create({
   waveBar: {
     width: 4,
     borderRadius: 2,
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
   },
   sampleSection: {
     gap: theme.spacing.xs,
@@ -472,29 +473,29 @@ const styles = StyleSheet.create({
   sampleTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   sampleChipsRow: {
     gap: theme.spacing.sm,
     paddingVertical: theme.spacing.xs,
   },
   sampleChip: {
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.inputBg,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     borderRadius: theme.radius.input,
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.sm,
     maxWidth: 240,
   },
   sampleChipPressed: {
-    backgroundColor: theme.colors.primary50,
-    borderColor: theme.colors.primary200,
+    backgroundColor: theme.colors.surfaceRaised,
+    borderColor: theme.colors.lime,
   },
   sampleChipCategory: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 10,
-    color: theme.colors.primary600,
+    color: theme.colors.lime,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     marginBottom: 2,
@@ -502,14 +503,14 @@ const styles = StyleSheet.create({
   sampleChipText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   transcriptCard: {
     padding: theme.spacing.base,
     backgroundColor: theme.colors.surface,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   transcriptHeader: {
     flexDirection: 'row',
@@ -528,12 +529,12 @@ const styles = StyleSheet.create({
   transcriptTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 15,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   transcriptHint: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   clearBtn: {
@@ -546,20 +547,20 @@ const styles = StyleSheet.create({
   clearBtnText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   transcriptInput: {
     minHeight: 120,
     maxHeight: 220,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     borderRadius: theme.radius.input,
     padding: theme.spacing.md,
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 15,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     lineHeight: 22,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   transcriptFooter: {
     flexDirection: 'row',
@@ -570,7 +571,7 @@ const styles = StyleSheet.create({
   charCountText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   readyBadge: {
     flexDirection: 'row',
@@ -580,7 +581,7 @@ const styles = StyleSheet.create({
   readyBadgeText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.success,
+    color: theme.colors.lime,
   },
   actionContainer: {
     gap: theme.spacing.sm,
@@ -588,7 +589,7 @@ const styles = StyleSheet.create({
   explanationText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     lineHeight: 18,
     paddingHorizontal: theme.spacing.md,

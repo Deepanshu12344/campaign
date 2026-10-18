@@ -14,7 +14,6 @@ import {
   Trash2,
   Clock,
   ArrowRight,
-  Sparkles,
   Layers,
 } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
@@ -117,33 +116,17 @@ export default function CreateTabScreen() {
 
   return (
     <View style={styles.container}>
-      <SharedHeader title="Create Campaign" showBack={false} />
+      <SharedHeader title="Create Campaign" showBack={false} showAvatar={true} />
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Intro Banner */}
-        <View style={styles.introCard}>
-          <View style={styles.introHeaderRow}>
-            <View style={styles.sparkleIconCircle}>
-              <Sparkles size={20} color={theme.colors.primary600} />
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.introTitle}>Spread an Important Message</Text>
-              <Text style={styles.introSubtitle}>
-                Build a community-funded advertising campaign to reach real audiences beyond your
-                followers.
-              </Text>
-            </View>
-          </View>
-        </View>
-
         {/* 1. Create Manually Option Card */}
         <Card style={styles.optionCard}>
           <View style={styles.optionHeader}>
-            <View style={styles.optionIconCirclePrimary}>
-              <PlusCircle size={24} color={theme.colors.white} />
+            <View style={styles.optionIconCircle}>
+              <PlusCircle size={22} color={theme.colors.lime} />
             </View>
             <View style={styles.optionTextCol}>
               <Text style={styles.optionTitle}>Create Manually</Text>
@@ -152,8 +135,8 @@ export default function CreateTabScreen() {
           </View>
 
           <Text style={styles.optionDescription}>
-            Follow the guided step-by-step form: Basics, Story, Campaign & Ad Visuals, Reach, and
-            Submit. Review the full preview before publishing.
+            Follow the guided step-by-step form: Basics, Story, Visuals, Reach, and
+            Submit. Review the preview before publishing.
           </Text>
 
           <Button
@@ -170,8 +153,8 @@ export default function CreateTabScreen() {
         {/* 2. Create with Voice Option Card */}
         <Card style={styles.optionCard}>
           <View style={styles.optionHeader}>
-            <View style={styles.optionIconCircleSecondary}>
-              <Mic size={24} color={theme.colors.primary600} />
+            <View style={styles.optionIconCircle}>
+              <Mic size={22} color={theme.colors.lime} />
             </View>
             <View style={styles.optionTextCol}>
               <Text style={styles.optionTitle}>Create with Your Voice</Text>
@@ -180,8 +163,7 @@ export default function CreateTabScreen() {
           </View>
 
           <Text style={styles.optionDescription}>
-            Describe your idea aloud and answer guided questions. The intake engine organizes your
-            thoughts into structured story blocks and key takeaways.
+            Describe your idea aloud. The intake engine organizes your thoughts into structured story blocks.
           </Text>
 
           <Button
@@ -198,7 +180,7 @@ export default function CreateTabScreen() {
         <View style={styles.draftsSection}>
           <View style={styles.draftsSectionHeader}>
             <View style={styles.draftsTitleRow}>
-              <FileEdit size={18} color={theme.colors.ink800} />
+              <FileEdit size={16} color={theme.colors.textSecondary} />
               <Text style={styles.draftsSectionTitle}>Resume a Saved Draft</Text>
             </View>
             {drafts.length > 0 && (
@@ -227,7 +209,7 @@ export default function CreateTabScreen() {
                           <Text style={styles.stepProgressText}>In Progress</Text>
                         </View>
                         <Text style={styles.bulletSeparator}>•</Text>
-                        <Clock size={12} color={theme.colors.ink500} style={{ marginRight: 3 }} />
+                        <Clock size={12} color={theme.colors.textSecondary} style={{ marginRight: 3 }} />
                         <Text style={styles.draftTimeText}>
                           {formatRelativeTime(
                             (d as unknown as { updatedAt?: string | Date; createdAt?: string | Date }).updatedAt ||
@@ -244,16 +226,16 @@ export default function CreateTabScreen() {
                       style={styles.deleteDraftBtn}
                       hitSlop={8}
                     >
-                      <Trash2 size={16} color={theme.colors.ink400} />
+                      <Trash2 size={16} color={theme.colors.textSecondary} />
                     </Pressable>
                   </View>
 
                   <View style={styles.draftCardBottom}>
                     <Button
                       title="Continue"
-                      variant="primary"
+                      variant="secondary"
                       size="sm"
-                      iconRight={<ArrowRight size={14} color={theme.colors.white} />}
+                      iconRight={<ArrowRight size={14} color={theme.colors.lime} />}
                       onPress={() => handleResumeDraft(d.id)}
                     />
                   </View>
@@ -264,7 +246,7 @@ export default function CreateTabScreen() {
             <EmptyState
               title="No saved drafts"
               description="Your work-in-progress campaigns will be saved here automatically so you can pick up where you left off."
-              icon={<Layers size={32} color={theme.colors.ink400} />}
+              icon={<Layers size={32} color={theme.colors.textSecondary} />}
             />
           )}
         </View>
@@ -279,7 +261,7 @@ export default function CreateTabScreen() {
         <View style={styles.deleteModalBody}>
           <Text style={styles.deleteModalText}>
             Are you sure you want to delete{' '}
-            <Text style={{ fontFamily: theme.typography.fonts.uiBold, color: theme.colors.ink900 }}>
+            <Text style={{ fontFamily: theme.typography.fonts.uiBold, color: theme.colors.textPrimary }}>
               "{draftToDelete?.title || 'Untitled campaign'}"
             </Text>
             ? This action cannot be undone.
@@ -336,40 +318,11 @@ const styles = StyleSheet.create({
     gap: theme.spacing.base,
     paddingBottom: 40,
   },
-  introCard: {
-    backgroundColor: theme.colors.primary50,
-    borderRadius: theme.radius.card,
-    borderWidth: 1,
-    borderColor: theme.colors.primary200,
-    padding: theme.spacing.base,
-  },
-  introHeaderRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: theme.spacing.md,
-  },
-  sparkleIconCircle: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: theme.colors.surface,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  introTitle: {
-    fontFamily: theme.typography.fonts.uiBold,
-    fontSize: 16,
-    color: theme.colors.primary800,
-    marginBottom: 2,
-  },
-  introSubtitle: {
-    fontFamily: theme.typography.fonts.uiRegular,
-    fontSize: 13,
-    lineHeight: 18,
-    color: theme.colors.ink700,
-  },
   optionCard: {
     padding: theme.spacing.lg,
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.surfaceRaised,
+    borderRadius: theme.radius.card,
   },
   optionHeader: {
     flexDirection: 'row',
@@ -377,19 +330,11 @@ const styles = StyleSheet.create({
     gap: theme.spacing.md,
     marginBottom: theme.spacing.sm,
   },
-  optionIconCirclePrimary: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: theme.colors.primary600,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  optionIconCircleSecondary: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: theme.colors.primary50,
+  optionIconCircle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -399,19 +344,19 @@ const styles = StyleSheet.create({
   optionTitle: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 17,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   optionBadgeText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 1,
   },
   optionDescription: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 20,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     marginBottom: theme.spacing.base,
   },
   optionButton: {
@@ -429,15 +374,15 @@ const styles = StyleSheet.create({
   draftsTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 8,
   },
   draftsSectionTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   draftCountPill: {
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.tintedPillBg,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: theme.radius.pill,
@@ -445,7 +390,7 @@ const styles = StyleSheet.create({
   draftCountText: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 12,
-    color: theme.colors.primary600,
+    color: theme.colors.lime,
   },
   loadingDraftsBox: {
     gap: 8,
@@ -455,6 +400,9 @@ const styles = StyleSheet.create({
   },
   draftCard: {
     padding: theme.spacing.base,
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.surfaceRaised,
+    borderRadius: theme.radius.card,
   },
   draftCardTop: {
     flexDirection: 'row',
@@ -469,7 +417,7 @@ const styles = StyleSheet.create({
   draftTitle: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 15,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: 4,
   },
   draftSubRow: {
@@ -477,30 +425,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   stepProgressPill: {
-    backgroundColor: theme.colors.bgMuted,
-    paddingHorizontal: 6,
-    paddingVertical: 1,
+    backgroundColor: theme.colors.surfaceRaised,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
     borderRadius: theme.radius.pill,
   },
   stepProgressText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   bulletSeparator: {
     marginHorizontal: 6,
-    color: theme.colors.ink400,
+    color: theme.colors.textSecondary,
     fontSize: 12,
   },
   draftTimeText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   deleteDraftBtn: {
     padding: 6,
     borderRadius: theme.radius.sm,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   draftCardBottom: {
     flexDirection: 'row',
@@ -517,7 +465,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 20,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   deleteModalActions: {
     gap: theme.spacing.sm,

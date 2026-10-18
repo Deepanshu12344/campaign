@@ -160,7 +160,7 @@ export default function DemoControlScreen() {
         <ReviewerBanner />
         <SharedHeader title="Reviewer Console" fallbackRoute="/(tabs)/profile" />
         <View style={styles.centerContainer}>
-          <ActivityIndicator size="large" color={theme.colors.primary600} />
+          <ActivityIndicator size="large" color={theme.colors.lime} />
         </View>
       </View>
     );
@@ -175,7 +175,7 @@ export default function DemoControlScreen() {
         <ScrollView contentContainerStyle={styles.gateContent}>
           <Card style={styles.gateCard}>
             <View style={styles.gateIconBox}>
-              <Lock size={36} color={theme.colors.ink600} />
+              <Lock size={36} color={theme.colors.textSecondary} />
             </View>
             <Text style={styles.gateTitle}>Reviewer Console Not Available</Text>
             <Text style={styles.gateBody}>
@@ -196,7 +196,7 @@ export default function DemoControlScreen() {
                 size="lg"
                 fullWidth
                 loading={authLoading}
-                iconLeft={<ShieldCheck size={18} color="#FFFFFF" />}
+                iconLeft={<ShieldCheck size={18} color={theme.colors.onLime} />}
                 onPress={handleAdminSignIn}
               />
               <Button
@@ -284,7 +284,7 @@ export default function DemoControlScreen() {
                 accessibilityRole="button"
                 accessibilityLabel="Refresh review queue"
               >
-                <RefreshCw size={16} color={theme.colors.ink600} />
+                <RefreshCw size={16} color={theme.colors.textSecondary} />
               </Pressable>
             </View>
 
@@ -351,7 +351,7 @@ export default function DemoControlScreen() {
                       variant="primary"
                       size="md"
                       fullWidth
-                      iconRight={<ChevronRight size={18} color="#FFFFFF" />}
+                      iconRight={<ChevronRight size={18} color={theme.colors.onLime} />}
                       onPress={() =>
                         router.push(`/demo/review/${item.id}` as Href)
                       }
@@ -380,7 +380,7 @@ export default function DemoControlScreen() {
           <ScrollView contentContainerStyle={styles.scrollList} showsVerticalScrollIndicator={false}>
             {/* Explanatory Policy Callout */}
             <View style={styles.policyNoticeBox}>
-              <ShieldAlert size={18} color="#92400E" style={styles.policyNoticeIcon} />
+              <ShieldAlert size={18} color={theme.colors.textPrimary} style={styles.policyNoticeIcon} />
               <View style={styles.policyNoticeTextContainer}>
                 <Text style={styles.policyNoticeTitle}>
                   Funding completion does not automatically start advertising.
@@ -433,7 +433,7 @@ export default function DemoControlScreen() {
                       style={styles.auditLogLink}
                       hitSlop={8}
                     >
-                      <History size={14} color={theme.colors.primary600} />
+                      <History size={14} color={theme.colors.lime} />
                       <Text style={styles.auditLogLinkText}>Audit Log</Text>
                     </Pressable>
                   </View>
@@ -459,7 +459,7 @@ export default function DemoControlScreen() {
                   {isFunding && (
                     <View style={styles.fundingSimulationBox}>
                       <View style={styles.simulationHeader}>
-                        <CircleDollarSign size={16} color={theme.colors.primary600} />
+                        <CircleDollarSign size={16} color={theme.colors.lime} />
                         <Text style={styles.simulationTitle}>Campaign Active in Community Funding</Text>
                       </View>
                       <Text style={styles.simulationText}>
@@ -471,7 +471,7 @@ export default function DemoControlScreen() {
                         size="md"
                         fullWidth
                         loading={simulateFundGoalMutation.isPending}
-                        iconLeft={<CircleDollarSign size={16} color={theme.colors.primary600} />}
+                        iconLeft={<CircleDollarSign size={16} color={theme.colors.lime} />}
                         onPress={() => handleSimulateFundGoal(campaign)}
                       />
                     </View>
@@ -487,9 +487,9 @@ export default function DemoControlScreen() {
                         {advanceCheck.checks.map((chk) => (
                           <View key={chk.id} style={styles.checkItem}>
                             {chk.passed ? (
-                              <CheckCircle2 size={16} color={theme.colors.emerald600} style={styles.checkIcon} />
+                              <CheckCircle2 size={16} color={theme.colors.lime} style={styles.checkIcon} />
                             ) : (
-                              <XCircle size={16} color={theme.colors.danger} style={styles.checkIcon} />
+                              <XCircle size={16} color={theme.colors.textSecondary} style={styles.checkIcon} />
                             )}
                             <View style={styles.checkTextCol}>
                               <Text style={[styles.checkLabel, !chk.passed && styles.checkLabelFailed]}>
@@ -513,7 +513,7 @@ export default function DemoControlScreen() {
                         size="md"
                         fullWidth
                         disabled={!advanceCheck.canAdvance}
-                        iconRight={<ChevronRight size={16} color={advanceCheck.canAdvance ? '#FFFFFF' : theme.colors.ink400} />}
+                        iconRight={<ChevronRight size={16} color={advanceCheck.canAdvance ? theme.colors.onLime : theme.colors.textSecondary} />}
                         onPress={() => setAdvanceModalCampaign(campaign)}
                         style={styles.advanceButton}
                       />
@@ -524,7 +524,7 @@ export default function DemoControlScreen() {
                   {canSimulateReport && (
                     <View style={styles.reportSimulationBox}>
                       <View style={styles.simulationHeader}>
-                        <Megaphone size={16} color={theme.colors.emerald600} />
+                        <Megaphone size={16} color={theme.colors.lime} />
                         <Text style={styles.simulationTitle}>Live Delivery Telemetry</Text>
                       </View>
                       <Text style={styles.simulationText}>
@@ -536,7 +536,7 @@ export default function DemoControlScreen() {
                         size="md"
                         fullWidth
                         loading={simulateReportMutation.isPending}
-                        iconLeft={<Sparkles size={16} color={theme.colors.primary600} />}
+                        iconLeft={<Sparkles size={16} color={theme.colors.lime} />}
                         onPress={() => setReportModalCampaign(campaign)}
                       />
                     </View>
@@ -555,7 +555,7 @@ export default function DemoControlScreen() {
           <Card style={styles.dangerCard}>
             <View style={styles.dangerHeader}>
               <View style={styles.dangerIconBox}>
-                <RefreshCw size={24} color={theme.colors.danger} />
+                <RefreshCw size={24} color={theme.colors.textPrimary} />
               </View>
               <View style={styles.dangerHeaderText}>
                 <Text style={styles.dangerTitle}>Reset Demo Database</Text>
@@ -577,7 +577,7 @@ export default function DemoControlScreen() {
               size="lg"
               fullWidth
               loading={resetDemoMutation.isPending}
-              iconLeft={<RefreshCw size={18} color="#FFFFFF" />}
+              iconLeft={<RefreshCw size={18} color={theme.colors.textPrimary} />}
               onPress={() => setIsResetConfirmVisible(true)}
             />
           </Card>
@@ -620,7 +620,7 @@ export default function DemoControlScreen() {
                 variant="secondary"
                 size="md"
                 fullWidth
-                iconLeft={<Sparkles size={18} color={theme.colors.primary600} />}
+                iconLeft={<Sparkles size={18} color={theme.colors.lime} />}
                 onPress={() => router.push('/dev/components')}
               />
               <Button
@@ -628,7 +628,7 @@ export default function DemoControlScreen() {
                 variant="secondary"
                 size="md"
                 fullWidth
-                iconLeft={<Layers size={18} color={theme.colors.primary600} />}
+                iconLeft={<Layers size={18} color={theme.colors.lime} />}
                 onPress={() => router.push('/creator/dashboard')}
               />
               <Button
@@ -636,7 +636,7 @@ export default function DemoControlScreen() {
                 variant="secondary"
                 size="md"
                 fullWidth
-                iconLeft={<ExternalLink size={18} color={theme.colors.primary600} />}
+                iconLeft={<ExternalLink size={18} color={theme.colors.lime} />}
                 onPress={() => router.push('/(tabs)/explore')}
               />
             </View>
@@ -660,7 +660,7 @@ export default function DemoControlScreen() {
                 hitSlop={8}
                 style={styles.modalCloseButton}
               >
-                <X size={20} color={theme.colors.ink700} />
+                <X size={20} color={theme.colors.textSecondary} />
               </Pressable>
             </View>
 
@@ -721,7 +721,7 @@ export default function DemoControlScreen() {
                 hitSlop={8}
                 style={styles.modalCloseButton}
               >
-                <X size={20} color={theme.colors.ink700} />
+                <X size={20} color={theme.colors.textSecondary} />
               </Pressable>
             </View>
 
@@ -770,7 +770,7 @@ export default function DemoControlScreen() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: theme.colors.danger }]}>
+              <Text style={styles.modalTitle}>
                 Confirm Demo Reset
               </Text>
               <Pressable
@@ -778,7 +778,7 @@ export default function DemoControlScreen() {
                 hitSlop={8}
                 style={styles.modalCloseButton}
               >
-                <X size={20} color={theme.colors.ink700} />
+                <X size={20} color={theme.colors.textSecondary} />
               </Pressable>
             </View>
 
@@ -817,7 +817,7 @@ export default function DemoControlScreen() {
           <View style={[styles.modalContent, styles.auditModalContent]}>
             <View style={styles.modalHeader}>
               <View style={styles.auditModalTitleRow}>
-                <History size={20} color={theme.colors.primary600} />
+                <History size={20} color={theme.colors.lime} />
                 <Text style={styles.modalTitle}>Campaign Audit Log</Text>
               </View>
               <Pressable
@@ -825,14 +825,14 @@ export default function DemoControlScreen() {
                 hitSlop={8}
                 style={styles.modalCloseButton}
               >
-                <X size={20} color={theme.colors.ink700} />
+                <X size={20} color={theme.colors.textSecondary} />
               </Pressable>
             </View>
 
             <ScrollView style={styles.auditScroll} showsVerticalScrollIndicator={false}>
               {auditQuery.isLoading ? (
                 <View style={styles.auditLoading}>
-                  <ActivityIndicator size="small" color={theme.colors.primary600} />
+                  <ActivityIndicator size="small" color={theme.colors.lime} />
                   <Text style={styles.auditLoadingText}>Loading audit trail...</Text>
                 </View>
               ) : (
@@ -904,30 +904,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.base,
     paddingVertical: theme.spacing.xs,
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.line,
+    borderBottomColor: theme.colors.border,
     gap: theme.spacing.sm,
     flexWrap: 'wrap',
   },
   statusPillItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: theme.radius.pill,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   statusPillLabel: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 10,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginRight: 4,
   },
   statusPillValue: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 10,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     maxWidth: 150,
   },
   tabsWrapper: {
@@ -935,7 +935,7 @@ const styles = StyleSheet.create({
     paddingVertical: theme.spacing.sm,
     backgroundColor: theme.colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.line,
+    borderBottomColor: theme.colors.border,
   },
   scrollList: {
     padding: theme.spacing.base,
@@ -951,7 +951,7 @@ const styles = StyleSheet.create({
   listSectionTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 18,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   refreshIconButton: {
     padding: theme.spacing.xs,
@@ -980,36 +980,36 @@ const styles = StyleSheet.create({
     fontSize: 11,
   },
   submissionBadge: {
-    backgroundColor: theme.colors.warningBg,
-    borderColor: '#FDE68A',
+    backgroundColor: theme.colors.surfaceRaised,
+    borderColor: theme.colors.border,
     borderWidth: 1,
   },
   submissionText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 11,
-    color: '#92400E',
+    color: theme.colors.textPrimary,
   },
   revisionBadge: {
-    backgroundColor: '#F3E8FF',
-    borderColor: '#E9D5FF',
+    backgroundColor: theme.colors.tintedPillBg,
+    borderColor: theme.colors.border,
     borderWidth: 1,
   },
   revisionText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 11,
-    color: '#6B21A8',
+    color: theme.colors.lime,
   },
   queueTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 17,
     lineHeight: 22,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   queueSummary: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   metaRow: {
     flexDirection: 'row',
@@ -1019,19 +1019,19 @@ const styles = StyleSheet.create({
   queueMetaText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   metaBold: {
     fontFamily: theme.typography.fonts.uiSemiBold,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   queueMetaDot: {
-    color: theme.colors.ink400,
+    color: theme.colors.textSecondary,
   },
   queueGoalRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     paddingHorizontal: theme.spacing.sm,
     paddingVertical: theme.spacing.xs,
     borderRadius: theme.radius.input,
@@ -1040,23 +1040,23 @@ const styles = StyleSheet.create({
   queueGoalLabel: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   queueGoalValue: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 13,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   queueActions: {
     marginTop: theme.spacing.xs,
   },
   policyNoticeBox: {
     flexDirection: 'row',
-    backgroundColor: theme.colors.warningBg,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.md,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: '#FDE68A',
+    borderColor: theme.colors.border,
     gap: theme.spacing.sm,
   },
   policyNoticeIcon: {
@@ -1068,14 +1068,14 @@ const styles = StyleSheet.create({
   policyNoticeTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: '#92400E',
+    color: theme.colors.textPrimary,
     marginBottom: 2,
   },
   policyNoticeBody: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 16,
-    color: '#78350F',
+    color: theme.colors.textSecondary,
   },
   filtersContainer: {
     gap: theme.spacing.xs,
@@ -1085,21 +1085,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.md,
     paddingVertical: 6,
     borderRadius: theme.radius.pill,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.surfaceRaised,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   filterChipSelected: {
-    backgroundColor: theme.colors.primary600,
-    borderColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
+    borderColor: theme.colors.lime,
   },
   filterChipText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   filterChipTextSelected: {
-    color: '#FFFFFF',
+    color: theme.colors.onLime,
     fontFamily: theme.typography.fonts.uiBold,
   },
   lifecycleCard: {
@@ -1115,7 +1115,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.tintedPillBg,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: theme.radius.pill,
@@ -1123,18 +1123,18 @@ const styles = StyleSheet.create({
   auditLogLinkText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 11,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   lifecycleTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 17,
     lineHeight: 22,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   lifecycleCreator: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   fundingProgressContainer: {
     gap: 6,
@@ -1148,22 +1148,22 @@ const styles = StyleSheet.create({
   fundingAmountRaised: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 14,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   fundingAmountGoal: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   progressBar: {
     height: 6,
   },
   fundingSimulationBox: {
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.md,
     borderRadius: theme.radius.input,
     borderWidth: 1,
-    borderColor: '#C7D2FE',
+    borderColor: theme.colors.border,
     gap: theme.spacing.xs,
     marginTop: theme.spacing.xs,
   },
@@ -1175,28 +1175,28 @@ const styles = StyleSheet.create({
   simulationTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.primary800,
+    color: theme.colors.textPrimary,
   },
   simulationText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 16,
-    color: theme.colors.primary700,
+    color: theme.colors.textSecondary,
     marginBottom: 4,
   },
   checksContainer: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.md,
     borderRadius: theme.radius.input,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     gap: theme.spacing.xs,
     marginTop: theme.spacing.xs,
   },
   checksTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: 4,
   },
   checksList: {
@@ -1216,21 +1216,21 @@ const styles = StyleSheet.create({
   checkLabel: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   checkLabelFailed: {
-    color: theme.colors.danger,
+    color: theme.colors.textSecondary,
   },
   checkDetail: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: 1,
   },
   checksExplanation: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     fontStyle: 'italic',
     marginTop: 4,
   },
@@ -1238,19 +1238,19 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.sm,
   },
   reportSimulationBox: {
-    backgroundColor: theme.colors.emerald50,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.md,
     borderRadius: theme.radius.input,
     borderWidth: 1,
-    borderColor: '#BBF7D0',
+    borderColor: theme.colors.border,
     gap: theme.spacing.xs,
     marginTop: theme.spacing.xs,
   },
   dangerCard: {
     padding: theme.spacing.xl,
     gap: theme.spacing.md,
-    borderColor: '#FECACA',
-    backgroundColor: '#FEF2F2',
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   dangerHeader: {
     flexDirection: 'row',
@@ -1261,7 +1261,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#FEE2E2',
+    backgroundColor: theme.colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1271,18 +1271,18 @@ const styles = StyleSheet.create({
   dangerTitle: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 16,
-    color: theme.colors.danger,
+    color: theme.colors.textPrimary,
   },
   dangerSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   dangerBody: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   sysCard: {
     padding: theme.spacing.lg,
@@ -1291,7 +1291,7 @@ const styles = StyleSheet.create({
   sysTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: theme.spacing.xs,
   },
   sysRow: {
@@ -1302,16 +1302,16 @@ const styles = StyleSheet.create({
   sysKey: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   sysValue: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   sysDivider: {
     height: 1,
-    backgroundColor: theme.colors.line,
+    backgroundColor: theme.colors.border,
   },
   shortcutsList: {
     gap: theme.spacing.sm,
@@ -1333,35 +1333,35 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
   },
   gateTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 20,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     textAlign: 'center',
   },
   gateBody: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 20,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
   },
   gateCallout: {
-    backgroundColor: theme.colors.warningBg,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.input,
     borderWidth: 1,
-    borderColor: '#FDE68A',
+    borderColor: theme.colors.border,
   },
   gateCalloutText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 16,
-    color: '#92400E',
+    color: theme.colors.textSecondary,
     textAlign: 'center',
   },
   gateActions: {
@@ -1377,11 +1377,11 @@ const styles = StyleSheet.create({
   metaLabel: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: theme.spacing.lg,
@@ -1393,7 +1393,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.lg,
     padding: theme.spacing.xl,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     gap: theme.spacing.md,
   },
   auditModalContent: {
@@ -1412,7 +1412,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 18,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   modalCloseButton: {
     padding: 4,
@@ -1421,7 +1421,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 20,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   modalActions: {
     flexDirection: 'row',
@@ -1430,7 +1430,7 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.sm,
   },
   reportMetricsPreview: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.md,
     borderRadius: theme.radius.input,
     gap: 4,
@@ -1438,7 +1438,7 @@ const styles = StyleSheet.create({
   previewLine: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   auditScroll: {
     maxHeight: 400,
@@ -1451,27 +1451,27 @@ const styles = StyleSheet.create({
   auditLoadingText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   auditSectionHeading: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 15,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: theme.spacing.sm,
   },
   auditEmptyText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     fontStyle: 'italic',
     marginBottom: theme.spacing.sm,
   },
   auditItem: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.input,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     marginBottom: theme.spacing.xs,
     gap: 2,
   },
@@ -1483,33 +1483,33 @@ const styles = StyleSheet.create({
   auditDecisionBadge: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 11,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   auditEventBadge: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 11,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   auditDate: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 10,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   auditReviewer: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   auditNotes: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
     fontStyle: 'italic',
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   auditPayload: {
     fontFamily: 'monospace',
     fontSize: 10,
-    color: theme.colors.ink700,
+    color: theme.colors.textPrimary,
     backgroundColor: theme.colors.surface,
     padding: 4,
     borderRadius: 4,

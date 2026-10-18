@@ -46,6 +46,7 @@ import {
   EmptyState,
   Sheet,
 } from '../../components/ui';
+import { HeaderAvatar } from '../../components/layout';
 import { CampaignCard } from '../../components/campaign/CampaignCard';
 import { useCampaigns, useFeatured } from '../../api/hooks/useCampaigns';
 import { useRequireAuth } from '../../auth/requireAuth';
@@ -353,6 +354,7 @@ export default function ExploreScreen() {
                 category={item}
                 selected={isSelected}
                 count={count}
+                showIcon={false}
                 onPress={() => {
                   Haptics.selectionAsync().catch(() => {});
                   setSelectedCategory(item);
@@ -363,47 +365,7 @@ export default function ExploreScreen() {
           }}
         />
 
-        {/* Featured Strip: only when no search, no filters, All category */}
-        {showFeaturedStrip && (
-          <View style={styles.featuredSection}>
-            <View style={styles.featuredHeaderRow}>
-              <View style={styles.featuredTitleRow}>
-                <Sparkles size={16} color={theme.colors.primary600} />
-                <Text style={styles.featuredSectionTitle}>Featured Amplifications</Text>
-              </View>
-              <Text style={styles.featuredSectionSubtitle}>Curated public-interest messages</Text>
-            </View>
 
-            {isFeaturedLoading ? (
-              <View style={styles.featuredLoadingRow}>
-                <View style={{ width: 280, marginRight: theme.spacing.md }}>
-                  <CampaignCard variant="compact" />
-                </View>
-                <View style={{ width: 280, marginRight: theme.spacing.md }}>
-                  <CampaignCard variant="compact" />
-                </View>
-              </View>
-            ) : featuredCampaigns && featuredCampaigns.length > 0 ? (
-              <FlatList
-                horizontal
-                data={featuredCampaigns}
-                keyExtractor={(item) => item.id}
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.featuredContent}
-                renderItem={({ item }) => (
-                  <View style={{ width: Math.min(windowWidth * 0.78, 300), marginRight: theme.spacing.md }}>
-                    <CampaignCard
-                      campaign={item}
-                      variant="compact"
-                      onPress={() => router.push(`/campaign/${item.id}`)}
-                      onBackPress={() => handleBackCampaign(item)}
-                    />
-                  </View>
-                )}
-              />
-            ) : null}
-          </View>
-        )}
 
         {/* Results Controls Strip */}
         <View style={styles.controlsStrip}>
@@ -422,7 +384,7 @@ export default function ExploreScreen() {
                 pressed && { opacity: 0.8 },
               ]}
             >
-              <ArrowUpDown size={14} color={theme.colors.ink700} />
+              <ArrowUpDown size={14} color={theme.colors.textSecondary} />
               <Text style={styles.controlBtnText}>
                 {SORT_OPTIONS.find((s) => s.id === sort)?.label}
               </Text>
@@ -441,7 +403,7 @@ export default function ExploreScreen() {
             >
               <SlidersHorizontal
                 size={14}
-                color={activeFilterCount > 0 ? theme.colors.primary600 : theme.colors.ink700}
+                color={activeFilterCount > 0 ? theme.colors.lime : theme.colors.textSecondary}
               />
               <Text
                 style={[
@@ -464,9 +426,9 @@ export default function ExploreScreen() {
               ]}
             >
               {isCompact ? (
-                <Rows3 size={16} color={theme.colors.primary600} />
+                <Rows3 size={16} color={theme.colors.lime} />
               ) : (
-                <LayoutGrid size={16} color={theme.colors.ink600} />
+                <LayoutGrid size={16} color={theme.colors.textSecondary} />
               )}
             </Pressable>
           </View>
@@ -530,7 +492,7 @@ export default function ExploreScreen() {
                 >
                   <Text style={styles.activeFilterChipText}>{item.label}</Text>
                   <View style={styles.activeFilterChipRemoveIcon}>
-                    <X size={12} color={theme.colors.primary700} />
+                    <X size={12} color={theme.colors.textSecondary} />
                   </View>
                 </Pressable>
               )}
@@ -603,7 +565,7 @@ export default function ExploreScreen() {
             description="Try broadening your search term or clearing some filters to explore more causes."
             actionTitle="Clear filters"
             onAction={handleResetAll}
-            icon={<HelpCircle size={38} color={theme.colors.ink400} />}
+            icon={<HelpCircle size={38} color={theme.colors.textSecondary} />}
           />
 
           <View style={styles.suggestionsSection}>
@@ -613,6 +575,7 @@ export default function ExploreScreen() {
                 <CategoryChip
                   key={cat}
                   category={cat}
+                  showIcon={false}
                   onPress={() => {
                     handleClearSearch();
                     setSelectedCategory(cat);
@@ -633,7 +596,7 @@ export default function ExploreScreen() {
           description={`There are currently no active public campaigns in "${selectedCategory}". Be the first to start an amplification message!`}
           actionTitle="Start a Campaign"
           onAction={handleStartCampaign}
-          icon={<Sparkles size={38} color={theme.colors.primary600} />}
+          icon={<Sparkles size={38} color={theme.colors.lime} />}
         />
       </View>
     );
@@ -661,15 +624,17 @@ export default function ExploreScreen() {
           { paddingTop: Math.max(insets.top, Platform.OS === 'android' ? 12 : 8) },
         ]}
       >
-        <View style={styles.searchInputRow}>
-          <View style={styles.searchIconWrap}>
-            <Search size={18} color={theme.colors.ink500} />
-          </View>
+        <View style={styles.searchBarHeaderRow}>
+          <HeaderAvatar size={36} />
+          <View style={styles.searchInputRow}>
+            <View style={styles.searchIconWrap}>
+              <Search size={18} color={theme.colors.textSecondary} />
+            </View>
 
           <TextInput
             style={styles.searchInput}
             placeholder="Search campaigns, causes, stories..."
-            placeholderTextColor={theme.colors.ink400}
+            placeholderTextColor={theme.colors.textSecondary}
             value={rawSearch}
             onChangeText={setRawSearch}
             onFocus={() => setIsSearchFocused(true)}
@@ -690,7 +655,7 @@ export default function ExploreScreen() {
           {/* Activity indicator when searching / debouncing */}
           {(isDebouncing || isFeedLoading) && (
             <View style={styles.searchIndicatorWrap}>
-              <ActivityIndicator size="small" color={theme.colors.primary600} />
+              <ActivityIndicator size="small" color={theme.colors.lime} />
             </View>
           )}
 
@@ -703,9 +668,10 @@ export default function ExploreScreen() {
               accessibilityLabel="Clear search input"
               style={styles.clearSearchBtn}
             >
-              <X size={16} color={theme.colors.ink500} />
+              <X size={16} color={theme.colors.textSecondary} />
             </Pressable>
           )}
+          </View>
         </View>
 
         {/* Recent Searches Overlay / Dropdown */}
@@ -731,7 +697,7 @@ export default function ExploreScreen() {
                   accessibilityRole="button"
                   accessibilityLabel={`Search ${term}`}
                 >
-                  <Clock size={14} color={theme.colors.ink400} />
+                  <Clock size={14} color={theme.colors.textSecondary} />
                   <Text style={styles.recentSearchItemText} numberOfLines={1}>
                     {term}
                   </Text>
@@ -744,7 +710,7 @@ export default function ExploreScreen() {
                   accessibilityRole="button"
                   accessibilityLabel={`Remove ${term} from recent searches`}
                 >
-                  <Trash2 size={13} color={theme.colors.ink400} />
+                  <Trash2 size={13} color={theme.colors.textSecondary} />
                 </Pressable>
               </View>
             ))}
@@ -770,13 +736,13 @@ export default function ExploreScreen() {
         ListEmptyComponent={renderEmptyComponent}
         ListFooterComponent={
           isFetchingNextPage ? (
-            <View style={styles.nextPageLoading}>
-              <ActivityIndicator size="small" color={theme.colors.primary600} />
-              <Text style={styles.nextPageLoadingText}>Loading more campaigns...</Text>
+            <View style={styles.footerWrap}>
+              <View style={styles.nextPageLoading}>
+                <ActivityIndicator size="small" color={theme.colors.lime} />
+                <Text style={styles.nextPageLoadingText}>Loading more campaigns...</Text>
+              </View>
             </View>
-          ) : (
-            <View style={{ height: theme.spacing.xl }} />
-          )
+          ) : null
         }
         onEndReached={() => {
           if (hasNextPage && !isFetchingNextPage) {
@@ -816,7 +782,7 @@ export default function ExploreScreen() {
 
                 {isSelected && (
                   <View style={styles.sheetOptionCheckWrap}>
-                    <Check size={18} color={theme.colors.primary600} />
+                    <Check size={18} color={theme.colors.lime} />
                   </View>
                 )}
               </Pressable>
@@ -987,15 +953,21 @@ const styles = StyleSheet.create({
     borderBottomColor: theme.colors.line,
     zIndex: 10,
   },
-  searchInputRow: {
+  searchBarHeaderRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.bg,
-    borderRadius: theme.radius.md,
+    gap: 12,
+  },
+  searchInputRow: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: theme.colors.inputBg,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: theme.colors.line,
-    height: 46,
-    paddingHorizontal: theme.spacing.sm,
+    height: 48,
+    paddingHorizontal: theme.spacing.md,
   },
   searchIconWrap: {
     marginRight: theme.spacing.xs,
@@ -1004,7 +976,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 15,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     height: '100%',
     padding: 0,
   },
@@ -1037,14 +1009,14 @@ const styles = StyleSheet.create({
   recentSearchesTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textMuted,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   clearRecentText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.primary600,
+    color: theme.colors.lime,
   },
   recentSearchItem: {
     flexDirection: 'row',
@@ -1062,7 +1034,7 @@ const styles = StyleSheet.create({
   recentSearchItemText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
     flex: 1,
   },
   removeRecentItemBtn: {
@@ -1081,7 +1053,7 @@ const styles = StyleSheet.create({
     marginRight: theme.spacing.sm,
   },
 
-  // Featured Strip
+  // Featured Strip (kept for layout consistency if needed)
   featuredSection: {
     marginTop: theme.spacing.xs,
     marginBottom: theme.spacing.md,
@@ -1098,12 +1070,12 @@ const styles = StyleSheet.create({
   featuredSectionTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 17,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   featuredSectionSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 1,
   },
   featuredContent: {
@@ -1125,7 +1097,7 @@ const styles = StyleSheet.create({
   resultsCountText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink800,
+    color: theme.colors.textSecondary,
   },
   controlsButtonsRow: {
     flexDirection: 'row',
@@ -1144,16 +1116,16 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.line,
   },
   controlBtnActive: {
-    backgroundColor: theme.colors.primary50,
-    borderColor: theme.colors.primary600,
+    backgroundColor: theme.colors.tintedPillBg,
+    borderColor: '#234F02',
   },
   controlBtnText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   controlBtnTextActive: {
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
     fontFamily: theme.typography.fonts.uiSemiBold,
   },
   iconControlBtn: {
@@ -1172,26 +1144,26 @@ const styles = StyleSheet.create({
   activeFilterChip: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.primary50,
-    borderColor: theme.colors.primary200,
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.surfaceRaised,
     borderWidth: 1,
     borderRadius: theme.radius.pill,
-    paddingVertical: 4,
-    paddingLeft: 10,
-    paddingRight: 6,
+    paddingVertical: 5,
+    paddingLeft: 12,
+    paddingRight: 8,
     marginRight: 6,
   },
   activeFilterChipText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.primary800,
-    marginRight: 4,
+    color: theme.colors.textPrimary,
+    marginRight: 6,
   },
   activeFilterChipRemoveIcon: {
     width: 18,
     height: 18,
     borderRadius: 9,
-    backgroundColor: theme.colors.white,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1203,7 +1175,7 @@ const styles = StyleSheet.create({
   clearAllFiltersBtnText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: theme.colors.primary600,
+    color: theme.colors.lime,
   },
 
   // Feed items
@@ -1228,7 +1200,7 @@ const styles = StyleSheet.create({
   nextPageLoadingText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
 
   // No results state
@@ -1246,7 +1218,7 @@ const styles = StyleSheet.create({
   suggestionsTitle: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginBottom: theme.spacing.sm,
   },
   suggestionsChipsRow: {
@@ -1273,7 +1245,7 @@ const styles = StyleSheet.create({
     borderBottomColor: theme.colors.line,
   },
   sheetOptionRowSelected: {
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   sheetOptionTextWrap: {
     flex: 1,
@@ -1281,15 +1253,15 @@ const styles = StyleSheet.create({
   sheetOptionTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 15,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   sheetOptionTitleSelected: {
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   sheetOptionDescription: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   sheetOptionCheckWrap: {
@@ -1307,14 +1279,14 @@ const styles = StyleSheet.create({
   filterSheetSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     flex: 1,
     marginRight: theme.spacing.sm,
   },
   filterClearAllText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.primary600,
+    color: theme.colors.lime,
   },
   filterGroup: {
     paddingHorizontal: theme.spacing.base,
@@ -1323,7 +1295,7 @@ const styles = StyleSheet.create({
   filterGroupTitle: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textSecondary,
     marginBottom: theme.spacing.xs,
     textTransform: 'uppercase',
     letterSpacing: 0.3,
@@ -1337,26 +1309,40 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
     paddingHorizontal: 12,
     borderRadius: theme.radius.pill,
-    backgroundColor: theme.colors.bg,
+    backgroundColor: theme.colors.surface,
     borderWidth: 1,
     borderColor: theme.colors.line,
   },
   filterPillSelected: {
-    backgroundColor: theme.colors.primary50,
-    borderColor: theme.colors.primary600,
+    backgroundColor: theme.colors.tintedPillBg,
+    borderColor: '#234F02',
   },
   filterPillText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   filterPillTextSelected: {
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
     fontFamily: theme.typography.fonts.uiSemiBold,
   },
   filterSheetFooter: {
     paddingHorizontal: theme.spacing.base,
     paddingTop: theme.spacing.md,
     paddingBottom: theme.spacing.sm,
+  },
+
+  // Footer & Demo label
+  footerWrap: {
+    paddingHorizontal: theme.spacing.base,
+    paddingVertical: theme.spacing.lg,
+    alignItems: 'center',
+  },
+  demoLabelText: {
+    fontFamily: theme.typography.fonts.uiRegular,
+    fontSize: 12,
+    color: theme.colors.textSecondary,
+    textAlign: 'center',
+    marginTop: theme.spacing.sm,
   },
 });

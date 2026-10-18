@@ -100,11 +100,11 @@ All components live in `apps/mobile/src/components/ui/` and must be built for re
    - Props: `loading`, `disabled`, `iconLeft`, `iconRight`, `onPress`.
 2. **`Card`**: Base container with `surface` background, `radius.card` (16), and soft card shadow.
 3. **`CampaignCard`**:
-   - Variants: `default` (standard vertical feed card), `compact` (horizontal list card), `featured` (large hero card for carousels).
-   - Exact Contents: Cover image, Category chip, 2-line title, Creator name with creator-type icon, 2-line editorial summary, Amount raised / Funding goal, Animated progress bar with percentage, "Est. reach at goal: ~X–Y people", Primary action button ("Back This Campaign").
+   - Variants: `default` (standard vertical feed card), `compact` (horizontal list card), `featured` (large photo snap card for carousels).
+   - Exact Contents: Cover image (with translucent status pill overlay on top-left when status is not `FUNDING`), Category grey text, 2-line title, Creator name with creator-type icon, Amount raised / Funding goal, Animated lime progress bar with percentage, "Est. reach at goal: ~X–Y people", Full-width lime pill action button with trailing arrow icon.
 4. **`ProgressBar`**: Smooth animated progress bar with background `line` and fill `primary-600` (or `success` when 100%+).
 5. **`StatusPill`**: Combined icon and text label for all campaign lifecycle states (`Draft`, `Under Review`, `Changes Requested`, `Funding`, `Promoting`, `Completed`, `Rejected`, `Failed`).
-6. **`CategoryChip`**: Icon + label pill for the 10 categories, toggling between unselected (`bg`, border `line`) and selected (`primary-50`, text `primary-600`).
+6. **`CategoryChip`**: Label pill for the 10 categories with optional icon (`showIcon={false}` for text-only mode), toggling between unselected and selected.
 7. **`Skeleton`**: Subtle shimmering placeholder component with animated opacity for loading states.
 8. **`EmptyState`**: Purposeful icon, clear headline, explanatory body copy, and a primary CTA button.
 9. **`ErrorState`**: Clear error icon, friendly explanation, and a "Try Again" retry action.
@@ -127,4 +127,4 @@ All components live in `apps/mobile/src/components/ui/` and must be built for re
 20. **`SourceItem`**: Clean external link card displaying source title, publisher, URL domain, and verified review indicator.
 21. **`Timeline`**: Vertical chronological progression component used for review history and campaign updates.
 22. **`ReachEstimateBadge`**: Informative pill displaying `~X–Y people reached` accompanied by an InfoTip trigger.
-23. **`DemoDataBadge`**: Distinct subtle badge stating `Demo data` to ensure complete transparency across prototype screens.
+23. **`Demo Disclosures`**: Centralized in three canonical locations: About page, FAQ ("Is the data on this app real?"), and Terms note ("This is a prototype. Campaigns, amounts and results shown are samples."). Individual `DemoDataBadge` components have been removed.

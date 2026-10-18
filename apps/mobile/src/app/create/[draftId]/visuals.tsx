@@ -593,7 +593,7 @@ export default function CreateVisualsScreen() {
         {isComplete ? (
           <View style={styles.readyCard}>
             <View style={styles.readyIconRow}>
-              <CheckCircle2 size={18} color={theme.colors.success} />
+              <CheckCircle2 size={18} color={theme.colors.lime} />
               <Text style={styles.readyTitle}>Step 3 Ready for Review</Text>
             </View>
             <Text style={styles.readySubtitle}>
@@ -603,7 +603,7 @@ export default function CreateVisualsScreen() {
         ) : (
           <View style={styles.alertsCard}>
             <View style={styles.alertsHeaderRow}>
-              <AlertCircle size={18} color={theme.colors.danger} />
+              <AlertCircle size={18} color={theme.colors.textPrimary} />
               <Text style={styles.alertsTitle}>
                 {errors.length} {errors.length === 1 ? 'item' : 'items'} needed before continuing
               </Text>
@@ -688,7 +688,7 @@ export default function CreateVisualsScreen() {
         {/* Non-blocking low resolution warning if triggered */}
         {lowResWarning && (
           <View style={styles.nonBlockingWarningCard}>
-            <AlertTriangle size={16} color={theme.colors.warning} />
+            <AlertTriangle size={16} color={theme.colors.textSecondary} />
             <Text style={styles.nonBlockingWarningText}>{lowResWarning}</Text>
           </View>
         )}
@@ -704,7 +704,7 @@ export default function CreateVisualsScreen() {
         <Card style={styles.sectionCard}>
           <View style={styles.sectionHeaderRow}>
             <View style={styles.sectionIconBadge}>
-              <Camera size={18} color={theme.colors.primary600} />
+              <Camera size={18} color={theme.colors.lime} />
             </View>
             <View style={styles.sectionTitleCol}>
               <Text style={styles.sectionHeading}>Campaign Cover Image</Text>
@@ -726,7 +726,7 @@ export default function CreateVisualsScreen() {
                   variant="secondary"
                   size="sm"
                   onPress={handlePickCoverImage}
-                  iconLeft={<RefreshCw size={14} color={theme.colors.primary600} />}
+                  iconLeft={<RefreshCw size={14} color={theme.colors.lime} />}
                   disabled={isUploadingCover}
                 />
                 <Button
@@ -734,7 +734,7 @@ export default function CreateVisualsScreen() {
                   variant="ghost"
                   size="sm"
                   onPress={handleRemoveCover}
-                  iconLeft={<Trash2 size={14} color={theme.colors.danger} />}
+                  iconLeft={<Trash2 size={14} color={theme.colors.textPrimary} />}
                   disabled={isUploadingCover}
                 />
               </View>
@@ -749,13 +749,13 @@ export default function CreateVisualsScreen() {
             >
               {isUploadingCover ? (
                 <View style={styles.uploadingStateBox}>
-                  <ActivityIndicator size="small" color={theme.colors.primary600} />
+                  <ActivityIndicator size="small" color={theme.colors.lime} />
                   <Text style={styles.uploadingText}>Uploading cover image...</Text>
                 </View>
               ) : (
                 <>
                   <View style={styles.uploadIconCircle}>
-                    <Upload size={22} color={theme.colors.primary600} />
+                    <Upload size={22} color={theme.colors.lime} />
                   </View>
                   <Text style={styles.uploadBoxTitle}>Select Cover Photo</Text>
                   <Text style={styles.uploadBoxSubtitle}>
@@ -768,7 +768,7 @@ export default function CreateVisualsScreen() {
 
           {coverUploadError && (
             <View style={styles.errorNoticeRow}>
-              <AlertCircle size={14} color={theme.colors.danger} />
+              <AlertCircle size={14} color={theme.colors.textPrimary} />
               <Text style={styles.errorNoticeText}>{coverUploadError}</Text>
               {lastCoverAssetRef.current && (
                 <Pressable onPress={handleRetryCoverUpload} style={styles.retryButton}>
@@ -790,7 +790,7 @@ export default function CreateVisualsScreen() {
         <Card style={styles.sectionCard}>
           <View style={styles.sectionHeaderRow}>
             <View style={styles.sectionIconBadge}>
-              <Layers size={18} color={theme.colors.primary600} />
+              <Layers size={18} color={theme.colors.lime} />
             </View>
             <View style={styles.sectionTitleCol}>
               <View style={styles.titleWithCountRow}>
@@ -807,7 +807,7 @@ export default function CreateVisualsScreen() {
 
           {/* Aspect Ratio Guidance Card */}
           <View style={styles.guidanceBanner}>
-            <Info size={16} color={theme.colors.primary600} />
+            <Info size={16} color={theme.colors.textSecondary} />
             <View style={styles.guidanceTextCol}>
               <Text style={styles.guidanceTitle}>Recommended Ad Ratios</Text>
               <Text style={styles.guidanceBody}>
@@ -828,7 +828,7 @@ export default function CreateVisualsScreen() {
 
                     {isPrimary ? (
                       <View style={styles.primaryBadge}>
-                        <Star size={10} color="#FFFFFF" fill="#FFFFFF" />
+                        <Star size={10} color={theme.colors.onLime} fill={theme.colors.onLime} />
                         <Text style={styles.primaryBadgeText}>Primary Ad</Text>
                       </View>
                     ) : (
@@ -848,7 +848,7 @@ export default function CreateVisualsScreen() {
                       accessibilityRole="button"
                       accessibilityLabel={`Delete ad image ${index + 1}`}
                     >
-                      <Trash2 size={13} color="#FFFFFF" />
+                      <Trash2 size={13} color={theme.colors.textPrimary} />
                     </Pressable>
                   </View>
                 );
@@ -866,9 +866,9 @@ export default function CreateVisualsScreen() {
                 onPress={handlePickAdImage}
                 iconLeft={
                   isUploadingAdImage ? (
-                    <ActivityIndicator size="small" color={theme.colors.primary600} />
+                    <ActivityIndicator size="small" color={theme.colors.lime} />
                   ) : (
-                    <Upload size={16} color={theme.colors.primary600} />
+                    <Upload size={16} color={theme.colors.lime} />
                   )
                 }
                 disabled={isUploadingAdImage}
@@ -881,13 +881,13 @@ export default function CreateVisualsScreen() {
               variant="ghost"
               size="md"
               onPress={() => setIsAiImageGalleryOpen(true)}
-              iconLeft={<Sparkles size={16} color={theme.colors.primary600} />}
+              iconLeft={<Sparkles size={16} color={theme.colors.lime} />}
             />
           </View>
 
           {adUploadError && (
             <View style={styles.errorNoticeRow}>
-              <AlertCircle size={14} color={theme.colors.danger} />
+              <AlertCircle size={14} color={theme.colors.textPrimary} />
               <Text style={styles.errorNoticeText}>{adUploadError}</Text>
               {lastAdAssetRef.current && (
                 <Pressable onPress={handleRetryAdUpload} style={styles.retryButton}>
@@ -902,14 +902,14 @@ export default function CreateVisualsScreen() {
       {/* SECTION 3: VIDEO CREATIVE (COMING SOON) */}
       <Card style={styles.sectionCard}>
         <View style={styles.sectionHeaderRow}>
-          <View style={[styles.sectionIconBadge, { backgroundColor: theme.colors.slate100 }]}>
-            <Film size={18} color={theme.colors.ink600} />
+          <View style={[styles.sectionIconBadge, { backgroundColor: theme.colors.surfaceRaised }]}>
+            <Film size={18} color={theme.colors.textSecondary} />
           </View>
           <View style={styles.sectionTitleCol}>
             <View style={styles.titleWithCountRow}>
               <Text style={styles.sectionHeading}>Video Creative</Text>
-              <View style={[styles.counterBadge, { backgroundColor: theme.colors.slate200 }]}>
-                <Text style={[styles.counterBadgeText, { color: theme.colors.ink700 }]}>Preview</Text>
+              <View style={[styles.counterBadge, { backgroundColor: theme.colors.surfaceRaised }]}>
+                <Text style={[styles.counterBadgeText, { color: theme.colors.textSecondary }]}>Preview</Text>
               </View>
             </View>
             <Text style={styles.sectionHelper}>
@@ -938,7 +938,7 @@ export default function CreateVisualsScreen() {
         <Card style={styles.sectionCard}>
           <View style={styles.sectionHeaderRow}>
             <View style={styles.sectionIconBadge}>
-              <Sparkles size={18} color={theme.colors.primary600} />
+              <Sparkles size={18} color={theme.colors.lime} />
             </View>
             <View style={styles.sectionTitleCol}>
               <Text style={styles.sectionHeading}>Ad Copy & Call-To-Action</Text>
@@ -955,7 +955,7 @@ export default function CreateVisualsScreen() {
               variant="secondary"
               size="sm"
               onPress={handleLaunchAiAdCopy}
-              iconLeft={<Sparkles size={14} color={theme.colors.primary600} />}
+              iconLeft={<Sparkles size={14} color={theme.colors.lime} />}
             />
           </View>
 
@@ -967,7 +967,7 @@ export default function CreateVisualsScreen() {
               </Text>
               {aiSuggestedFields.headline && (
                 <View style={styles.aiTagPill}>
-                  <Sparkles size={10} color={theme.colors.primary600} />
+                  <Sparkles size={10} color={theme.colors.lime} />
                   <Text style={styles.aiTagText}>AI-suggested</Text>
                 </View>
               )}
@@ -994,7 +994,7 @@ export default function CreateVisualsScreen() {
               </Text>
               {aiSuggestedFields.description && (
                 <View style={styles.aiTagPill}>
-                  <Sparkles size={10} color={theme.colors.primary600} />
+                  <Sparkles size={10} color={theme.colors.lime} />
                   <Text style={styles.aiTagText}>AI-suggested</Text>
                 </View>
               )}
@@ -1030,7 +1030,7 @@ export default function CreateVisualsScreen() {
                     accessibilityState={{ selected: isSelected }}
                     accessibilityLabel={`Call to action: ${preset}`}
                   >
-                    {isSelected && <Check size={13} color={theme.colors.primary600} />}
+                    {isSelected && <Check size={13} color={theme.colors.lime} />}
                     <Text
                       style={[
                         styles.ctaChipText,
@@ -1051,7 +1051,7 @@ export default function CreateVisualsScreen() {
       <Card style={styles.sectionCard}>
         <View style={styles.sectionHeaderRow}>
           <View style={styles.sectionIconBadge}>
-            <ExternalLink size={18} color={theme.colors.primary600} />
+            <ExternalLink size={18} color={theme.colors.lime} />
           </View>
           <View style={styles.sectionTitleCol}>
             <Text style={styles.sectionHeading}>Placement Previews</Text>
@@ -1095,7 +1095,7 @@ export default function CreateVisualsScreen() {
                 <Image source={{ uri: primaryImage }} style={styles.feedImage} resizeMode="cover" />
               ) : (
                 <View style={styles.previewImagePlaceholder}>
-                  <Camera size={28} color={theme.colors.ink400} />
+                  <Camera size={28} color={theme.colors.textSecondary} />
                   <Text style={styles.previewImagePlaceholderText}>Add an ad image to preview</Text>
                 </View>
               )}
@@ -1126,7 +1126,7 @@ export default function CreateVisualsScreen() {
                 <Image source={{ uri: primaryImage }} style={styles.storyBackgroundImg} resizeMode="cover" />
               ) : (
                 <View style={[styles.storyBackgroundImg, styles.previewImagePlaceholder]}>
-                  <Camera size={28} color={theme.colors.ink400} />
+                  <Camera size={28} color={theme.colors.textSecondary} />
                   <Text style={styles.previewImagePlaceholderText}>Add an ad image to preview</Text>
                 </View>
               )}
@@ -1178,7 +1178,7 @@ export default function CreateVisualsScreen() {
                   <Image source={{ uri: primaryImage }} style={styles.bannerImage} resizeMode="cover" />
                 ) : (
                   <View style={[styles.bannerImage, styles.previewImagePlaceholder]}>
-                    <Camera size={18} color={theme.colors.ink400} />
+                    <Camera size={18} color={theme.colors.textSecondary} />
                   </View>
                 )}
               </View>
@@ -1210,7 +1210,7 @@ export default function CreateVisualsScreen() {
         <ScrollView style={styles.aiSheetScroll} showsVerticalScrollIndicator={false}>
           {aiAdCopyMutation.isPending ? (
             <View style={styles.aiLoadingBox}>
-              <ActivityIndicator size="large" color={theme.colors.primary600} />
+              <ActivityIndicator size="large" color={theme.colors.lime} />
               <Text style={styles.aiLoadingText}>
                 Synthesizing high-performing ad copy options from your campaign details...
               </Text>
@@ -1346,7 +1346,7 @@ export default function CreateVisualsScreen() {
         <View style={styles.modalBackdrop}>
           <Card style={styles.confirmModalCard}>
             <View style={styles.confirmIconCircle}>
-              <AlertTriangle size={24} color={theme.colors.warning} />
+              <AlertTriangle size={24} color={theme.colors.textSecondary} />
             </View>
             <Text style={styles.confirmModalTitle}>
               Replace existing {overwriteConfirm?.type}?
@@ -1404,21 +1404,21 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: theme.typography.styles.h2.fontSize,
     lineHeight: theme.typography.styles.h2.lineHeight,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   stepSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.body.fontSize,
     lineHeight: theme.typography.styles.body.lineHeight,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: 4,
   },
   warningsContainer: {
     gap: theme.spacing.sm,
   },
   readyCard: {
-    backgroundColor: theme.colors.successBg,
-    borderColor: '#BBF7D0',
+    backgroundColor: theme.colors.tintedPillBg,
+    borderColor: theme.colors.line,
     borderWidth: 1,
     borderRadius: theme.radius.md,
     padding: theme.spacing.md,
@@ -1432,17 +1432,17 @@ const styles = StyleSheet.create({
   readyTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: theme.typography.styles.body.fontSize,
-    color: theme.colors.success,
+    color: theme.colors.lime,
   },
   readySubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   alertsCard: {
-    backgroundColor: '#FEF2F2',
-    borderColor: '#FECACA',
+    backgroundColor: theme.colors.surfaceRaised,
+    borderColor: theme.colors.border,
     borderWidth: 1,
     borderRadius: theme.radius.md,
     padding: theme.spacing.md,
@@ -1456,7 +1456,7 @@ const styles = StyleSheet.create({
   alertsTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.danger,
+    color: theme.colors.textPrimary,
   },
   alertsList: {
     gap: 8,
@@ -1471,25 +1471,25 @@ const styles = StyleSheet.create({
     width: 5,
     height: 5,
     borderRadius: 3,
-    backgroundColor: theme.colors.danger,
+    backgroundColor: theme.colors.textPrimary,
   },
   alertItemText: {
     flex: 1,
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   alertFixLink: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.primary600,
+    color: theme.colors.lime,
   },
   nonBlockingWarningCard: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: theme.colors.warningBg,
-    borderColor: '#FDE68A',
+    backgroundColor: theme.colors.surfaceRaised,
+    borderColor: theme.colors.border,
     borderWidth: 1,
     borderRadius: theme.radius.sm,
     padding: theme.spacing.sm,
@@ -1499,11 +1499,13 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 16,
-    color: theme.colors.ink800,
+    color: theme.colors.textSecondary,
   },
   sectionCard: {
     padding: theme.spacing.base,
     borderRadius: theme.radius.card,
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.border,
   },
   sectionHeaderRow: {
     flexDirection: 'row',
@@ -1515,7 +1517,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1530,10 +1532,10 @@ const styles = StyleSheet.create({
   sectionHeading: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   counterBadge: {
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
     paddingVertical: 2,
     paddingHorizontal: 8,
     borderRadius: theme.radius.full,
@@ -1541,21 +1543,21 @@ const styles = StyleSheet.create({
   counterBadgeText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: theme.colors.primary700,
+    color: theme.colors.textSecondary,
   },
   sectionHelper: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   coverPreviewContainer: {
     borderRadius: theme.radius.input,
     overflow: 'hidden',
-    backgroundColor: theme.colors.slate100,
+    backgroundColor: theme.colors.surface,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   coverImagePreview: {
     width: '100%',
@@ -1565,7 +1567,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: 'rgba(15, 23, 42, 0.75)',
+    backgroundColor: theme.colors.surface,
     paddingVertical: 3,
     paddingHorizontal: 8,
     borderRadius: theme.radius.sm,
@@ -1573,7 +1575,7 @@ const styles = StyleSheet.create({
   coverOverlayBadgeText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: '#FFFFFF',
+    color: theme.colors.textPrimary,
   },
   imageActionButtonsRow: {
     flexDirection: 'row',
@@ -1583,18 +1585,18 @@ const styles = StyleSheet.create({
   },
   uploadBox: {
     borderWidth: 2,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     borderStyle: 'dashed',
     borderRadius: theme.radius.input,
     paddingVertical: theme.spacing.lg,
     paddingHorizontal: theme.spacing.base,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surface,
   },
   uploadBoxError: {
-    borderColor: theme.colors.danger,
-    backgroundColor: '#FEF2F2',
+    borderColor: theme.colors.textPrimary,
+    backgroundColor: theme.colors.surface,
   },
   uploadingStateBox: {
     alignItems: 'center',
@@ -1603,13 +1605,13 @@ const styles = StyleSheet.create({
   uploadingText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   uploadIconCircle: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: theme.spacing.sm,
@@ -1617,12 +1619,12 @@ const styles = StyleSheet.create({
   uploadBoxTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   uploadBoxSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   errorNoticeRow: {
@@ -1636,24 +1638,26 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.danger,
+    color: theme.colors.textPrimary,
   },
   retryButton: {
     paddingVertical: 2,
     paddingHorizontal: 8,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
     borderRadius: theme.radius.xs,
   },
   retryButtonText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.primary600,
+    color: theme.colors.lime,
   },
   guidanceBanner: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: theme.spacing.sm,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
+    borderColor: theme.colors.border,
+    borderWidth: 1,
     borderRadius: theme.radius.sm,
     padding: theme.spacing.sm,
     marginBottom: theme.spacing.base,
@@ -1664,13 +1668,13 @@ const styles = StyleSheet.create({
   guidanceTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: theme.colors.primary700,
+    color: theme.colors.textPrimary,
   },
   guidanceBody: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 16,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   adThumbnailsGrid: {
@@ -1684,9 +1688,9 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     borderRadius: theme.radius.sm,
     overflow: 'hidden',
-    backgroundColor: theme.colors.slate100,
+    backgroundColor: theme.colors.surface,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   thumbnailImage: {
     width: '100%',
@@ -1699,7 +1703,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
     paddingVertical: 2,
     paddingHorizontal: 6,
     borderRadius: theme.radius.xs,
@@ -1707,13 +1711,13 @@ const styles = StyleSheet.create({
   primaryBadgeText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 10,
-    color: '#FFFFFF',
+    color: theme.colors.onLime,
   },
   setPrimaryBtn: {
     position: 'absolute',
     bottom: 6,
     left: 6,
-    backgroundColor: 'rgba(15, 23, 42, 0.75)',
+    backgroundColor: theme.colors.surface,
     paddingVertical: 3,
     paddingHorizontal: 8,
     borderRadius: theme.radius.xs,
@@ -1721,13 +1725,13 @@ const styles = StyleSheet.create({
   setPrimaryBtnText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 10,
-    color: '#FFFFFF',
+    color: theme.colors.textPrimary,
   },
   thumbnailDeleteBtn: {
     position: 'absolute',
     top: 6,
     right: 6,
-    backgroundColor: 'rgba(239, 68, 68, 0.85)',
+    backgroundColor: theme.colors.surfaceRaised,
     width: 24,
     height: 24,
     borderRadius: 12,
@@ -1739,23 +1743,23 @@ const styles = StyleSheet.create({
     gap: theme.spacing.sm,
   },
   videoNoticeBox: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     borderRadius: theme.radius.sm,
     padding: theme.spacing.base,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   videoNoticeTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
     marginBottom: 4,
   },
   videoNoticeBody: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   aiButtonRow: {
     marginBottom: theme.spacing.base,
@@ -1772,30 +1776,32 @@ const styles = StyleSheet.create({
   fieldLabel: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   fieldSubHelper: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginBottom: theme.spacing.sm,
   },
   requiredAsterisk: {
-    color: theme.colors.danger,
+    color: theme.colors.textSecondary,
   },
   aiTagPill: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.tintedPillBg,
     paddingVertical: 2,
     paddingHorizontal: 6,
     borderRadius: theme.radius.full,
+    borderWidth: 1,
+    borderColor: theme.colors.line,
   },
   aiTagText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 10,
-    color: theme.colors.primary700,
+    color: theme.colors.tintedPillText,
   },
   ctaChipsRow: {
     flexDirection: 'row',
@@ -1810,21 +1816,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: theme.radius.sm,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     backgroundColor: theme.colors.surface,
   },
   ctaChipActive: {
-    borderColor: theme.colors.primary600,
-    backgroundColor: theme.colors.primary50,
+    borderColor: theme.colors.lime,
+    backgroundColor: theme.colors.tintedPillBg,
   },
   ctaChipText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   ctaChipTextActive: {
     fontFamily: theme.typography.fonts.uiSemiBold,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   segmentedControl: {
     marginBottom: theme.spacing.sm,
@@ -1832,7 +1838,7 @@ const styles = StyleSheet.create({
   previewDisclaimerText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     marginBottom: theme.spacing.base,
   },
@@ -1840,7 +1846,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     overflow: 'hidden',
     ...theme.shadows.card,
   },
@@ -1856,17 +1862,17 @@ const styles = StyleSheet.create({
   feedCreatorName: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   feedSponsoredLabel: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   feedImageContainer: {
     width: '100%',
     aspectRatio: 1,
-    backgroundColor: theme.colors.slate100,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   feedImage: {
     width: '100%',
@@ -1877,7 +1883,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     padding: theme.spacing.sm,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surface,
   },
   feedTextCol: {
     flex: 1,
@@ -1885,17 +1891,17 @@ const styles = StyleSheet.create({
   feedHeadlineText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   feedDescriptionText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 16,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   feedCtaButton: {
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: theme.radius.sm,
@@ -1903,7 +1909,7 @@ const styles = StyleSheet.create({
   feedCtaButtonText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: '#FFFFFF',
+    color: theme.colors.onLime,
   },
   previewStoryWrapper: {
     alignItems: 'center',
@@ -1915,7 +1921,7 @@ const styles = StyleSheet.create({
     height: 444,
     borderRadius: theme.radius.card,
     overflow: 'hidden',
-    backgroundColor: '#0F172A',
+    backgroundColor: theme.colors.surfaceRaised,
     ...theme.shadows.elevated,
   },
   storyBackgroundImg: {
@@ -1929,11 +1935,11 @@ const styles = StyleSheet.create({
     right: 0,
     padding: 12,
     paddingTop: 16,
-    backgroundColor: 'rgba(15, 23, 42, 0.45)',
+    backgroundColor: 'rgba(18, 21, 17, 0.65)',
   },
   storyProgressBar: {
     height: 2,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    backgroundColor: theme.colors.lime,
     borderRadius: 1,
     marginBottom: 8,
   },
@@ -1945,11 +1951,11 @@ const styles = StyleSheet.create({
   storyCreatorName: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: '#FFFFFF',
+    color: theme.colors.textPrimary,
     flex: 1,
   },
   storySponsoredPill: {
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    backgroundColor: theme.colors.surfaceRaised,
     paddingVertical: 2,
     paddingHorizontal: 6,
     borderRadius: theme.radius.xs,
@@ -1957,7 +1963,7 @@ const styles = StyleSheet.create({
   storySponsoredPillText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 10,
-    color: '#FFFFFF',
+    color: theme.colors.textSecondary,
   },
   storyBottomOverlay: {
     position: 'absolute',
@@ -1965,24 +1971,24 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     padding: 14,
-    backgroundColor: 'rgba(15, 23, 42, 0.75)',
+    backgroundColor: 'rgba(18, 21, 17, 0.85)',
   },
   storyHeadlineText: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 15,
     lineHeight: 19,
-    color: '#FFFFFF',
+    color: theme.colors.textPrimary,
   },
   storyDescriptionText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
     lineHeight: 15,
-    color: 'rgba(255, 255, 255, 0.85)',
+    color: theme.colors.textSecondary,
     marginTop: 4,
   },
   storyCtaPill: {
     marginTop: 10,
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
     paddingVertical: 7,
     paddingHorizontal: 12,
     borderRadius: theme.radius.full,
@@ -1991,20 +1997,20 @@ const styles = StyleSheet.create({
   storyCtaPillText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 11,
-    color: '#FFFFFF',
+    color: theme.colors.onLime,
   },
   previewBannerContainer: {
     backgroundColor: theme.colors.surface,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     overflow: 'hidden',
     padding: theme.spacing.sm,
     ...theme.shadows.card,
   },
   bannerAdBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: theme.colors.slate200,
+    backgroundColor: theme.colors.surfaceRaised,
     paddingVertical: 1,
     paddingHorizontal: 4,
     borderRadius: 2,
@@ -2013,7 +2019,7 @@ const styles = StyleSheet.create({
   bannerAdBadgeText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 9,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   bannerContentRow: {
     flexDirection: 'row',
@@ -2024,7 +2030,7 @@ const styles = StyleSheet.create({
     height: 90,
     borderRadius: theme.radius.sm,
     overflow: 'hidden',
-    backgroundColor: theme.colors.slate100,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   bannerImage: {
     width: '100%',
@@ -2037,13 +2043,13 @@ const styles = StyleSheet.create({
   bannerHeadlineText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   bannerDescriptionText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
     lineHeight: 15,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   bannerCtaRow: {
@@ -2051,7 +2057,7 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   bannerCtaBtn: {
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
     paddingVertical: 4,
     paddingHorizontal: 10,
     borderRadius: theme.radius.sm,
@@ -2059,19 +2065,19 @@ const styles = StyleSheet.create({
   bannerCtaBtnText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 11,
-    color: '#FFFFFF',
+    color: theme.colors.onLime,
   },
   previewImagePlaceholder: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     padding: theme.spacing.base,
-    backgroundColor: theme.colors.slate100,
+    backgroundColor: theme.colors.surface,
   },
   previewImagePlaceholderText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 6,
     textAlign: 'center',
   },
@@ -2088,7 +2094,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 20,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     paddingHorizontal: theme.spacing.lg,
   },
@@ -2099,7 +2105,7 @@ const styles = StyleSheet.create({
   aiSectionTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginTop: 4,
   },
   aiOptionCard: {
@@ -2107,10 +2113,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     padding: theme.spacing.sm,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     borderRadius: theme.radius.sm,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   aiOptionTextCol: {
     flex: 1,
@@ -2118,18 +2124,20 @@ const styles = StyleSheet.create({
   aiOptionContent: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   aiCharCount: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   aiFeedbackBox: {
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
     borderRadius: theme.radius.sm,
     padding: theme.spacing.sm,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
     gap: 8,
   },
   aiFeedbackItem: {
@@ -2141,7 +2149,7 @@ const styles = StyleSheet.create({
     width: 5,
     height: 5,
     borderRadius: 3,
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
     marginTop: 6,
   },
   aiFeedbackText: {
@@ -2149,11 +2157,11 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 16,
-    color: theme.colors.ink800,
+    color: theme.colors.textSecondary,
   },
   modalBackdrop: {
     flex: 1,
-    backgroundColor: 'rgba(15, 23, 42, 0.65)',
+    backgroundColor: 'rgba(18, 21, 17, 0.75)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: theme.spacing.base,
@@ -2163,6 +2171,8 @@ const styles = StyleSheet.create({
     maxHeight: '80%',
     padding: theme.spacing.base,
     borderRadius: theme.radius.card,
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.border,
   },
   galleryHeader: {
     flexDirection: 'row',
@@ -2173,12 +2183,12 @@ const styles = StyleSheet.create({
   galleryTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 18,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   gallerySubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   galleryCloseBtn: {
@@ -2186,7 +2196,7 @@ const styles = StyleSheet.create({
   },
   galleryCloseText: {
     fontSize: 18,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     fontWeight: 'bold',
   },
   galleryScroll: {
@@ -2202,9 +2212,9 @@ const styles = StyleSheet.create({
     width: '48%',
     borderRadius: theme.radius.sm,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     overflow: 'hidden',
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.surfaceRaised,
     paddingBottom: 8,
   },
   galleryItemImg: {
@@ -2215,7 +2225,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 6,
     left: 6,
-    backgroundColor: 'rgba(15, 23, 42, 0.75)',
+    backgroundColor: theme.colors.surface,
     paddingVertical: 2,
     paddingHorizontal: 4,
     borderRadius: theme.radius.xs,
@@ -2223,12 +2233,12 @@ const styles = StyleSheet.create({
   galleryItemBadgeText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 8,
-    color: '#FFFFFF',
+    color: theme.colors.textPrimary,
   },
   galleryItemTitle: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     paddingHorizontal: 8,
     marginTop: 6,
   },
@@ -2241,12 +2251,14 @@ const styles = StyleSheet.create({
     padding: theme.spacing.lg,
     borderRadius: theme.radius.card,
     alignItems: 'center',
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.border,
   },
   confirmIconCircle: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: theme.colors.warningBg,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: theme.spacing.md,
@@ -2254,7 +2266,7 @@ const styles = StyleSheet.create({
   confirmModalTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     textAlign: 'center',
     marginBottom: theme.spacing.xs,
   },
@@ -2262,7 +2274,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     marginBottom: theme.spacing.base,
   },

@@ -5,6 +5,7 @@ import {
   Text,
   ScrollView,
   Share,
+  Pressable,
 } from 'react-native';
 import { useLocalSearchParams, useRouter, Href } from 'expo-router';
 import {
@@ -12,6 +13,7 @@ import {
   Calendar,
   CreditCard,
   ShieldCheck,
+  Share2,
 } from 'lucide-react-native';
 import { quote } from '@campaigns/shared';
 import { useReceipt } from '../../../api';
@@ -22,7 +24,6 @@ import {
   Button,
   Skeleton,
   ErrorState,
-  DemoDataBadge,
 } from '../../../components/ui';
 import { theme } from '../../../theme';
 
@@ -106,12 +107,15 @@ export default function PaymentReceiptScreen() {
         subtitle={`Receipt #${receipt.receiptNo}`}
         fallbackRoute="/profile/payments"
         rightAction={
-          <Button
-            title="Share"
-            variant="ghost"
-            size="sm"
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Share receipt"
             onPress={handleShare}
-          />
+            style={styles.shareCircleBtn}
+            hitSlop={8}
+          >
+            <Share2 size={18} color={theme.colors.lime} />
+          </Pressable>
         }
       />
 
@@ -124,12 +128,14 @@ export default function PaymentReceiptScreen() {
         <Card style={styles.headerCard}>
           <View style={styles.receiptTopRow}>
             <View style={styles.receiptIconWrapper}>
-              <Receipt size={24} color={theme.colors.primary700} />
+              <Receipt size={24} color={theme.colors.lime} />
             </View>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.receiptNumberText}>{receipt.receiptNo}</Text>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <Text style={styles.receiptNumberText} numberOfLines={1} ellipsizeMode="middle">
+                {receipt.receiptNo}
+              </Text>
               <View style={styles.dateRow}>
-                <Calendar size={13} color={theme.colors.ink500} />
+                <Calendar size={13} color={theme.colors.textSecondary} />
                 <Text style={styles.dateText}>{formattedDate}</Text>
               </View>
             </View>
@@ -207,11 +213,10 @@ export default function PaymentReceiptScreen() {
           <Text style={styles.cardHeaderTitle}>Payment & Attribution</Text>
 
           <View style={styles.paymentInfoRow}>
-            <CreditCard size={18} color={theme.colors.ink600} />
-            <Text style={styles.paymentMethodText}>
-              {receipt.cardBrand || 'Simulated Card'} •••• {receipt.cardLast4 || '4242'}
+            <CreditCard size={18} color={theme.colors.textSecondary} />
+            <Text style={styles.paymentMethodText} numberOfLines={1}>
+              Simulated card •••• {receipt.cardLast4 || '1234'}
             </Text>
-            <DemoDataBadge size="sm" />
           </View>
 
           <View style={styles.divider} />
@@ -233,7 +238,7 @@ export default function PaymentReceiptScreen() {
 
         {/* Non-Donation Legal Disclosure */}
         <View style={styles.legalNoticeBox}>
-          <ShieldCheck size={18} color={theme.colors.ink600} style={{ marginTop: 2 }} />
+          <ShieldCheck size={18} color={theme.colors.lime} style={{ marginTop: 2 }} />
           <Text style={styles.legalNoticeText}>
             <Text style={{ fontWeight: '700' }}>Legal Disclosure:</Text> This contribution strictly funds digital advertising distribution to spread the campaign message. It does not constitute a charitable donation or tax deduction, and no cash is remitted to the campaign creator.
           </Text>
@@ -290,13 +295,13 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.tintedPillBg,
     alignItems: 'center',
     justifyContent: 'center',
   },
   receiptNumberText: {
     ...theme.typography.styles.h3,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   dateRow: {
     flexDirection: 'row',
@@ -306,7 +311,7 @@ const styles = StyleSheet.create({
   },
   dateText: {
     ...theme.typography.styles.caption,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   divider: {
     height: 1,
@@ -321,12 +326,12 @@ const styles = StyleSheet.create({
   },
   metaLabel: {
     ...theme.typography.styles.caption,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginBottom: 2,
   },
   campaignTitle: {
     ...theme.typography.styles.bodyMedium,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   sectionCard: {
     padding: theme.spacing.base,
@@ -335,12 +340,12 @@ const styles = StyleSheet.create({
   },
   cardHeaderTitle: {
     ...theme.typography.styles.h3,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: 2,
   },
   cardSubText: {
     ...theme.typography.styles.small,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginBottom: theme.spacing.md,
   },
   breakdownRow: {
@@ -351,16 +356,16 @@ const styles = StyleSheet.create({
   },
   breakdownItemTitle: {
     ...theme.typography.styles.bodyMedium,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   breakdownItemDesc: {
     ...theme.typography.styles.caption,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 1,
   },
   breakdownAmount: {
     ...theme.typography.styles.bodyMedium,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     fontFamily: theme.typography.fonts.uiSemiBold,
   },
   totalRow: {
@@ -370,12 +375,12 @@ const styles = StyleSheet.create({
   },
   totalLabel: {
     ...theme.typography.styles.h3,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     fontFamily: theme.typography.fonts.uiBold,
   },
   totalAmount: {
     ...theme.typography.styles.h2,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
     fontFamily: theme.typography.fonts.uiBold,
   },
   paymentInfoRow: {
@@ -385,7 +390,7 @@ const styles = StyleSheet.create({
   },
   paymentMethodText: {
     ...theme.typography.styles.bodyMedium,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
     flex: 1,
   },
   backerRow: {
@@ -395,12 +400,12 @@ const styles = StyleSheet.create({
   },
   backerValue: {
     ...theme.typography.styles.bodyMedium,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     fontFamily: theme.typography.fonts.uiSemiBold,
   },
   legalNoticeBox: {
     flexDirection: 'row',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     borderWidth: 1,
     borderColor: theme.colors.line,
     borderRadius: theme.radius.md,
@@ -411,7 +416,17 @@ const styles = StyleSheet.create({
   legalNoticeText: {
     flex: 1,
     ...theme.typography.styles.small,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     lineHeight: 18,
+  },
+  shareCircleBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: theme.colors.surfaceRaised,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: theme.colors.border,
   },
 });

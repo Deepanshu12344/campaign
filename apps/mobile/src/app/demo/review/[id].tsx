@@ -141,7 +141,7 @@ export default function ReviewInspectionScreen() {
         <ReviewerBanner />
         <SharedHeader title="Campaign Inspection" fallbackRoute="/demo/control" />
         <View style={styles.centerContainer}>
-          <ActivityIndicator size="large" color={theme.colors.primary600} />
+          <ActivityIndicator size="large" color={theme.colors.lime} />
         </View>
       </View>
     );
@@ -155,7 +155,7 @@ export default function ReviewInspectionScreen() {
         <SharedHeader title="Campaign Inspection" fallbackRoute="/demo/control" />
         <View style={styles.centerContainer}>
           <Card style={styles.gateCard}>
-            <Lock size={36} color={theme.colors.ink600} />
+            <Lock size={36} color={theme.colors.textSecondary} />
             <Text style={styles.gateTitle}>Reviewer Console Not Available</Text>
             <Text style={styles.gateBody}>
               This inspection screen requires ADMIN privileges. Sign in with the reviewer demo credentials.
@@ -166,7 +166,7 @@ export default function ReviewInspectionScreen() {
               size="md"
               fullWidth
               loading={authLoading}
-              iconLeft={<ShieldCheck size={18} color="#FFFFFF" />}
+              iconLeft={<ShieldCheck size={18} color={theme.colors.onLime} />}
               onPress={async () => {
                 await signIn({ email: 'admin@demo.com', password: 'password123' });
                 refetch();
@@ -287,7 +287,7 @@ export default function ReviewInspectionScreen() {
             {/* Ad Copy & Creative Specification */}
             <Card style={styles.card}>
               <View style={styles.sectionHeaderRow}>
-                <Megaphone size={18} color={theme.colors.primary600} />
+                <Megaphone size={18} color={theme.colors.lime} />
                 <Text style={styles.sectionTitle}>Ad Copy & Creative Spec</Text>
               </View>
               <Text style={styles.sectionSubtitle}>
@@ -369,7 +369,7 @@ export default function ReviewInspectionScreen() {
             {/* Targeting & Distribution Channels */}
             <Card style={styles.card}>
               <View style={styles.sectionHeaderRow}>
-                <Target size={18} color={theme.colors.primary600} />
+                <Target size={18} color={theme.colors.lime} />
                 <Text style={styles.sectionTitle}>Audience & Distribution Targeting</Text>
               </View>
               <Text style={styles.sectionSubtitle}>
@@ -381,7 +381,7 @@ export default function ReviewInspectionScreen() {
                 <View style={styles.chipsRow}>
                   {campaign.reach?.locations?.map((loc: string, idx: number) => (
                     <View key={idx} style={styles.targetChip}>
-                      <MapPin size={12} color={theme.colors.primary700} />
+                      <MapPin size={12} color={theme.colors.lime} />
                       <Text style={styles.targetChipText}>{loc}</Text>
                     </View>
                   )) || <Text style={styles.emptyText}>Worldwide (No regional restrictions)</Text>}
@@ -404,7 +404,7 @@ export default function ReviewInspectionScreen() {
                 <View style={styles.chipsRow}>
                   {campaign.reach?.channels?.map((channel: string, idx: number) => (
                     <View key={idx} style={styles.channelChip}>
-                      <Radio size={12} color={theme.colors.ink700} />
+                      <Radio size={12} color={theme.colors.textSecondary} />
                       <Text style={styles.channelChipText}>{channel}</Text>
                     </View>
                   )) || <Text style={styles.emptyText}>Standard Social & Search Feeds</Text>}
@@ -424,7 +424,7 @@ export default function ReviewInspectionScreen() {
             {/* Budget & Reach Estimates */}
             <Card style={styles.card}>
               <View style={styles.sectionHeaderRow}>
-                <DollarSign size={18} color={theme.colors.primary600} />
+                <DollarSign size={18} color={theme.colors.lime} />
                 <Text style={styles.sectionTitle}>Funding Goal & Budget Allocation</Text>
               </View>
               <Text style={styles.sectionSubtitle}>
@@ -470,7 +470,7 @@ export default function ReviewInspectionScreen() {
             {/* 4-Item Reviewer Checklist */}
             <Card style={styles.checklistCard}>
               <View style={styles.checklistHeader}>
-                <ShieldCheck size={20} color={theme.colors.primary700} />
+                <ShieldCheck size={20} color={theme.colors.lime} />
                 <Text style={styles.checklistTitle}>Compliance Verification Checklist</Text>
               </View>
               <Text style={styles.checklistSubtitle}>
@@ -486,9 +486,9 @@ export default function ReviewInspectionScreen() {
                   accessibilityState={{ checked: checklist.contentChecked }}
                 >
                   {checklist.contentChecked ? (
-                    <CheckSquare size={22} color={theme.colors.emerald600} />
+                    <CheckSquare size={22} color={theme.colors.lime} />
                   ) : (
-                    <Square size={22} color={theme.colors.ink400} />
+                    <Square size={22} color={theme.colors.textSecondary} />
                   )}
                   <View style={styles.checkTextWrapper}>
                     <Text style={styles.checkItemTitle}>1. Editorial & Truthfulness Standards</Text>
@@ -506,9 +506,9 @@ export default function ReviewInspectionScreen() {
                   accessibilityState={{ checked: checklist.sourcesChecked }}
                 >
                   {checklist.sourcesChecked ? (
-                    <CheckSquare size={22} color={theme.colors.emerald600} />
+                    <CheckSquare size={22} color={theme.colors.lime} />
                   ) : (
-                    <Square size={22} color={theme.colors.ink400} />
+                    <Square size={22} color={theme.colors.textSecondary} />
                   )}
                   <View style={styles.checkTextWrapper}>
                     <Text style={styles.checkItemTitle}>2. External Sources & Evidence</Text>
@@ -526,9 +526,9 @@ export default function ReviewInspectionScreen() {
                   accessibilityState={{ checked: checklist.creativeChecked }}
                 >
                   {checklist.creativeChecked ? (
-                    <CheckSquare size={22} color={theme.colors.emerald600} />
+                    <CheckSquare size={22} color={theme.colors.lime} />
                   ) : (
-                    <Square size={22} color={theme.colors.ink400} />
+                    <Square size={22} color={theme.colors.textSecondary} />
                   )}
                   <View style={styles.checkTextWrapper}>
                     <Text style={styles.checkItemTitle}>3. Ad Visuals & Copy Compliance</Text>
@@ -546,9 +546,9 @@ export default function ReviewInspectionScreen() {
                   accessibilityState={{ checked: checklist.targetingChecked }}
                 >
                   {checklist.targetingChecked ? (
-                    <CheckSquare size={22} color={theme.colors.emerald600} />
+                    <CheckSquare size={22} color={theme.colors.lime} />
                   ) : (
-                    <Square size={22} color={theme.colors.ink400} />
+                    <Square size={22} color={theme.colors.textSecondary} />
                   )}
                   <View style={styles.checkTextWrapper}>
                     <Text style={styles.checkItemTitle}>4. Audience & Channel Targeting</Text>
@@ -561,7 +561,7 @@ export default function ReviewInspectionScreen() {
 
               {!canApprove && (
                 <View style={styles.checklistAlert}>
-                  <AlertCircle size={14} color="#92400E" />
+                  <AlertCircle size={14} color={theme.colors.textPrimary} />
                   <Text style={styles.checklistAlertText}>
                     Approval is disabled until all 4 verification boxes are checked.
                   </Text>
@@ -583,7 +583,7 @@ export default function ReviewInspectionScreen() {
                   size="lg"
                   fullWidth
                   disabled={!canApprove}
-                  iconLeft={<CheckCircle2 size={18} color={canApprove ? '#FFFFFF' : theme.colors.ink400} />}
+                  iconLeft={<CheckCircle2 size={18} color={canApprove ? theme.colors.onLime : theme.colors.textSecondary} />}
                   onPress={() => handleOpenDecisionModal('APPROVE')}
                 />
 
@@ -592,7 +592,7 @@ export default function ReviewInspectionScreen() {
                   variant="secondary"
                   size="md"
                   fullWidth
-                  iconLeft={<Clock size={18} color={theme.colors.primary600} />}
+                  iconLeft={<Clock size={18} color={theme.colors.lime} />}
                   onPress={() => handleOpenDecisionModal('CHANGES_REQUESTED')}
                 />
 
@@ -601,7 +601,7 @@ export default function ReviewInspectionScreen() {
                   variant="danger"
                   size="md"
                   fullWidth
-                  iconLeft={<XCircle size={18} color="#FFFFFF" />}
+                  iconLeft={<XCircle size={18} color={theme.colors.textPrimary} />}
                   onPress={() => handleOpenDecisionModal('REJECT')}
                 />
               </View>
@@ -610,7 +610,7 @@ export default function ReviewInspectionScreen() {
             {/* Audit Trail Section */}
             <Card style={styles.card}>
               <View style={styles.sectionHeaderRow}>
-                <History size={18} color={theme.colors.primary600} />
+                <History size={18} color={theme.colors.lime} />
                 <Text style={styles.sectionTitle}>Campaign Audit Log</Text>
               </View>
               <Text style={styles.sectionSubtitle}>
@@ -618,7 +618,7 @@ export default function ReviewInspectionScreen() {
               </Text>
 
               {auditQuery.isLoading ? (
-                <ActivityIndicator size="small" color={theme.colors.primary600} style={{ marginVertical: 12 }} />
+                <ActivityIndicator size="small" color={theme.colors.lime} style={{ marginVertical: 12 }} />
               ) : (
                 <View style={styles.auditContainer}>
                   <Text style={styles.auditSubHeading}>Prior Review Decisions</Text>
@@ -676,12 +676,7 @@ export default function ReviewInspectionScreen() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text
-                style={[
-                  styles.modalTitle,
-                  activeModal === 'REJECT' && { color: theme.colors.danger },
-                ]}
-              >
+              <Text style={styles.modalTitle}>
                 {activeModal === 'APPROVE' && 'Approve Campaign'}
                 {activeModal === 'CHANGES_REQUESTED' && 'Request Changes'}
                 {activeModal === 'REJECT' && 'Reject Submission'}
@@ -691,7 +686,7 @@ export default function ReviewInspectionScreen() {
                 hitSlop={8}
                 style={styles.modalCloseButton}
               >
-                <X size={20} color={theme.colors.ink700} />
+                <X size={20} color={theme.colors.textSecondary} />
               </Pressable>
             </View>
 
@@ -796,39 +791,39 @@ const styles = StyleSheet.create({
     fontSize: 11,
   },
   submissionBadge: {
-    backgroundColor: theme.colors.warningBg,
-    borderColor: '#FDE68A',
+    backgroundColor: theme.colors.surfaceRaised,
+    borderColor: theme.colors.border,
     borderWidth: 1,
   },
   submissionText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 11,
-    color: '#92400E',
+    color: theme.colors.textPrimary,
   },
   revisionBadge: {
-    backgroundColor: '#F3E8FF',
-    borderColor: '#E9D5FF',
+    backgroundColor: theme.colors.tintedPillBg,
+    borderColor: theme.colors.border,
     borderWidth: 1,
   },
   revisionText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 11,
-    color: '#6B21A8',
+    color: theme.colors.lime,
   },
   campaignTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 20,
     lineHeight: 26,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   campaignSummary: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 20,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   metaBox: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.input,
     gap: 4,
@@ -842,28 +837,28 @@ const styles = StyleSheet.create({
   metaLabel: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   metaValue: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   sectionTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 17,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   sectionSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 16,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   coverPreviewContainer: {
     borderRadius: theme.radius.card,
     overflow: 'hidden',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     marginTop: theme.spacing.xs,
   },
   coverPreviewImage: {
@@ -873,14 +868,14 @@ const styles = StyleSheet.create({
   imageCaption: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     padding: 6,
     textAlign: 'center',
     backgroundColor: theme.colors.surface,
   },
   noImagePlaceholder: {
     height: 100,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     borderRadius: theme.radius.card,
     alignItems: 'center',
     justifyContent: 'center',
@@ -888,7 +883,7 @@ const styles = StyleSheet.create({
   noImageText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   adImagesContainer: {
     marginTop: theme.spacing.sm,
@@ -897,7 +892,7 @@ const styles = StyleSheet.create({
   subSectionTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   adImagesScroll: {
     gap: theme.spacing.sm,
@@ -907,7 +902,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.card,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   adImage: {
     width: 140,
@@ -916,7 +911,7 @@ const styles = StyleSheet.create({
   adImageLabel: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 10,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     paddingVertical: 3,
     backgroundColor: theme.colors.surface,
@@ -927,7 +922,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   adCopyCard: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     borderRadius: theme.radius.input,
     padding: theme.spacing.md,
     gap: theme.spacing.sm,
@@ -939,16 +934,16 @@ const styles = StyleSheet.create({
   adCopyLabel: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     textTransform: 'uppercase',
   },
   adCopyText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 14,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   ctaPill: {
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
     alignSelf: 'flex-start',
     paddingHorizontal: 12,
     paddingVertical: 4,
@@ -958,7 +953,7 @@ const styles = StyleSheet.create({
   ctaText: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 12,
-    color: '#FFFFFF',
+    color: theme.colors.onLime,
   },
   storyContainer: {
     marginTop: theme.spacing.xs,
@@ -967,18 +962,18 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.xs,
   },
   emptySourcesBox: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.md,
     borderRadius: theme.radius.input,
   },
   emptySourcesText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     fontStyle: 'italic',
   },
   targetingBox: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.md,
     borderRadius: theme.radius.input,
     gap: theme.spacing.sm,
@@ -987,7 +982,7 @@ const styles = StyleSheet.create({
   targetHeading: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   chipsRow: {
     flexDirection: 'row',
@@ -998,17 +993,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.tintedPillBg,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: theme.radius.pill,
     borderWidth: 1,
-    borderColor: '#C7D2FE',
+    borderColor: theme.colors.border,
   },
   targetChipText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: theme.colors.primary800,
+    color: theme.colors.lime,
   },
   interestChip: {
     backgroundColor: theme.colors.surface,
@@ -1016,12 +1011,12 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: theme.radius.pill,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   interestChipText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: theme.colors.ink800,
+    color: theme.colors.textSecondary,
   },
   channelChip: {
     flexDirection: 'row',
@@ -1032,22 +1027,22 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: theme.radius.pill,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   channelChipText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: theme.colors.ink800,
+    color: theme.colors.textSecondary,
   },
   emptyText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     fontStyle: 'italic',
   },
   divider: {
     height: 1,
-    backgroundColor: theme.colors.line,
+    backgroundColor: theme.colors.border,
     marginVertical: 4,
   },
   budgetGrid: {
@@ -1057,7 +1052,7 @@ const styles = StyleSheet.create({
   },
   budgetItem: {
     flex: 1,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.md,
     borderRadius: theme.radius.input,
     gap: 4,
@@ -1065,26 +1060,26 @@ const styles = StyleSheet.create({
   budgetLabel: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   budgetValueLarge: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 18,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   allocationBox: {
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.md,
     borderRadius: theme.radius.input,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     gap: 6,
     marginTop: theme.spacing.xs,
   },
   allocationTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
     marginBottom: 2,
   },
   allocationRow: {
@@ -1095,19 +1090,19 @@ const styles = StyleSheet.create({
   allocationText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   allocationAmount: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   checklistCard: {
     padding: theme.spacing.lg,
     gap: theme.spacing.md,
-    borderWidth: 1.5,
-    borderColor: '#C7D2FE',
-    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   checklistHeader: {
     flexDirection: 'row',
@@ -1117,13 +1112,13 @@ const styles = StyleSheet.create({
   checklistTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 17,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   checklistSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 16,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   checklistItems: {
     gap: theme.spacing.md,
@@ -1140,29 +1135,29 @@ const styles = StyleSheet.create({
   checkItemTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   checkItemDescription: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 16,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   checklistAlert: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.warningBg,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.input,
     borderWidth: 1,
-    borderColor: '#FDE68A',
+    borderColor: theme.colors.textPrimary,
     gap: 6,
   },
   checklistAlertText: {
     flex: 1,
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: '#92400E',
+    color: theme.colors.textPrimary,
   },
   actionCard: {
     padding: theme.spacing.lg,
@@ -1171,12 +1166,12 @@ const styles = StyleSheet.create({
   actionCardTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 17,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   actionCardSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginBottom: theme.spacing.xs,
   },
   actionButtonsList: {
@@ -1188,15 +1183,15 @@ const styles = StyleSheet.create({
   auditSubHeading: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
     marginBottom: theme.spacing.xs,
   },
   auditCard: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.input,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     marginBottom: theme.spacing.xs,
     gap: 2,
   },
@@ -1208,33 +1203,33 @@ const styles = StyleSheet.create({
   auditBadge: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 11,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   auditEventBadge: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 11,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   auditDate: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 10,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   auditReviewer: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   auditNotes: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
     fontStyle: 'italic',
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   auditPayload: {
     fontFamily: 'monospace',
     fontSize: 10,
-    color: theme.colors.ink700,
+    color: theme.colors.textPrimary,
     backgroundColor: theme.colors.surface,
     padding: 4,
     borderRadius: 4,
@@ -1250,18 +1245,18 @@ const styles = StyleSheet.create({
   gateTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 18,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     textAlign: 'center',
   },
   gateBody: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: theme.spacing.lg,
@@ -1273,7 +1268,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.lg,
     padding: theme.spacing.xl,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     gap: theme.spacing.md,
   },
   modalHeader: {
@@ -1284,7 +1279,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 18,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   modalCloseButton: {
     padding: 4,
@@ -1293,7 +1288,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   modalActions: {
     flexDirection: 'row',

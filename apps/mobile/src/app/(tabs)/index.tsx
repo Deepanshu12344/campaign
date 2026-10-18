@@ -9,19 +9,18 @@ import {
   useWindowDimensions,
   ActivityIndicator,
   Platform,
+  Image as RNImage,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Image } from 'expo-image';
 import Svg, { Defs, LinearGradient as SvgGradient, Stop, Rect } from 'react-native-svg';
 import {
-  Compass,
-  Sparkles,
-  ArrowRight,
+  ArrowUpRight,
+  Pencil,
   ShieldCheck,
   Megaphone,
-  Pencil,
   Info,
-  ChevronRight,
   HelpCircle,
 } from 'lucide-react-native';
 import {
@@ -31,18 +30,15 @@ import {
   quote,
 } from '@campaigns/shared';
 import { theme } from '../../theme';
-import {
-  Button,
-  CategoryChip,
-  DemoDataBadge,
-  ErrorState,
-  EmptyState,
-  Sheet,
-} from '../../components/ui';
+import { Sheet } from '../../components/ui/Sheet';
+import { Button } from '../../components/ui/Button';
+import { EmptyState } from '../../components/ui/EmptyState';
+import { ErrorState } from '../../components/ui/ErrorState';
 import { CampaignCard } from '../../components/campaign/CampaignCard';
 import { useCampaigns, useFeatured } from '../../api/hooks/useCampaigns';
 import { useEstimateConfig } from '../../api/hooks/useConfig';
 import { useRequireAuth } from '../../auth/requireAuth';
+import { HeaderAvatar } from '../../components/layout';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -54,14 +50,14 @@ export default function HomeScreen() {
   const [selectedCategory, setSelectedCategory] = useState<Category | 'All'>('All');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [disclaimerModalOpen, setDisclaimerModalOpen] = useState(false);
-  const [reachInfoModalOpen, setReachInfoModalOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  // Responsive carousel dimensions: visible peek of next card
-  const carouselCardWidth = Math.min(Math.round(windowWidth * 0.84), 340);
-  const carouselSnapInterval = carouselCardWidth + theme.spacing.base;
+  // Responsive dimensions for featured carousel
+  const featuredCardWidth = Math.min(Math.round(windowWidth * 0.78), 300);
+  const featuredSnapInterval = featuredCardWidth + 12;
 
   // Real API hooks
-  useEstimateConfig(); // warms cache for estimates
+  useEstimateConfig();
   const {
     data: featuredCampaigns,
     isLoading: isFeaturedLoading,
@@ -81,12 +77,9 @@ export default function HomeScreen() {
     category: selectedCategory === 'All' ? undefined : selectedCategory,
   });
 
-  // Dynamic illustrative reach per $1 from shared reach math
-  const illustrativeReach = useMemo(() => {
-    return quote(100); // 100 cents = $1.00
-  }, []);
+  // Dynamic reach quote for $1 estimate
+  const illustrativeReach = useMemo(() => quote(100), []);
 
-  // Flattened campaigns across pages
   const campaigns = useMemo(() => {
     return feedData?.pages.flatMap((page) => page.items) ?? [];
   }, [feedData]);
@@ -112,7 +105,7 @@ export default function HomeScreen() {
     });
   }, [requireAuth, router]);
 
-  // Handle card primary action
+  // Back campaign handler
   const handleBackCampaign = useCallback(
     (campaign: CampaignCardDto) => {
       if (campaign.status === 'FUNDING') {
@@ -128,138 +121,75 @@ export default function HomeScreen() {
   const renderListHeader = useCallback(() => {
     return (
       <View style={styles.headerContainer}>
-        {/* Top App Branding Bar */}
-        <View style={[styles.brandingBar, { paddingTop: Math.max(insets.top, Platform.OS === 'android' ? 12 : 8) }]}>
-          <View style={styles.brandTitleRow}>
-            <View style={styles.brandIconCircle}>
-              <Megaphone size={16} color="#FFFFFF" />
-            </View>
-            <Text style={styles.brandTitle}>Campaigns</Text>
-          </View>
-          <DemoDataBadge size="sm" />
-        </View>
-
-        {/* 1. Hero Section (Calm indigo gradient) */}
-        <View style={styles.heroOuter}>
+        {/* 1. Hero Card (~360dp high, 24dp radius, soothing nature photo) */}
+        <View style={styles.heroWrap}>
           <View style={styles.heroCard}>
-            <Svg style={StyleSheet.absoluteFill}>
+            <RNImage
+              // eslint-disable-next-line @typescript-eslint/no-require-imports
+              source={require('../../../assets/images/hero-nature.jpg')}
+              style={StyleSheet.absoluteFill}
+              resizeMode="cover"
+            />
+            {/* Dark green to black bottom gradient for text legibility over bottom half */}
+            <Svg width="100%" height="100%" style={StyleSheet.absoluteFill}>
               <Defs>
-                <SvgGradient id="heroGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <Stop offset="0%" stopColor="#312E81" />
-                  <Stop offset="50%" stopColor="#3730A3" />
-                  <Stop offset="100%" stopColor="#4338CA" />
+                <SvgGradient id="heroGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <Stop offset="0%" stopColor="#121511" stopOpacity="0" />
+                  <Stop offset="35%" stopColor="#121511" stopOpacity="0" />
+                  <Stop offset="65%" stopColor="#121511" stopOpacity="0.65" />
+                  <Stop offset="85%" stopColor="#121511" stopOpacity="0.9" />
+                  <Stop offset="100%" stopColor="#121511" stopOpacity="0.98" />
                 </SvgGradient>
               </Defs>
-              <Rect width="100%" height="100%" fill="url(#heroGradient)" rx={theme.radius.sheet} />
+              <Rect width="100%" height="100%" fill="url(#heroGradient)" rx={24} />
             </Svg>
 
             <View style={styles.heroContent}>
-              <View style={styles.heroBadgeRow}>
-                <View style={styles.heroSubBadge}>
-                  <Sparkles size={13} color="#C7D2FE" />
-                  <Text style={styles.heroSubBadgeText}>Community-Funded Message Amplification</Text>
-                </View>
-              </View>
-
-              <Text style={styles.heroHeadline}>
-                Help important messages travel further.
+              <Text style={styles.heroHeadline}>HELP MESSAGES TRAVEL FURTHER</Text>
+              <Text style={styles.heroSupportingText}>
+                People pool funds to run public ads for causes that matter.
               </Text>
 
-              <Text style={styles.heroDescription}>
-                Backers pool funds to distribute high-impact, verified public-interest ads across social and search networks.
-              </Text>
-
-              {/* Action Buttons */}
-              <View style={styles.heroActionsRow}>
-                <Button
-                  title="Explore Campaigns"
-                  variant="secondary"
-                  size="md"
-                  iconLeft={<Compass size={17} color={theme.colors.primary700} />}
-                  onPress={() => router.push('/(tabs)/explore')}
-                  style={styles.heroPrimaryBtn}
-                  textStyle={styles.heroPrimaryBtnText}
-                />
-
-                <Button
-                  title="Start a Campaign"
-                  variant="ghost"
-                  size="md"
-                  onPress={handleStartCampaign}
-                  style={styles.heroSecondaryBtn}
-                  textStyle={styles.heroSecondaryBtnText}
-                />
-              </View>
-
-              {/* Illustrative Reach per $1 Card */}
-              <View style={styles.reachEstimateCard}>
-                <View style={styles.reachCardHeader}>
-                  <View style={styles.reachCardTitleRow}>
-                    <Text style={styles.reachCardTitle}>Illustrative reach per $1</Text>
-                    <Pressable
-                      onPress={() => setReachInfoModalOpen(true)}
-                      hitSlop={12}
-                      accessibilityRole="button"
-                      accessibilityLabel="Reach calculation explanation"
-                      style={styles.infoTipBtn}
-                    >
-                      <Info size={14} color="#C7D2FE" />
-                    </Pressable>
-                  </View>
-                  <DemoDataBadge size="sm" />
-                </View>
-
-                <View style={styles.reachCardBody}>
-                  <Text style={styles.reachRangeText}>
-                    ~{illustrativeReach.estimatedReachLow.toLocaleString()}–{illustrativeReach.estimatedReachHigh.toLocaleString()} people
-                  </Text>
-                  <Text style={styles.reachSubtext}>
-                    Estimated unique audience reached per $1 backed, based on demo CPM and frequency.
-                  </Text>
-                </View>
-              </View>
+              {/* Lime pill button (48dp height) */}
+              <Pressable
+                onPress={() => router.push('/(tabs)/explore')}
+                accessibilityRole="button"
+                accessibilityLabel="Explore campaigns"
+                style={({ pressed }) => [
+                  styles.explorePillBtn,
+                  pressed && styles.explorePillBtnPressed,
+                ]}
+              >
+                <Text style={styles.explorePillBtnText}>Explore campaigns</Text>
+              </Pressable>
             </View>
           </View>
         </View>
 
-        {/* 2. Disclaimer Chip */}
+        {/* 2. Quiet note under hero: "Contributions pay for ads, not for the cause or creator." */}
         <Pressable
           onPress={() => setDisclaimerModalOpen(true)}
           accessibilityRole="button"
           accessibilityLabel="Read platform donation disclaimer"
           style={({ pressed }) => [
-            styles.disclaimerContainer,
-            pressed && styles.disclaimerPressed,
+            styles.quietNoteContainer,
+            pressed && { opacity: 0.7 },
           ]}
         >
-          <View style={styles.disclaimerContent}>
-            <View style={styles.disclaimerIconWrap}>
-              <Info size={15} color={theme.colors.primary600} />
-            </View>
-            <Text style={styles.disclaimerText} numberOfLines={2}>
-              Contributions fund ad distribution, not the cause or creator.
-            </Text>
-            <ChevronRight size={16} color={theme.colors.ink400} />
-          </View>
+          <Info size={13} color={theme.colors.textSecondary} strokeWidth={2} />
+          <Text style={styles.quietNoteText}>
+            Contributions pay for ads, not for the cause or creator.
+          </Text>
         </Pressable>
 
-        {/* 3. Featured Campaigns Section */}
-        <View style={styles.sectionContainer}>
-          <View style={styles.sectionHeader}>
-            <View>
-              <Text style={styles.sectionTitle}>Featured Campaigns</Text>
-              <Text style={styles.sectionSubtitle}>Curated public-interest messages ready to scale</Text>
-            </View>
-          </View>
+        {/* 3. Featured Section: horizontal snap carousel of photo cards */}
+        <View style={styles.sectionWrap}>
+          <Text style={styles.sectionTitle}>Featured</Text>
 
           {isFeaturedLoading ? (
-            <View style={styles.carouselLoadingRow}>
-              <View style={{ width: carouselCardWidth, marginRight: theme.spacing.base }}>
-                <CampaignCard variant="skeleton" />
-              </View>
-              <View style={{ width: carouselCardWidth, marginRight: theme.spacing.base }}>
-                <CampaignCard variant="skeleton" />
-              </View>
+            <View style={styles.featuredLoadingRow}>
+              <View style={[styles.featuredPlaceholder, { width: featuredCardWidth }]} />
+              <View style={[styles.featuredPlaceholder, { width: featuredCardWidth }]} />
             </View>
           ) : featuredCampaigns && featuredCampaigns.length > 0 ? (
             <FlatList
@@ -267,120 +197,134 @@ export default function HomeScreen() {
               data={featuredCampaigns}
               keyExtractor={(item) => item.id}
               showsHorizontalScrollIndicator={false}
-              snapToInterval={carouselSnapInterval}
+              snapToInterval={featuredSnapInterval}
               decelerationRate="fast"
               snapToAlignment="start"
-              contentContainerStyle={styles.carouselContent}
+              contentContainerStyle={styles.featuredCarouselContent}
               renderItem={({ item }) => (
-                <View style={{ width: carouselCardWidth, marginRight: theme.spacing.base }}>
-                  <CampaignCard
-                    campaign={item}
-                    variant="featured"
-                    onPress={() => router.push(`/campaign/${item.id}`)}
-                    onBackPress={() => handleBackCampaign(item)}
-                  />
-                </View>
+                <Pressable
+                  onPress={() => router.push(`/campaign/${item.id}`)}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Featured: ${item.title}`}
+                  style={({ pressed }) => [
+                    styles.featuredCard,
+                    { width: featuredCardWidth },
+                    pressed && { transform: [{ scale: 0.98 }] },
+                  ]}
+                >
+                  {item.coverUrl ? (
+                    <Image
+                      source={{ uri: item.coverUrl }}
+                      style={StyleSheet.absoluteFill}
+                      contentFit="cover"
+                      transition={200}
+                    />
+                  ) : (
+                    <View style={[StyleSheet.absoluteFill, { backgroundColor: theme.colors.surfaceRaised }]} />
+                  )}
+
+                  {/* Dark gradient overlay */}
+                  <Svg width="100%" height="100%" style={StyleSheet.absoluteFill}>
+                    <Defs>
+                      <SvgGradient id={`featGrad-${item.id}`} x1="0%" y1="0%" x2="0%" y2="100%">
+                        <Stop offset="0%" stopColor="#121511" stopOpacity="0.1" />
+                        <Stop offset="45%" stopColor="#121511" stopOpacity="0.4" />
+                        <Stop offset="100%" stopColor="#121511" stopOpacity="0.95" />
+                      </SvgGradient>
+                    </Defs>
+                    <Rect width="100%" height="100%" fill={`url(#featGrad-${item.id})`} rx={20} />
+                  </Svg>
+
+                  <View style={styles.featuredCardBody}>
+                    <View style={styles.featuredFooterRow}>
+                      <Text style={[styles.featuredTitleText, { flex: 1, marginRight: 8, marginBottom: 0 }]} numberOfLines={2}>
+                        {item.title}
+                      </Text>
+                      {/* Circular lime arrow button */}
+                      <View style={styles.featuredArrowCircle}>
+                        <ArrowUpRight size={16} color={theme.colors.onLime} strokeWidth={2.5} />
+                      </View>
+                    </View>
+                  </View>
+                </Pressable>
               )}
             />
-          ) : (
-            <View style={styles.emptyFeaturedWrap}>
-              <Text style={styles.emptySectionText}>No featured campaigns available right now.</Text>
-            </View>
-          )}
+          ) : null}
         </View>
 
-        {/* 4. How It Works Section */}
-        <View style={styles.sectionContainer}>
-          <View style={styles.sectionHeader}>
-            <View>
-              <Text style={styles.sectionTitle}>How It Works</Text>
-              <Text style={styles.sectionSubtitle}>A transparent 3-step amplification cycle</Text>
-            </View>
-          </View>
-
-          <View style={styles.howItWorksCard}>
-            {/* Step 1: Create */}
-            <View style={styles.howStepRow}>
-              <View style={[styles.howStepIconWrap, { backgroundColor: theme.colors.primary50 }]}>
-                <Pencil size={18} color={theme.colors.primary600} />
+        {/* 4. How It Works: single surface card with 3 compact rows */}
+        <View style={styles.sectionWrap}>
+          <Text style={styles.sectionTitle}>How it works</Text>
+          <View style={styles.howCard}>
+            {/* Row 1: Create */}
+            <View style={styles.howRow}>
+              <View style={styles.howIconCircle}>
+                <Pencil size={16} color={theme.colors.lime} strokeWidth={2} />
               </View>
-              <View style={styles.howStepTextWrap}>
-                <Text style={styles.howStepTitle}>1. Create</Text>
-                <Text style={styles.howStepBody}>Creators write a clear, sourced message.</Text>
+              <View style={styles.howTextContainer}>
+                <Text style={styles.howRowTitle}>1. Create</Text>
+                <Text style={styles.howRowBody}>Creators write a clear, sourced message.</Text>
               </View>
             </View>
 
-            <View style={styles.howStepDivider} />
+            <View style={styles.howDivider} />
 
-            {/* Step 2: Review */}
-            <View style={styles.howStepRow}>
-              <View style={[styles.howStepIconWrap, { backgroundColor: theme.colors.infoBg }]}>
-                <ShieldCheck size={18} color={theme.colors.info} />
+            {/* Row 2: Review */}
+            <View style={styles.howRow}>
+              <View style={styles.howIconCircle}>
+                <ShieldCheck size={16} color={theme.colors.lime} strokeWidth={2} />
               </View>
-              <View style={styles.howStepTextWrap}>
-                <Text style={styles.howStepTitle}>2. Review</Text>
-                <Text style={styles.howStepBody}>
-                  We check content, sources and targeting before anything goes live.
-                </Text>
+              <View style={styles.howTextContainer}>
+                <Text style={styles.howRowTitle}>2. Review</Text>
+                <Text style={styles.howRowBody}>Content and sources are verified before launch.</Text>
               </View>
             </View>
 
-            <View style={styles.howStepDivider} />
+            <View style={styles.howDivider} />
 
-            {/* Step 3: Amplify */}
-            <View style={styles.howStepRow}>
-              <View style={[styles.howStepIconWrap, { backgroundColor: theme.colors.successBg }]}>
-                <Megaphone size={18} color={theme.colors.success} />
+            {/* Row 3: Amplify */}
+            <View style={styles.howRow}>
+              <View style={styles.howIconCircle}>
+                <Megaphone size={16} color={theme.colors.lime} strokeWidth={2} />
               </View>
-              <View style={styles.howStepTextWrap}>
-                <Text style={styles.howStepTitle}>3. Amplify</Text>
-                <Text style={styles.howStepBody}>
-                  Backers pool money to pay for ads that spread the message.
-                </Text>
+              <View style={styles.howTextContainer}>
+                <Text style={styles.howRowTitle}>3. Amplify</Text>
+                <Text style={styles.howRowBody}>Backers pool funds to distribute ads to real audiences.</Text>
               </View>
             </View>
-
-            {/* Learn More Link */}
-            <Pressable
-              onPress={() => router.push('/info/how-it-works')}
-              accessibilityRole="button"
-              accessibilityLabel="Learn more about how Campaigns works"
-              style={({ pressed }) => [
-                styles.learnMoreLink,
-                pressed && { opacity: 0.7 },
-              ]}
-            >
-              <Text style={styles.learnMoreLinkText}>Learn more about how Campaigns works</Text>
-              <ArrowRight size={15} color={theme.colors.primary600} />
-            </Pressable>
           </View>
         </View>
 
-        {/* 5. Campaign Feed Header & Category Chips */}
-        <View style={styles.feedHeaderSection}>
-          <View style={styles.sectionHeader}>
-            <View>
-              <Text style={styles.sectionTitle}>Campaign Feed</Text>
-              <Text style={styles.sectionSubtitle}>Discover and amplify active community messages</Text>
-            </View>
-          </View>
-
-          {/* Category Chips Bar */}
+        {/* 5. Campaigns Section: Title + Category pills row */}
+        <View style={styles.feedHeaderWrap}>
+          <Text style={styles.sectionTitle}>Campaigns</Text>
           <FlatList
             horizontal
             data={['All', ...CATEGORIES] as (Category | 'All')[]}
             keyExtractor={(item) => item}
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.categoryChipsContent}
+            contentContainerStyle={styles.categoryPillsContent}
             renderItem={({ item }) => {
               const isSelected = selectedCategory === item;
               return (
-                <CategoryChip
-                  category={item}
-                  selected={isSelected}
+                <Pressable
                   onPress={() => setSelectedCategory(item)}
-                  style={styles.categoryChipItem}
-                />
+                  accessibilityRole="button"
+                  accessibilityLabel={`Filter by ${item}`}
+                  style={[
+                    styles.categoryPill,
+                    isSelected ? styles.categoryPillSelected : styles.categoryPillUnselected,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.categoryPillText,
+                      isSelected ? styles.categoryPillTextSelected : styles.categoryPillTextUnselected,
+                    ]}
+                  >
+                    {item}
+                  </Text>
+                </Pressable>
               );
             }}
           />
@@ -388,146 +332,53 @@ export default function HomeScreen() {
       </View>
     );
   }, [
-    insets.top,
-    carouselCardWidth,
-    carouselSnapInterval,
     isFeaturedLoading,
     featuredCampaigns,
-    illustrativeReach,
+    featuredCardWidth,
+    featuredSnapInterval,
     selectedCategory,
-    handleStartCampaign,
-    handleBackCampaign,
     router,
   ]);
 
-  // Render footer component of the single FlatList
+  // Feed footer: loading more indicator
   const renderListFooter = useCallback(() => {
+    if (!isFetchingNextPage) return null;
     return (
-      <View style={styles.footerContainer}>
-        {/* Next Page Loading Indicator */}
-        {isFetchingNextPage && (
-          <View style={styles.nextPageLoading}>
-            <ActivityIndicator size="small" color={theme.colors.primary600} />
-            <Text style={styles.nextPageLoadingText}>Loading more campaigns...</Text>
-          </View>
-        )}
-
-        {/* 6. Footer Strip with Links */}
-        <View style={styles.footerStrip}>
-          <View style={styles.footerLinksRow}>
-            <Pressable
-              onPress={() => router.push('/info/how-it-works')}
-              hitSlop={8}
-              accessibilityRole="button"
-              accessibilityLabel="How Campaigns works"
-            >
-              <Text style={styles.footerLinkText}>How It Works</Text>
-            </Pressable>
-
-            <Text style={styles.footerDot}>•</Text>
-
-            <Pressable
-              onPress={() => router.push('/info/partners')}
-              hitSlop={8}
-              accessibilityRole="button"
-              accessibilityLabel="Partners information"
-            >
-              <Text style={styles.footerLinkText}>Partners</Text>
-            </Pressable>
-
-            <Text style={styles.footerDot}>•</Text>
-
-            <Pressable
-              onPress={() => router.push('/info/about')}
-              hitSlop={8}
-              accessibilityRole="button"
-              accessibilityLabel="About Campaigns"
-            >
-              <Text style={styles.footerLinkText}>About</Text>
-            </Pressable>
-
-            <Text style={styles.footerDot}>•</Text>
-
-            <Pressable
-              onPress={() => router.push('/info/faqs')}
-              hitSlop={8}
-              accessibilityRole="button"
-              accessibilityLabel="Frequently Asked Questions"
-            >
-              <Text style={styles.footerLinkText}>FAQs</Text>
-            </Pressable>
-
-            <Text style={styles.footerDot}>•</Text>
-
-            <Pressable
-              onPress={() => router.push('/info/terms')}
-              hitSlop={8}
-              accessibilityRole="button"
-              accessibilityLabel="Terms of Service"
-            >
-              <Text style={styles.footerLinkText}>Terms</Text>
-            </Pressable>
-
-            <Text style={styles.footerDot}>•</Text>
-
-            <Pressable
-              onPress={() => router.push('/info/privacy')}
-              hitSlop={8}
-              accessibilityRole="button"
-              accessibilityLabel="Privacy Policy"
-            >
-              <Text style={styles.footerLinkText}>Privacy</Text>
-            </Pressable>
-
-            <Text style={styles.footerDot}>•</Text>
-
-            <Pressable
-              onPress={() => router.push('/info/community-guidelines')}
-              hitSlop={8}
-              accessibilityRole="button"
-              accessibilityLabel="Community Guidelines"
-            >
-              <Text style={styles.footerLinkText}>Guidelines</Text>
-            </Pressable>
-          </View>
-
-          <View style={styles.footerBrandRow}>
-            <Text style={styles.footerBrandText}>
-              Campaigns • Public Interest Ad Amplification
-            </Text>
-            <DemoDataBadge size="sm" />
-          </View>
+      <View style={styles.footerWrap}>
+        <View style={styles.loadingMoreRow}>
+          <ActivityIndicator size="small" color={theme.colors.lime} />
+          <Text style={styles.loadingMoreText}>Loading more campaigns...</Text>
         </View>
       </View>
     );
-  }, [isFetchingNextPage, router]);
+  }, [isFetchingNextPage]);
 
-  // Render empty state when feed has no items
+  // Empty state
   const renderEmptyComponent = useCallback(() => {
     if (isFeedLoading) {
       return (
-        <View style={styles.feedLoadingContainer}>
-          <CampaignCard variant="skeleton" style={styles.feedSkeletonCard} />
-          <CampaignCard variant="skeleton" style={styles.feedSkeletonCard} />
+        <View style={styles.feedLoadingWrap}>
+          <CampaignCard variant="skeleton" style={{ marginBottom: 16 }} />
+          <CampaignCard variant="skeleton" style={{ marginBottom: 16 }} />
         </View>
       );
     }
 
     if (isFeedError) {
       return (
-        <View style={styles.feedErrorContainer}>
+        <View style={styles.feedStateWrap}>
           <ErrorState
             title="Unable to load campaigns"
-            message={feedError?.message || 'We encountered a problem fetching the campaign feed.'}
+            message={feedError?.message || 'We encountered a problem fetching the feed.'}
             onRetry={refetchFeed}
-            retryTitle="Reload Campaigns"
+            retryTitle="Reload"
           />
         </View>
       );
     }
 
     return (
-      <View style={styles.feedEmptyContainer}>
+      <View style={styles.feedStateWrap}>
         <EmptyState
           title={selectedCategory === 'All' ? 'No campaigns found' : `No ${selectedCategory} campaigns`}
           description={
@@ -541,7 +392,7 @@ export default function HomeScreen() {
               ? () => setSelectedCategory('All')
               : handleStartCampaign
           }
-          icon={<HelpCircle size={36} color={theme.colors.ink400} />}
+          icon={<HelpCircle size={36} color={theme.colors.textSecondary} />}
         />
       </View>
     );
@@ -556,12 +407,42 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.screen}>
-      {/* Primary FlatList: No nested vertical ScrollViews */}
+      {/* Sticky Top Header: pinned outside FlatList */}
+      <View
+        style={[
+          styles.topBar,
+          {
+            paddingTop: Math.max(insets.top, Platform.OS === 'android' ? 12 : 8),
+            borderBottomColor: isScrolled ? theme.colors.line : 'transparent',
+            borderBottomWidth: 1,
+          },
+        ]}
+      >
+        <HeaderAvatar size={36} />
+
+        <Pressable
+          onPress={handleStartCampaign}
+          accessibilityRole="button"
+          accessibilityLabel="Start a campaign"
+          style={({ pressed }) => [styles.startHeaderPill, pressed && styles.startHeaderPillPressed]}
+        >
+          <Text style={styles.startHeaderPillText}>Start a campaign</Text>
+        </Pressable>
+      </View>
+
       <FlatList
         data={campaigns}
         keyExtractor={(item) => item.id}
+        onScroll={(e) => {
+          const y = e.nativeEvent.contentOffset.y;
+          const scrolled = y > 8;
+          if (scrolled !== isScrolled) {
+            setIsScrolled(scrolled);
+          }
+        }}
+        scrollEventThrottle={16}
         renderItem={({ item }) => (
-          <View style={styles.feedItemContainer}>
+          <View style={styles.cardItemWrap}>
             <CampaignCard
               campaign={item}
               variant="default"
@@ -583,100 +464,41 @@ export default function HomeScreen() {
           <RefreshControl
             refreshing={isRefreshing}
             onRefresh={handleRefresh}
-            colors={[theme.colors.primary600]}
-            tintColor={theme.colors.primary600}
+            colors={[theme.colors.lime]}
+            tintColor={theme.colors.lime}
           />
         }
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.flatListContent}
       />
 
-      {/* Sheet 1: "Not a Donation" Disclaimer Modal */}
+      {/* Sheet: "Not a Donation" Disclaimer Modal */}
       <Sheet
         visible={disclaimerModalOpen}
         onClose={() => setDisclaimerModalOpen(false)}
         title="Amplify vs. Donate"
       >
         <View style={styles.modalBody}>
-          <View style={styles.modalIconCircle}>
-            <Megaphone size={28} color={theme.colors.primary600} />
-          </View>
-
-          <Text style={styles.modalHeadline}>
-            Campaigns is NOT a donation platform.
-          </Text>
-
+          <Text style={styles.modalHeadline}>Campaigns is NOT a donation platform.</Text>
           <Text style={styles.modalParagraph}>
-            When you back a campaign here, you are <Text style={styles.modalBold}>not giving money to the creator or a charity</Text>. Instead, 90% of your contribution strictly funds paid ad distribution across digital channels (social feeds, search, and video).
+            When you back a campaign, you are <Text style={styles.modalBold}>not giving money to the creator or a charity</Text>. 90% of your contribution strictly funds paid ad distribution across social feeds, search engines, and media.
           </Text>
-
           <Text style={styles.modalParagraph}>
-            The remaining 10% platform fee covers independent human fact-checking, citation verification, ad compliance review, and infrastructure.
+            The remaining 10% platform fee covers independent human fact-checking, citation verification, compliance, and infrastructure.
           </Text>
-
-          <View style={styles.modalHighlightBox}>
-            <ShieldCheck size={18} color={theme.colors.primary700} />
-            <Text style={styles.modalHighlightText}>
-              Every dollar is accounted for in public performance reports showing real ad impressions and reach.
+          <View style={styles.estimateBox}>
+            <Text style={styles.estimateBoxTitle}>Distribution Estimate</Text>
+            <Text style={styles.estimateBoxText}>
+              Contributions typically deliver about {illustrativeReach.estimatedReachLow}–{illustrativeReach.estimatedReachHigh} people reached per $1 (estimate, not a guarantee). Actual distribution depends on target audience, platform auction dynamics, and campaign timing.
             </Text>
           </View>
-
           <Button
             title="I Understand"
             variant="primary"
             size="lg"
             fullWidth
             onPress={() => setDisclaimerModalOpen(false)}
-            style={{ marginTop: theme.spacing.md }}
-          />
-        </View>
-      </Sheet>
-
-      {/* Sheet 2: Illustrative Reach Explanation Modal */}
-      <Sheet
-        visible={reachInfoModalOpen}
-        onClose={() => setReachInfoModalOpen(false)}
-        title="Illustrative Reach Calculation"
-      >
-        <View style={styles.modalBody}>
-          <Text style={styles.modalHeadline}>How Reach Is Estimated</Text>
-
-          <Text style={styles.modalParagraph}>
-            Reach represents the estimated number of unique people who will view a campaign message through sponsored distribution.
-          </Text>
-
-          <View style={styles.reachMathTable}>
-            <View style={styles.reachMathRow}>
-              <Text style={styles.reachMathLabel}>Ad Budget Allocation</Text>
-              <Text style={styles.reachMathValue}>90% of contribution</Text>
-            </View>
-            <View style={styles.reachMathRow}>
-              <Text style={styles.reachMathLabel}>Demonstration CPM</Text>
-              <Text style={styles.reachMathValue}>$6.00 per 1,000 views</Text>
-            </View>
-            <View style={styles.reachMathRow}>
-              <Text style={styles.reachMathLabel}>Average Frequency</Text>
-              <Text style={styles.reachMathValue}>2.2 impressions / person</Text>
-            </View>
-            <View style={[styles.reachMathRow, styles.reachMathRowHighlight]}>
-              <Text style={styles.reachMathLabelBold}>Resulting Range</Text>
-              <Text style={styles.reachMathValueBold}>
-                ~{illustrativeReach.estimatedReachLow}–{illustrativeReach.estimatedReachHigh} people / $1
-              </Text>
-            </View>
-          </View>
-
-          <Text style={styles.modalDisclaimerNote}>
-            * This figure is an illustrative demonstration estimate. Real-world ad reach varies depending on geographic targeting, channel bidding competition, and audience engagement.
-          </Text>
-
-          <Button
-            title="Close"
-            variant="secondary"
-            size="md"
-            fullWidth
-            onPress={() => setReachInfoModalOpen(false)}
-            style={{ marginTop: theme.spacing.md }}
+            style={{ marginTop: 16 }}
           />
         </View>
       </Sheet>
@@ -687,478 +509,343 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: theme.colors.bg,
+    backgroundColor: theme.colors.bg, // #121511
   },
   flatListContent: {
     flexGrow: 1,
-    paddingBottom: theme.spacing.xl,
+    paddingBottom: 32,
   },
   headerContainer: {
     width: '100%',
   },
 
-  // Branding bar
-  brandingBar: {
-    paddingHorizontal: theme.spacing.base,
-    paddingBottom: theme.spacing.sm,
+  // Top Bar: avatar left, compact lime pill right
+  topBar: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingBottom: 12,
     backgroundColor: theme.colors.bg,
+    zIndex: 10,
   },
-  brandTitleRow: {
+  avatarPressable: {
+    borderRadius: 9999,
+  },
+  startHeaderPill: {
+    backgroundColor: theme.colors.lime,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 9999,
+  },
+  startHeaderPillPressed: {
+    backgroundColor: theme.colors.limePressed,
+  },
+  startHeaderPillText: {
+    fontFamily: theme.typography.fonts.uiSemiBold,
+    fontSize: 13,
+    color: theme.colors.onLime,
+  },
+
+  // Hero Card (~360dp high, 24dp radius)
+  heroWrap: {
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    marginBottom: 12,
+  },
+  heroCard: {
+    height: 360,
+    borderRadius: 24,
+    overflow: 'hidden',
+    position: 'relative',
+    justifyContent: 'flex-end',
+    backgroundColor: theme.colors.surface,
+  },
+  heroContent: {
+    padding: 20,
+    zIndex: 2,
+  },
+  heroHeadline: {
+    fontFamily: theme.typography.fonts.display,
+    fontSize: 26,
+    lineHeight: 28,
+    color: theme.colors.textPrimary,
+    letterSpacing: -0.5,
+    marginBottom: 8,
+  },
+  heroSupportingText: {
+    fontFamily: theme.typography.fonts.uiRegular,
+    fontSize: 14,
+    lineHeight: 20,
+    color: theme.colors.textSecondary,
+    marginBottom: 12,
+  },
+  heroMetricRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 6,
+    marginBottom: 16,
   },
-  brandIconCircle: {
-    width: 28,
-    height: 28,
-    borderRadius: theme.radius.full,
-    backgroundColor: theme.colors.primary600,
+  heroMetricText: {
+    fontFamily: theme.typography.fonts.uiMedium,
+    fontSize: 12,
+    color: theme.colors.lime,
+  },
+  explorePillBtn: {
+    backgroundColor: theme.colors.lime,
+    height: 48,
+    borderRadius: 9999,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  brandTitle: {
-    fontFamily: theme.typography.fonts.serifBold,
-    fontSize: 20,
-    color: theme.colors.ink900,
-    letterSpacing: -0.2,
+  explorePillBtnPressed: {
+    backgroundColor: theme.colors.limePressed,
+  },
+  explorePillBtnText: {
+    fontFamily: theme.typography.fonts.uiBold,
+    fontSize: 15,
+    color: theme.colors.onLime,
   },
 
-  // Hero section
-  heroOuter: {
-    paddingHorizontal: theme.spacing.base,
-    paddingTop: theme.spacing.xs,
-  },
-  heroCard: {
-    borderRadius: theme.radius.sheet,
-    overflow: 'hidden',
-    position: 'relative',
-    backgroundColor: theme.colors.primary700,
-    ...theme.shadows.card,
-  },
-  heroContent: {
-    padding: theme.spacing.lg,
-  },
-  heroBadgeRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: theme.spacing.sm,
-  },
-  heroSubBadge: {
+  // Quiet note under hero
+  quietNoteContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: 'rgba(255, 255, 255, 0.12)',
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    borderRadius: theme.radius.full,
+    paddingHorizontal: 16,
+    marginBottom: 24,
   },
-  heroSubBadgeText: {
-    fontFamily: theme.typography.fonts.uiMedium,
-    fontSize: 12,
-    color: theme.colors.primary100,
-  },
-  heroHeadline: {
-    fontFamily: theme.typography.fonts.serifBold,
-    fontSize: 27,
-    lineHeight: 34,
-    color: theme.colors.white,
-    marginBottom: theme.spacing.sm,
-    letterSpacing: -0.3,
-  },
-  heroDescription: {
-    fontFamily: theme.typography.fonts.uiRegular,
-    fontSize: 15,
-    lineHeight: 22,
-    color: theme.colors.primary100,
-    marginBottom: theme.spacing.lg,
-  },
-  heroActionsRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: theme.spacing.sm,
-    marginBottom: theme.spacing.lg,
-  },
-  heroPrimaryBtn: {
-    backgroundColor: theme.colors.white,
-    borderWidth: 0,
-    minHeight: 46,
-    paddingHorizontal: theme.spacing.lg,
-  },
-  heroPrimaryBtnText: {
-    color: theme.colors.primary700,
-    fontFamily: theme.typography.fonts.uiSemiBold,
-    fontSize: 15,
-  },
-  heroSecondaryBtn: {
-    borderColor: 'rgba(255, 255, 255, 0.4)',
-    borderWidth: 1,
-    minHeight: 46,
-    paddingHorizontal: theme.spacing.base,
-  },
-  heroSecondaryBtnText: {
-    color: theme.colors.white,
-    fontFamily: theme.typography.fonts.uiMedium,
-    fontSize: 15,
-  },
-
-  // Reach estimate card inside hero
-  reachEstimateCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.12)',
-    borderRadius: theme.radius.lg,
-    padding: theme.spacing.md,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
-  },
-  reachCardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 6,
-  },
-  reachCardTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  reachCardTitle: {
-    fontFamily: theme.typography.fonts.uiMedium,
-    fontSize: 13,
-    color: theme.colors.primary100,
-  },
-  infoTipBtn: {
-    padding: 2,
-  },
-  reachCardBody: {},
-  reachRangeText: {
-    fontFamily: theme.typography.fonts.serifBold,
-    fontSize: 22,
-    color: theme.colors.white,
-    letterSpacing: -0.2,
-    marginBottom: 2,
-  },
-  reachSubtext: {
+  quietNoteText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 16,
-    color: theme.colors.primary200,
-  },
-
-  // Disclaimer chip
-  disclaimerContainer: {
-    marginHorizontal: theme.spacing.base,
-    marginTop: theme.spacing.md,
-    backgroundColor: theme.colors.primary50,
-    borderRadius: theme.radius.pill,
-    borderWidth: 1,
-    borderColor: theme.colors.primary200,
-  },
-  disclaimerPressed: {
-    opacity: 0.85,
-    transform: [{ scale: 0.99 }],
-  },
-  disclaimerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: theme.spacing.md,
-    gap: 8,
-  },
-  disclaimerIconWrap: {
-    width: 24,
-    height: 24,
-    borderRadius: theme.radius.full,
-    backgroundColor: theme.colors.white,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  disclaimerText: {
+    color: theme.colors.textSecondary,
     flex: 1,
-    fontFamily: theme.typography.fonts.uiMedium,
-    fontSize: 13,
-    lineHeight: 18,
-    color: theme.colors.primary800,
   },
 
-  // Sections general
-  sectionContainer: {
-    marginTop: theme.spacing.xl,
-  },
-  sectionHeader: {
-    paddingHorizontal: theme.spacing.base,
-    marginBottom: theme.spacing.md,
+  // Section Wraps (24dp between sections)
+  sectionWrap: {
+    marginBottom: 24,
   },
   sectionTitle: {
-    fontFamily: theme.typography.fonts.serifBold,
+    fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 20,
-    color: theme.colors.ink900,
-    letterSpacing: -0.2,
-  },
-  sectionSubtitle: {
-    fontFamily: theme.typography.fonts.uiRegular,
-    fontSize: 13,
-    color: theme.colors.ink500,
-    marginTop: 2,
+    lineHeight: 26,
+    color: theme.colors.textPrimary,
+    paddingHorizontal: 16,
+    marginBottom: 14,
   },
 
-  // Carousel
-  carouselContent: {
-    paddingHorizontal: theme.spacing.base,
-  },
-  carouselLoadingRow: {
+  // Featured Carousel
+  featuredLoadingRow: {
     flexDirection: 'row',
-    paddingHorizontal: theme.spacing.base,
+    paddingHorizontal: 16,
+    gap: 12,
   },
-  emptyFeaturedWrap: {
-    paddingHorizontal: theme.spacing.base,
-    paddingVertical: theme.spacing.md,
-  },
-  emptySectionText: {
-    fontFamily: theme.typography.fonts.uiRegular,
-    fontSize: 14,
-    color: theme.colors.ink500,
-  },
-
-  // How it works
-  howItWorksCard: {
-    marginHorizontal: theme.spacing.base,
+  featuredPlaceholder: {
+    height: 220,
+    borderRadius: 20,
     backgroundColor: theme.colors.surface,
-    borderRadius: theme.radius.card,
-    borderWidth: 1,
-    borderColor: theme.colors.line,
-    padding: theme.spacing.base,
-    ...theme.shadows.card,
   },
-  howStepRow: {
+  featuredCarouselContent: {
+    paddingHorizontal: 16,
+    gap: 12,
+  },
+  featuredCard: {
+    height: 220,
+    borderRadius: 20,
+    overflow: 'hidden',
+    position: 'relative',
+    justifyContent: 'flex-end',
+    backgroundColor: theme.colors.surface,
+  },
+  featuredCardBody: {
+    padding: 16,
+    zIndex: 2,
+  },
+  featuredCategoryText: {
+    fontFamily: theme.typography.fonts.uiMedium,
+    fontSize: 11,
+    color: theme.colors.textSecondary,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    marginBottom: 4,
+  },
+  featuredTitleText: {
+    fontFamily: theme.typography.fonts.display,
+    fontSize: 16,
+    lineHeight: 20,
+    color: theme.colors.textPrimary,
+    marginBottom: 10,
+  },
+  featuredFooterRow: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: theme.spacing.md,
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
-  howStepIconWrap: {
-    width: 38,
-    height: 38,
-    borderRadius: theme.radius.full,
+  featuredProgressText: {
+    fontFamily: theme.typography.fonts.uiMedium,
+    fontSize: 12,
+    color: theme.colors.lime,
+  },
+  featuredArrowCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: theme.colors.lime,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  howStepTextWrap: {
+
+  // How It Works Card
+  howCard: {
+    marginHorizontal: 16,
+    backgroundColor: theme.colors.surface,
+    borderRadius: 24,
+    padding: 20,
+  },
+  howRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+  },
+  howIconCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: theme.colors.inputBg,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  howTextContainer: {
     flex: 1,
   },
-  howStepTitle: {
-    fontFamily: theme.typography.fonts.uiBold,
-    fontSize: 15,
-    color: theme.colors.ink900,
+  howRowTitle: {
+    fontFamily: theme.typography.fonts.uiSemiBold,
+    fontSize: 14,
+    lineHeight: 18,
+    color: theme.colors.textPrimary,
     marginBottom: 2,
   },
-  howStepBody: {
+  howRowBody: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
-  howStepDivider: {
+  howDivider: {
     height: 1,
     backgroundColor: theme.colors.line,
-    marginVertical: theme.spacing.md,
+    marginVertical: 14,
     marginLeft: 50,
   },
-  learnMoreLink: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    gap: 6,
-    marginTop: theme.spacing.base,
-    paddingTop: theme.spacing.sm,
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.line,
-  },
-  learnMoreLinkText: {
-    fontFamily: theme.typography.fonts.uiSemiBold,
-    fontSize: 13,
-    color: theme.colors.primary600,
-  },
 
-  // Feed & Categories
-  feedHeaderSection: {
-    marginTop: theme.spacing.xl,
+  // Feed Header & Category Pills
+  feedHeaderWrap: {
+    marginBottom: 16,
   },
-  categoryChipsContent: {
-    paddingHorizontal: theme.spacing.base,
-    paddingBottom: theme.spacing.md,
-  },
-  categoryChipItem: {
-    marginRight: theme.spacing.sm,
-  },
-  feedItemContainer: {
-    paddingHorizontal: theme.spacing.base,
-    marginBottom: theme.spacing.base,
-  },
-  feedLoadingContainer: {
-    paddingHorizontal: theme.spacing.base,
-  },
-  feedSkeletonCard: {
-    marginBottom: theme.spacing.base,
-  },
-  feedErrorContainer: {
-    paddingHorizontal: theme.spacing.base,
-    paddingVertical: theme.spacing.xl,
-  },
-  feedEmptyContainer: {
-    paddingHorizontal: theme.spacing.base,
-    paddingVertical: theme.spacing.xl,
-  },
-
-  // Footer
-  footerContainer: {
-    marginTop: theme.spacing.lg,
-  },
-  nextPageLoading: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+  categoryPillsContent: {
+    paddingHorizontal: 16,
     gap: 8,
-    paddingVertical: theme.spacing.md,
   },
-  nextPageLoadingText: {
-    fontFamily: theme.typography.fonts.uiRegular,
-    fontSize: 13,
-    color: theme.colors.ink500,
-  },
-  footerStrip: {
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.line,
-    paddingTop: theme.spacing.lg,
-    paddingHorizontal: theme.spacing.base,
+  categoryPill: {
+    height: 36,
+    paddingHorizontal: 16,
+    borderRadius: 9999,
     alignItems: 'center',
-  },
-  footerLinksRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
     justifyContent: 'center',
-    alignItems: 'center',
-    rowGap: 8,
-    marginBottom: theme.spacing.md,
   },
-  footerLinkText: {
+  categoryPillSelected: {
+    backgroundColor: theme.colors.lime,
+  },
+  categoryPillUnselected: {
+    backgroundColor: theme.colors.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.line,
+  },
+  categoryPillText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink600,
-    paddingHorizontal: 6,
-    paddingVertical: 4,
   },
-  footerDot: {
-    color: theme.colors.ink400,
-    fontSize: 12,
+  categoryPillTextSelected: {
+    color: theme.colors.onLime,
+    fontFamily: theme.typography.fonts.uiSemiBold,
   },
-  footerBrandRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-  },
-  footerBrandText: {
-    fontFamily: theme.typography.fonts.uiRegular,
-    fontSize: 12,
-    color: theme.colors.ink400,
+  categoryPillTextUnselected: {
+    color: theme.colors.textSecondary,
   },
 
+  // Feed Items
+  cardItemWrap: {
+    paddingHorizontal: 16,
+    marginBottom: 16,
+  },
+  feedLoadingWrap: {
+    paddingHorizontal: 16,
+  },
+  feedStateWrap: {
+    paddingHorizontal: 16,
+    paddingVertical: 24,
+  },
+
+  // Footer Wrap
+  footerWrap: {
+    alignItems: 'center',
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+  },
+  loadingMoreRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 12,
+  },
+  loadingMoreText: {
+    fontFamily: theme.typography.fonts.uiRegular,
+    fontSize: 13,
+    color: theme.colors.textSecondary,
+  },
   // Modal styles
   modalBody: {
-    paddingVertical: theme.spacing.sm,
-  },
-  modalIconCircle: {
-    width: 48,
-    height: 48,
-    borderRadius: theme.radius.full,
-    backgroundColor: theme.colors.primary50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: theme.spacing.md,
-    alignSelf: 'center',
+    paddingTop: 8,
+    paddingBottom: 24,
   },
   modalHeadline: {
-    fontFamily: theme.typography.fonts.serifBold,
-    fontSize: 20,
-    color: theme.colors.ink900,
-    textAlign: 'center',
-    marginBottom: theme.spacing.md,
+    fontFamily: theme.typography.fonts.uiBold,
+    fontSize: 18,
+    lineHeight: 24,
+    color: theme.colors.textPrimary,
+    marginBottom: 12,
   },
   modalParagraph: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
-    lineHeight: 21,
-    color: theme.colors.ink700,
-    marginBottom: theme.spacing.md,
+    lineHeight: 22,
+    color: theme.colors.textSecondary,
+    marginBottom: 12,
   },
   modalBold: {
-    fontFamily: theme.typography.fonts.uiBold,
-    color: theme.colors.ink900,
+    fontFamily: theme.typography.fonts.uiSemiBold,
+    color: theme.colors.textPrimary,
   },
-  modalHighlightBox: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 10,
-    backgroundColor: theme.colors.primary50,
-    borderRadius: theme.radius.md,
-    padding: theme.spacing.md,
+  estimateBox: {
+    marginTop: 12,
+    padding: 14,
+    borderRadius: theme.radii.md,
+    backgroundColor: theme.colors.surfaceRaised,
     borderWidth: 1,
-    borderColor: theme.colors.primary200,
-    marginTop: 4,
+    borderColor: theme.colors.border,
   },
-  modalHighlightText: {
-    flex: 1,
-    fontFamily: theme.typography.fonts.uiMedium,
+  estimateBoxTitle: {
+    fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
+    color: theme.colors.lime,
+    marginBottom: 4,
+  },
+  estimateBoxText: {
+    fontFamily: theme.typography.fonts.uiRegular,
+    fontSize: 12,
     lineHeight: 18,
-    color: theme.colors.primary800,
-  },
-  reachMathTable: {
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.radius.md,
-    borderWidth: 1,
-    borderColor: theme.colors.line,
-    overflow: 'hidden',
-    marginBottom: theme.spacing.md,
-  },
-  reachMathRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 10,
-    paddingHorizontal: theme.spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.line,
-  },
-  reachMathRowHighlight: {
-    backgroundColor: theme.colors.primary50,
-    borderBottomWidth: 0,
-  },
-  reachMathLabel: {
-    fontFamily: theme.typography.fonts.uiRegular,
-    fontSize: 13,
-    color: theme.colors.ink600,
-  },
-  reachMathValue: {
-    fontFamily: theme.typography.fonts.uiMedium,
-    fontSize: 13,
-    color: theme.colors.ink900,
-  },
-  reachMathLabelBold: {
-    fontFamily: theme.typography.fonts.uiBold,
-    fontSize: 14,
-    color: theme.colors.primary800,
-  },
-  reachMathValueBold: {
-    fontFamily: theme.typography.fonts.uiBold,
-    fontSize: 14,
-    color: theme.colors.primary700,
-  },
-  modalDisclaimerNote: {
-    fontFamily: theme.typography.fonts.uiRegular,
-    fontSize: 11,
-    lineHeight: 16,
-    color: theme.colors.ink500,
-    fontStyle: 'italic',
+    color: theme.colors.textSecondary,
   },
 });

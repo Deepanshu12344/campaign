@@ -257,7 +257,7 @@ export default function CreateSubmitScreen() {
         ) : (
           <>
             <AlertCircle size={18} color={theme.colors.warning} />
-            <Text style={[styles.statusBannerText, { color: theme.colors.warning }]}>
+            <Text style={[styles.statusBannerText, { color: theme.colors.textSecondary }]}>
               {!hasAnyErrors
                 ? 'Review and check all 4 confirmations below to unlock submission.'
                 : 'Complete the remaining checklist items below to submit for review.'}
@@ -269,7 +269,7 @@ export default function CreateSubmitScreen() {
       {/* 1. FUNDING GOAL SECTION (SOLE SETTER) */}
       <Card style={styles.card}>
         <View style={styles.sectionHeaderRow}>
-          <CircleDollarSign size={20} color={theme.colors.primary600} />
+          <CircleDollarSign size={20} color={theme.colors.lime} />
           <View style={{ flex: 1 }}>
             <View style={styles.inlineHeaderWithTip}>
               <Text style={styles.sectionHeading}>Funding Goal</Text>
@@ -376,7 +376,7 @@ export default function CreateSubmitScreen() {
           {/* Section 1: Basics */}
           <Accordion
             title="Step 1: Campaign Basics"
-            icon={<FileText size={18} color={theme.colors.primary600} />}
+            icon={<FileText size={18} color={theme.colors.lime} />}
             defaultOpen={false}
           >
             <View style={styles.accordionInner}>
@@ -407,7 +407,7 @@ export default function CreateSubmitScreen() {
                 title="Edit Basics"
                 variant="ghost"
                 size="sm"
-                iconLeft={<Edit3 size={14} color={theme.colors.ink600} />}
+                iconLeft={<Edit3 size={14} color={theme.colors.textSecondary} />}
                 onPress={() => handleJumpToStep('basics')}
                 style={styles.editStepBtn}
               />
@@ -417,7 +417,7 @@ export default function CreateSubmitScreen() {
           {/* Section 2: Story and Sources */}
           <Accordion
             title="Step 2: Story & Sources"
-            icon={<FileText size={18} color={theme.colors.primary600} />}
+            icon={<FileText size={18} color={theme.colors.lime} />}
             defaultOpen={false}
           >
             <View style={styles.accordionInner}>
@@ -448,7 +448,7 @@ export default function CreateSubmitScreen() {
                 title="Edit Story & Sources"
                 variant="ghost"
                 size="sm"
-                iconLeft={<Edit3 size={14} color={theme.colors.ink600} />}
+                iconLeft={<Edit3 size={14} color={theme.colors.textSecondary} />}
                 onPress={() => handleJumpToStep('story')}
                 style={styles.editStepBtn}
               />
@@ -458,7 +458,7 @@ export default function CreateSubmitScreen() {
           {/* Section 3: Visuals */}
           <Accordion
             title="Step 3: Campaign & Ad Visuals"
-            icon={<ImageIcon size={18} color={theme.colors.primary600} />}
+            icon={<ImageIcon size={18} color={theme.colors.lime} />}
             defaultOpen={false}
           >
             <View style={styles.accordionInner}>
@@ -503,7 +503,7 @@ export default function CreateSubmitScreen() {
                 title="Edit Visuals"
                 variant="ghost"
                 size="sm"
-                iconLeft={<Edit3 size={14} color={theme.colors.ink600} />}
+                iconLeft={<Edit3 size={14} color={theme.colors.textSecondary} />}
                 onPress={() => handleJumpToStep('visuals')}
                 style={styles.editStepBtn}
               />
@@ -513,7 +513,7 @@ export default function CreateSubmitScreen() {
           {/* Section 4: Reach & Distribution */}
           <Accordion
             title="Step 4: Audience & Reach"
-            icon={<Target size={18} color={theme.colors.primary600} />}
+            icon={<Target size={18} color={theme.colors.lime} />}
             defaultOpen={false}
           >
             <View style={styles.accordionInner}>
@@ -552,7 +552,7 @@ export default function CreateSubmitScreen() {
                 title="Edit Audience & Reach"
                 variant="ghost"
                 size="sm"
-                iconLeft={<Edit3 size={14} color={theme.colors.ink600} />}
+                iconLeft={<Edit3 size={14} color={theme.colors.textSecondary} />}
                 onPress={() => handleJumpToStep('reach')}
                 style={styles.editStepBtn}
               />
@@ -562,7 +562,7 @@ export default function CreateSubmitScreen() {
           {/* Section 5: Duration */}
           <Accordion
             title="Campaign Duration & Funding Window"
-            icon={<Clock size={18} color={theme.colors.primary600} />}
+            icon={<Clock size={18} color={theme.colors.lime} />}
             defaultOpen={false}
           >
             <View style={styles.accordionInner}>
@@ -579,7 +579,7 @@ export default function CreateSubmitScreen() {
                 title="Edit Duration in Reach"
                 variant="ghost"
                 size="sm"
-                iconLeft={<Edit3 size={14} color={theme.colors.ink600} />}
+                iconLeft={<Edit3 size={14} color={theme.colors.textSecondary} />}
                 onPress={() => handleJumpToStep('reach')}
                 style={styles.editStepBtn}
               />
@@ -591,7 +591,7 @@ export default function CreateSubmitScreen() {
       {/* 3. PLAIN-LANGUAGE FEES AND FUNDING POLICIES */}
       <Card style={styles.card}>
         <View style={styles.sectionHeaderRow}>
-          <ShieldAlert size={20} color={theme.colors.primary600} />
+          <ShieldAlert size={20} color={theme.colors.lime} />
           <View style={{ flex: 1 }}>
             <View style={styles.inlineHeaderWithTip}>
               <Text style={styles.sectionHeading}>Fees & Funding Policies</Text>
@@ -642,7 +642,7 @@ export default function CreateSubmitScreen() {
       {/* 4. FOUR REQUIRED CONFIRMATION CHECKBOXES */}
       <Card style={styles.card}>
         <View style={styles.sectionHeaderRow}>
-          <ShieldCheck size={20} color={theme.colors.ink900} />
+          <ShieldCheck size={20} color={theme.colors.lime} />
           <View style={{ flex: 1 }}>
             <Text style={styles.sectionHeading}>Creator Confirmations</Text>
             <Text style={styles.sectionSubheading}>
@@ -663,7 +663,7 @@ export default function CreateSubmitScreen() {
             style={styles.checkboxRow}
           >
             <View style={[styles.checkbox, rightsConfirmed && styles.checkboxSelected]}>
-              {rightsConfirmed && <Check size={12} color="#FFFFFF" strokeWidth={3} />}
+              {rightsConfirmed && <Check size={12} color={theme.colors.onLime} strokeWidth={3} />}
             </View>
             <Text style={styles.checkboxLabel}>
               <Text style={styles.checkboxBold}>Content Rights</Text>: I confirm that I own or have
@@ -683,7 +683,7 @@ export default function CreateSubmitScreen() {
             style={styles.checkboxRow}
           >
             <View style={[styles.checkbox, guidelinesConfirmed && styles.checkboxSelected]}>
-              {guidelinesConfirmed && <Check size={12} color="#FFFFFF" strokeWidth={3} />}
+              {guidelinesConfirmed && <Check size={12} color={theme.colors.onLime} strokeWidth={3} />}
             </View>
             <View style={{ flex: 1 }}>
               <Text style={styles.checkboxLabel}>
@@ -697,7 +697,7 @@ export default function CreateSubmitScreen() {
                 style={styles.policyLinkRow}
               >
                 <Text style={styles.policyLinkText}>Read Community Guidelines</Text>
-                <ExternalLink size={12} color={theme.colors.primary600} />
+                <ExternalLink size={12} color={theme.colors.lime} />
               </Pressable>
             </View>
           </Pressable>
@@ -713,7 +713,7 @@ export default function CreateSubmitScreen() {
             style={styles.checkboxRow}
           >
             <View style={[styles.checkbox, adDistributionOnlyConfirmed && styles.checkboxSelected]}>
-              {adDistributionOnlyConfirmed && <Check size={12} color="#FFFFFF" strokeWidth={3} />}
+              {adDistributionOnlyConfirmed && <Check size={12} color={theme.colors.onLime} strokeWidth={3} />}
             </View>
             <View style={{ flex: 1 }}>
               <Text style={styles.checkboxLabel}>
@@ -727,7 +727,7 @@ export default function CreateSubmitScreen() {
                 style={styles.policyLinkRow}
               >
                 <Text style={styles.policyLinkText}>View Distribution Terms of Service</Text>
-                <ExternalLink size={12} color={theme.colors.primary600} />
+                <ExternalLink size={12} color={theme.colors.lime} />
               </Pressable>
             </View>
           </Pressable>
@@ -743,7 +743,7 @@ export default function CreateSubmitScreen() {
             style={styles.checkboxRow}
           >
             <View style={[styles.checkbox, reviewEditsConfirmed && styles.checkboxSelected]}>
-              {reviewEditsConfirmed && <Check size={12} color="#FFFFFF" strokeWidth={3} />}
+              {reviewEditsConfirmed && <Check size={12} color={theme.colors.onLime} strokeWidth={3} />}
             </View>
             <Text style={styles.checkboxLabel}>
               <Text style={styles.checkboxBold}>Review & Verification</Text>: I understand that the
@@ -757,13 +757,13 @@ export default function CreateSubmitScreen() {
       {/* 5. "STILL NEEDED" CHECKLIST CARD */}
       <Card style={styles.checklistCard}>
         <View style={styles.sectionHeaderRow}>
-          <ShieldCheck size={18} color={theme.colors.ink800} />
+          <ShieldCheck size={18} color={theme.colors.lime} />
           <Text style={styles.sectionHeading}>Still Needed Before Submission</Text>
         </View>
 
         {!hasAnyErrors ? (
           <View style={styles.allCompleteRow}>
-            <CheckCircle2 size={20} color={theme.colors.success} />
+            <CheckCircle2 size={20} color={theme.colors.lime} />
             <Text style={styles.allCompleteText}>
               All 5 steps have met the platform submission requirements!
             </Text>
@@ -778,9 +778,9 @@ export default function CreateSubmitScreen() {
                 <View style={styles.checklistItemHeader}>
                   <View style={styles.checklistTitleRow}>
                     {isDone ? (
-                      <CheckCircle2 size={16} color={theme.colors.success} />
+                      <CheckCircle2 size={16} color={theme.colors.lime} />
                     ) : (
-                      <AlertCircle size={16} color={theme.colors.warning} />
+                      <AlertCircle size={16} color={theme.colors.textSecondary} />
                     )}
                     <Text
                       style={[
@@ -824,7 +824,7 @@ export default function CreateSubmitScreen() {
             title="Back to Reach"
             variant="ghost"
             size="md"
-            iconLeft={<ArrowLeft size={16} color={theme.colors.ink600} />}
+            iconLeft={<ArrowLeft size={16} color={theme.colors.textSecondary} />}
             onPress={() => router.push(`/create/${draftId}/reach` as Href)}
             style={{ flex: 1 }}
           />
@@ -833,7 +833,7 @@ export default function CreateSubmitScreen() {
             title="Save as Draft"
             variant="secondary"
             size="md"
-            iconLeft={<Save size={16} color={theme.colors.ink800} />}
+            iconLeft={<Save size={16} color={theme.colors.textSecondary} />}
             onPress={handleSaveDraft}
             style={{ flex: 1.2 }}
           />
@@ -844,7 +844,7 @@ export default function CreateSubmitScreen() {
           variant="secondary"
           size="lg"
           fullWidth
-          iconRight={<Eye size={18} color={theme.colors.primary600} />}
+          iconRight={<Eye size={18} color={theme.colors.lime} />}
           onPress={handlePreview}
           style={styles.previewBtn}
         />
@@ -856,7 +856,7 @@ export default function CreateSubmitScreen() {
           fullWidth
           disabled={hasAnyErrors || !allCheckboxesChecked || isSubmitting}
           loading={isSubmitting}
-          iconRight={<Send size={18} color="#FFFFFF" />}
+          iconRight={<Send size={18} color={theme.colors.onLime} />}
           onPress={handleSubmit}
         />
 
@@ -949,13 +949,13 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 24,
     lineHeight: 30,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   stepSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 20,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: 4,
   },
   statusBanner: {
@@ -968,16 +968,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   statusBannerSuccess: {
-    backgroundColor: theme.colors.successBg,
-    borderColor: '#BBF7D0',
+    backgroundColor: theme.colors.surfaceRaised,
+    borderColor: theme.colors.lime,
   },
   statusBannerPending: {
-    backgroundColor: theme.colors.warningBg,
-    borderColor: '#FDE68A',
+    backgroundColor: theme.colors.surfaceRaised,
+    borderColor: theme.colors.line,
   },
   statusBannerText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
+    color: theme.colors.textPrimary,
     flex: 1,
   },
   card: {
@@ -997,13 +998,13 @@ const styles = StyleSheet.create({
   sectionHeading: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   sectionSubheading: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   fieldSpacing: {
@@ -1015,7 +1016,7 @@ const styles = StyleSheet.create({
   chipsLabel: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   chipsRow: {
     flexDirection: 'row',
@@ -1028,23 +1029,23 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.pill,
     borderWidth: 1,
     borderColor: theme.colors.line,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   goalChipSelected: {
-    backgroundColor: theme.colors.primary50,
-    borderColor: theme.colors.primary600,
+    backgroundColor: theme.colors.tintedPillBg,
+    borderColor: theme.colors.lime,
   },
   goalChipText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink700,
+    color: theme.colors.textPrimary,
   },
   goalChipTextSelected: {
     fontFamily: theme.typography.fonts.uiBold,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   estimateBox: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     borderRadius: theme.radius.sm,
     padding: theme.spacing.md,
     gap: 6,
@@ -1061,16 +1062,16 @@ const styles = StyleSheet.create({
   estimateTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   estimateDisclaimer: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
     lineHeight: 15,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   financialBreakdown: {
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.surfaceRaised,
     borderRadius: theme.radius.sm,
     borderWidth: 1,
     borderColor: theme.colors.line,
@@ -1080,7 +1081,7 @@ const styles = StyleSheet.create({
   breakdownHeaderTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   breakdownRow: {
     flexDirection: 'row',
@@ -1100,17 +1101,17 @@ const styles = StyleSheet.create({
   breakdownItemLabel: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   breakdownItemValue: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.lime,
   },
   breakdownItemDesc: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   summarySection: {
     gap: theme.spacing.xs,
@@ -1118,12 +1119,12 @@ const styles = StyleSheet.create({
   sectionGroupTitle: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   sectionGroupSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginBottom: theme.spacing.xs,
   },
   accordionsList: {
@@ -1142,16 +1143,16 @@ const styles = StyleSheet.create({
     width: 130,
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   summaryValue: {
     flex: 1,
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   sourcesMiniList: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.sm,
     gap: 4,
@@ -1159,7 +1160,7 @@ const styles = StyleSheet.create({
   sourceBulletText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   coverThumbnailWrapper: {
     marginTop: 4,
@@ -1168,13 +1169,13 @@ const styles = StyleSheet.create({
   coverThumbnailLabel: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   coverThumbnail: {
     width: '100%',
     height: 120,
     borderRadius: theme.radius.sm,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
   },
   editStepBtn: {
     alignSelf: 'flex-start',
@@ -1191,7 +1192,7 @@ const styles = StyleSheet.create({
   policyBullet: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 14,
-    color: theme.colors.primary600,
+    color: theme.colors.lime,
     lineHeight: 20,
   },
   policyText: {
@@ -1199,11 +1200,11 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 19,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   policyBold: {
     fontFamily: theme.typography.fonts.uiSemiBold,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   checkboxesContainer: {
     gap: 12,
@@ -1212,7 +1213,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 10,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.md,
     borderRadius: theme.radius.sm,
   },
@@ -1221,26 +1222,26 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 4,
     borderWidth: 1.5,
-    borderColor: theme.colors.ink400,
+    borderColor: theme.colors.line,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 2,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   checkboxSelected: {
-    backgroundColor: theme.colors.primary600,
-    borderColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
+    borderColor: theme.colors.lime,
   },
   checkboxLabel: {
     flex: 1,
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   checkboxBold: {
     fontFamily: theme.typography.fonts.uiSemiBold,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   policyLinkRow: {
     flexDirection: 'row',
@@ -1251,7 +1252,7 @@ const styles = StyleSheet.create({
   policyLinkText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.primary600,
+    color: theme.colors.lime,
     textDecorationLine: 'underline',
   },
   checklistCard: {
@@ -1262,14 +1263,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: theme.colors.successBg,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.md,
     borderRadius: theme.radius.sm,
   },
   allCompleteText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.success,
+    color: theme.colors.lime,
     flex: 1,
   },
   checklistItem: {
@@ -1290,10 +1291,10 @@ const styles = StyleSheet.create({
   checklistStepTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   checklistStepTitleDone: {
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   errorPillsList: {
     marginTop: 6,
@@ -1303,7 +1304,7 @@ const styles = StyleSheet.create({
   errorBulletText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.warning,
+    color: theme.colors.textPrimary,
   },
   actionSection: {
     gap: theme.spacing.sm,
@@ -1314,12 +1315,12 @@ const styles = StyleSheet.create({
     gap: theme.spacing.sm,
   },
   previewBtn: {
-    borderColor: theme.colors.primary600,
+    borderColor: theme.colors.line,
   },
   actionHint: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
   },
   policySheetContent: {
@@ -1332,13 +1333,13 @@ const styles = StyleSheet.create({
   policyModalHeading: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: 4,
   },
   policyModalParagraph: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 19,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
 });

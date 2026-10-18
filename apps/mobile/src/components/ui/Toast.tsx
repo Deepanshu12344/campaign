@@ -147,28 +147,27 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   const getToastIcon = (type: ToastType = 'info') => {
     switch (type) {
       case 'success':
-        return <CheckCircle2 size={20} color={theme.colors.success} />;
+        return <CheckCircle2 size={20} color={theme.colors.lime} />;
       case 'warning':
-        return <AlertTriangle size={20} color={theme.colors.warning} />;
+        return <AlertTriangle size={20} color={theme.colors.textPrimary} />;
       case 'danger':
-        return <AlertCircle size={20} color={theme.colors.danger} />;
+        return <AlertCircle size={20} color={theme.colors.textPrimary} />;
       case 'info':
       default:
-        return <Info size={20} color={theme.colors.info} />;
+        return <Info size={20} color={theme.colors.textSecondary} />;
     }
   };
 
   const getBorderColor = (type: ToastType = 'info') => {
     switch (type) {
       case 'success':
-        return theme.colors.success;
+        return theme.colors.lime;
       case 'warning':
-        return theme.colors.warning;
       case 'danger':
-        return theme.colors.danger;
+        return theme.colors.textPrimary;
       case 'info':
       default:
-        return theme.colors.info;
+        return theme.colors.textSecondary;
     }
   };
 
@@ -236,7 +235,7 @@ const styles = StyleSheet.create({
     gap: theme.spacing.md,
     borderLeftWidth: 4,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     ...theme.shadows.elevated,
     zIndex: 9999,
   },
@@ -249,21 +248,21 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: theme.typography.styles.small.fontSize,
     lineHeight: theme.typography.styles.small.lineHeight,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   actionButton: {
     paddingVertical: 4,
     paddingHorizontal: 10,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.tintedPillBg,
     borderRadius: theme.radius.sm,
     borderWidth: 1,
-    borderColor: theme.colors.primary100,
+    borderColor: theme.colors.lime,
     marginLeft: theme.spacing.xs,
   },
   actionText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: theme.typography.styles.caption.fontSize,
     lineHeight: theme.typography.styles.caption.lineHeight,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
 });

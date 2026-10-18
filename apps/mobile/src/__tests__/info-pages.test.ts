@@ -15,8 +15,8 @@ import { ContactInputSchema, CONTACT_TOPICS } from '@campaigns/shared';
 
 describe('Info & Editorial Pages Suite', () => {
   describe('1. FAQ Data & Search Filtering', () => {
-    it('contains all 14 structured FAQ items across 5 canonical categories', () => {
-      expect(FAQ_ITEMS.length).toBe(14);
+    it('contains all 15 structured FAQ items across 5 canonical categories', () => {
+      expect(FAQ_ITEMS.length).toBe(15);
 
       const categories = new Set(FAQ_ITEMS.map((item) => item.category));
       expect(categories).toEqual(
@@ -34,11 +34,17 @@ describe('Info & Editorial Pages Suite', () => {
         const count = FAQ_ITEMS.filter((i) => i.category === cat).length;
         expect(count).toBeGreaterThanOrEqual(2);
       }
+
+      // Verify centralized prototype disclosure FAQ entry
+      const isDataReal = FAQ_ITEMS.find((i) => i.id === 'is-data-real');
+      expect(isDataReal).toBeDefined();
+      expect(isDataReal?.question).toBe('Is the data on this app real?');
+      expect(isDataReal?.answer).toContain('This is a prototype');
     });
 
     it('returns all items when search query is empty or whitespace', () => {
-      expect(filterFaqs('')).toHaveLength(14);
-      expect(filterFaqs('   ')).toHaveLength(14);
+      expect(filterFaqs('')).toHaveLength(15);
+      expect(filterFaqs('   ')).toHaveLength(15);
     });
 
     it('filters FAQs by question text with case-insensitivity', () => {

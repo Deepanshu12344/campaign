@@ -73,8 +73,7 @@ export function ProgressBar({
     width: `${animatedWidth.value}%`,
   }));
 
-  const fillColor =
-    color || (normalizedProgress >= 100 ? theme.colors.success : theme.colors.primary600);
+  const fillColor = color || theme.colors.lime;
 
   return (
     <View
@@ -97,7 +96,7 @@ export function ProgressBar({
 const styles = StyleSheet.create({
   track: {
     width: '100%',
-    backgroundColor: theme.colors.line,
+    backgroundColor: theme.colors.surfaceRaised, // #3F423E
     overflow: 'hidden',
   },
   fill: {

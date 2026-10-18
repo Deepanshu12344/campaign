@@ -29,7 +29,6 @@ import {
   Card,
   Button,
   StatusPill,
-  DemoDataBadge,
   InfoTip,
   ErrorState,
 } from '../../../components/ui';
@@ -95,7 +94,7 @@ export default function CampaignReportScreen() {
       <View style={styles.container}>
         <SharedHeader title="Performance Report" fallbackRoute={`/campaign/${campaignId}`} />
         <View style={styles.centerContainer}>
-          <ActivityIndicator size="large" color={theme.colors.primary600} />
+          <ActivityIndicator size="large" color={theme.colors.lime} />
           <Text style={styles.centerText}>Loading distribution report...</Text>
         </View>
       </View>
@@ -127,7 +126,7 @@ export default function CampaignReportScreen() {
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <Card style={styles.notAvailableCard}>
             <View style={styles.notAvailableIconCircle}>
-              <FileCheck size={36} color={theme.colors.ink500} />
+              <FileCheck size={36} color={theme.colors.textSecondary} />
             </View>
             <Text style={styles.notAvailableTitle}>Report Not Available Yet</Text>
             <Text style={styles.notAvailableSubtitle}>
@@ -177,7 +176,7 @@ export default function CampaignReportScreen() {
             accessibilityRole="button"
             accessibilityLabel="Share performance report"
           >
-            <Share2 size={18} color={theme.colors.ink800} />
+            <Share2 size={18} color={theme.colors.textPrimary} />
           </Pressable>
         }
       />
@@ -187,10 +186,9 @@ export default function CampaignReportScreen() {
         <Card style={styles.heroCard}>
           <View style={styles.heroBadgeRow}>
             <View style={styles.verifiedBadge}>
-              <ShieldCheck size={14} color={theme.colors.emerald700} />
+              <ShieldCheck size={14} color={theme.colors.lime} />
               <Text style={styles.verifiedBadgeText}>Audited Distribution Report</Text>
             </View>
-            <DemoDataBadge size="sm" />
           </View>
 
           <Text style={styles.campaignTitle}>{campaign.title}</Text>
@@ -215,7 +213,7 @@ export default function CampaignReportScreen() {
               <Text style={styles.sectionTitle}>Funds Raised</Text>
               <Text style={styles.metricLarge}>{formatCurrency(report.fundsRaisedCents)}</Text>
             </View>
-            <DollarSign size={20} color={theme.colors.primary700} />
+            <DollarSign size={20} color={theme.colors.lime} />
           </View>
           <Text style={styles.definitionText}>
             Plain-language definition: The total gross funds pledged by public supporters during the
@@ -233,7 +231,7 @@ export default function CampaignReportScreen() {
               <Text style={styles.sectionTitle}>Platform Fee</Text>
               <Text style={styles.metricLarge}>{formatCurrency(report.platformFeeCents)}</Text>
             </View>
-            <PieChart size={20} color={theme.colors.ink600} />
+            <PieChart size={20} color={theme.colors.textSecondary} />
           </View>
           <Text style={styles.definitionText}>
             Plain-language definition: A standard 10% platform fee retained to cover editorial fact-checking,
@@ -252,7 +250,7 @@ export default function CampaignReportScreen() {
               <Text style={styles.sectionTitle}>Ad Budget & Spend</Text>
               <Text style={styles.metricLarge}>{formatCurrency(report.adSpendCents)}</Text>
             </View>
-            <Target size={20} color={theme.colors.emerald700} />
+            <Target size={20} color={theme.colors.lime} />
           </View>
           <View style={styles.budgetUtilizationRow}>
             <Text style={styles.budgetUtilizationLabel}>Budget Allocation:</Text>
@@ -276,7 +274,7 @@ export default function CampaignReportScreen() {
               <Text style={styles.sectionTitle}>Impressions</Text>
               <Text style={styles.metricLarge}>{report.impressions.toLocaleString()}</Text>
             </View>
-            <Eye size={20} color={theme.colors.primary700} />
+            <Eye size={20} color={theme.colors.lime} />
           </View>
           <Text style={styles.definitionText}>
             Plain-language definition: An impression is logged each time the campaign ad creative was
@@ -294,7 +292,7 @@ export default function CampaignReportScreen() {
               <Text style={styles.sectionTitle}>Audience Reach</Text>
               <Text style={styles.sectionSubtitle}>Estimated & Measured (Strictly Separate)</Text>
             </View>
-            <Users size={20} color={theme.colors.emerald700} />
+            <Users size={20} color={theme.colors.lime} />
           </View>
 
           {/* Subcard 5A: Modeled Estimated Reach */}
@@ -302,7 +300,6 @@ export default function CampaignReportScreen() {
             <View style={styles.subReachHeader}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                 <Text style={styles.subReachTag}>PRE-DISTRIBUTION PROJECTION</Text>
-                <DemoDataBadge size="sm" />
               </View>
               <InfoTip
                 title="Estimated Reach"
@@ -312,7 +309,7 @@ export default function CampaignReportScreen() {
             <Text style={styles.subReachValue}>
               {formatReach(campaign.estimatedReachLow, campaign.estimatedReachHigh)} people
             </Text>
-            <Text style={{ ...theme.typography.styles.captionSemiBold, color: theme.colors.ink500, marginBottom: 4 }}>
+            <Text style={{ ...theme.typography.styles.captionSemiBold, color: theme.colors.textSecondary, marginBottom: 4 }}>
               Estimate, not a guarantee
             </Text>
             <Text style={styles.subReachDescription}>
@@ -325,10 +322,9 @@ export default function CampaignReportScreen() {
           <View style={[styles.subReachBox, styles.subMeasuredBox]}>
             <View style={styles.subReachHeader}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                <Text style={[styles.subReachTag, { color: theme.colors.emerald800 }]}>
+                <Text style={[styles.subReachTag, { color: theme.colors.lime }]}>
                   DELIVERED MEASURED REACH
                 </Text>
-                <DemoDataBadge size="sm" />
               </View>
               <InfoTip
                 title="Measured Reach"
@@ -363,7 +359,7 @@ export default function CampaignReportScreen() {
                 <Text style={styles.ctrBadgeText}>• {(report.ctr * 100).toFixed(2)}% CTR</Text>
               </View>
             </View>
-            <MousePointer size={20} color={theme.colors.primary700} />
+            <MousePointer size={20} color={theme.colors.lime} />
           </View>
           <Text style={styles.definitionText}>
             Plain-language definition: Clicks count direct taps on the ad that opened the full campaign story.
@@ -382,7 +378,7 @@ export default function CampaignReportScreen() {
               <Text style={styles.sectionTitle}>Campaign & Ad Duration</Text>
               <Text style={styles.metricLarge}>{durationDays} Days Active</Text>
             </View>
-            <Calendar size={20} color={theme.colors.ink600} />
+            <Calendar size={20} color={theme.colors.textSecondary} />
           </View>
           <View style={styles.dateRangeBox}>
             <Text style={styles.dateRangeText}>
@@ -404,7 +400,7 @@ export default function CampaignReportScreen() {
             <View style={styles.sectionTitleBlock}>
               <Text style={styles.sectionTitle}>Auditor & Delivery Notes</Text>
             </View>
-            <FileText size={20} color={theme.colors.ink600} />
+            <FileText size={20} color={theme.colors.textSecondary} />
           </View>
           <View style={styles.notesBox}>
             <Text style={styles.notesText}>
@@ -424,7 +420,7 @@ export default function CampaignReportScreen() {
             label="View Campaign Story"
             variant="secondary"
             size="md"
-            icon={<ExternalLink size={16} color={theme.colors.ink800} />}
+            icon={<ExternalLink size={16} color={theme.colors.textPrimary} />}
             onPress={() => router.push(`/campaign/${campaign.id}`)}
             style={{ flex: 1 }}
           />
@@ -437,7 +433,7 @@ export default function CampaignReportScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.bg,
   },
   centerContainer: {
     flex: 1,
@@ -448,7 +444,7 @@ const styles = StyleSheet.create({
   centerText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 14,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: theme.spacing.base,
   },
   scrollContent: {
@@ -462,10 +458,10 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surface,
   },
   shareBtnPressed: {
-    backgroundColor: theme.colors.line,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   heroCard: {
     padding: theme.spacing.base,
@@ -481,29 +477,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: theme.colors.emerald50,
+    backgroundColor: theme.colors.tintedPillBg,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: theme.radius.sm,
     borderWidth: 1,
-    borderColor: theme.colors.emerald200,
+    borderColor: theme.colors.lime,
   },
   verifiedBadgeText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 11,
-    color: theme.colors.emerald800,
+    color: theme.colors.lime,
   },
   campaignTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: theme.typography.styles.h3.fontSize,
     lineHeight: theme.typography.styles.h3.lineHeight,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   campaignSummary: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   heroMetaRow: {
     flexDirection: 'row',
@@ -514,10 +510,10 @@ const styles = StyleSheet.create({
   heroMetaText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   heroMetaDot: {
-    color: theme.colors.ink400,
+    color: theme.colors.textMuted,
   },
   sectionCard: {
     padding: theme.spacing.base,
@@ -532,7 +528,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 2,
@@ -540,7 +536,7 @@ const styles = StyleSheet.create({
   sectionIndexText: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 12,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   sectionTitleBlock: {
     flex: 1,
@@ -548,37 +544,37 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   sectionSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   metricLarge: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 24,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginTop: 2,
   },
   budgetUtilizationRow: {
     flexDirection: 'row',
     gap: 6,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     padding: theme.spacing.xs,
     borderRadius: theme.radius.sm,
   },
   budgetUtilizationLabel: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   budgetUtilizationValue: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   clicksRow: {
     flexDirection: 'row',
@@ -588,10 +584,10 @@ const styles = StyleSheet.create({
   ctrBadgeText: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 16,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   dateRangeBox: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     padding: theme.spacing.xs,
     borderRadius: theme.radius.sm,
     alignSelf: 'flex-start',
@@ -599,43 +595,43 @@ const styles = StyleSheet.create({
   dateRangeText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   notesBox: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.md,
     borderLeftWidth: 3,
-    borderLeftColor: theme.colors.primary600,
+    borderLeftColor: theme.colors.lime,
   },
   notesText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 19,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   definitionText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 17,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     borderTopWidth: 1,
-    borderTopColor: theme.colors.line,
+    borderTopColor: theme.colors.border,
     paddingTop: theme.spacing.xs,
   },
   reachSectionCard: {
     gap: theme.spacing.md,
   },
   subReachBox: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.md,
     gap: 4,
   },
   subMeasuredBox: {
-    backgroundColor: theme.colors.emerald50,
+    backgroundColor: theme.colors.tintedPillBg,
     borderWidth: 1,
-    borderColor: theme.colors.emerald200,
+    borderColor: theme.colors.lime,
   },
   subReachHeader: {
     flexDirection: 'row',
@@ -645,24 +641,24 @@ const styles = StyleSheet.create({
   subReachTag: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 10,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     letterSpacing: 0.5,
   },
   subReachValue: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 22,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   subMeasuredValue: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 22,
-    color: theme.colors.emerald800,
+    color: theme.colors.lime,
   },
   subReachDescription: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
     lineHeight: 16,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   notAvailableCard: {
     padding: theme.spacing.xl,
@@ -673,7 +669,7 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: theme.spacing.sm,
@@ -681,13 +677,13 @@ const styles = StyleSheet.create({
   notAvailableTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: theme.typography.styles.h3.fontSize,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     textAlign: 'center',
   },
   notAvailableSubtitle: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 14,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
   },
   statusCallout: {
@@ -699,13 +695,13 @@ const styles = StyleSheet.create({
   statusCalloutLabel: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   notAvailableExplanation: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 20,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     marginTop: theme.spacing.xs,
   },

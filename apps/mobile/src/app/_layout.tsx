@@ -5,17 +5,13 @@ import { useFonts } from 'expo-font';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
-  PlusJakartaSans_400Regular,
-  PlusJakartaSans_500Medium,
-  PlusJakartaSans_600SemiBold,
-  PlusJakartaSans_700Bold,
-} from '@expo-google-fonts/plus-jakarta-sans';
-import {
-  Newsreader_400Regular,
-  Newsreader_500Medium_Italic,
-  Newsreader_600SemiBold,
-  Newsreader_700Bold,
-} from '@expo-google-fonts/newsreader';
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+} from '@expo-google-fonts/inter';
+import { ArchivoBlack_400Regular } from '@expo-google-fonts/archivo-black';
+import { StatusBar } from 'expo-status-bar';
 import { ToastProvider } from '../components/ui/Toast';
 import { theme } from '../theme';
 import { useAuthStore } from '../store/authStore';
@@ -41,14 +37,20 @@ SplashScreen.preventAutoHideAsync().catch(() => {
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
-    'PlusJakartaSans-Regular': PlusJakartaSans_400Regular,
-    'PlusJakartaSans-Medium': PlusJakartaSans_500Medium,
-    'PlusJakartaSans-SemiBold': PlusJakartaSans_600SemiBold,
-    'PlusJakartaSans-Bold': PlusJakartaSans_700Bold,
-    'Newsreader-Regular': Newsreader_400Regular,
-    'Newsreader-MediumItalic': Newsreader_500Medium_Italic,
-    'Newsreader-SemiBold': Newsreader_600SemiBold,
-    'Newsreader-Bold': Newsreader_700Bold,
+    'Inter-Regular': Inter_400Regular,
+    'Inter-Medium': Inter_500Medium,
+    'Inter-SemiBold': Inter_600SemiBold,
+    'Inter-Bold': Inter_700Bold,
+    'ArchivoBlack-Regular': ArchivoBlack_400Regular,
+    // Fallback aliases so existing code renders with Inter
+    'PlusJakartaSans-Regular': Inter_400Regular,
+    'PlusJakartaSans-Medium': Inter_500Medium,
+    'PlusJakartaSans-SemiBold': Inter_600SemiBold,
+    'PlusJakartaSans-Bold': Inter_700Bold,
+    'Newsreader-Regular': Inter_400Regular,
+    'Newsreader-MediumItalic': Inter_400Regular,
+    'Newsreader-SemiBold': Inter_600SemiBold,
+    'Newsreader-Bold': Inter_700Bold,
   });
 
   const isHydrated = useAuthStore((s) => s.isHydrated);
@@ -74,6 +76,7 @@ export default function RootLayout() {
     <GlobalErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <SafeAreaProvider>
+          <StatusBar style="light" />
           <AuthGateProvider>
             <ToastProvider>
               <OfflineBanner />

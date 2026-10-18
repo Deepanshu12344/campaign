@@ -42,7 +42,7 @@ export class GlobalErrorBoundary extends Component<Props, State> {
         <View style={styles.container}>
           <View style={styles.content}>
             <View style={styles.iconCircle}>
-              <AlertCircle size={40} color={theme.colors.danger} />
+              <AlertCircle size={40} color={theme.colors.textPrimary} />
             </View>
 
             <Text style={styles.title}>Something went wrong</Text>
@@ -63,7 +63,7 @@ export class GlobalErrorBoundary extends Component<Props, State> {
               variant="primary"
               size="lg"
               fullWidth
-              iconLeft={<RefreshCw size={18} color="#FFFFFF" />}
+              iconLeft={<RefreshCw size={18} color={theme.colors.onLime} />}
               onPress={this.handleReset}
               style={styles.retryButton}
             />
@@ -91,14 +91,16 @@ const styles = StyleSheet.create({
     padding: theme.spacing.xl,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     alignItems: 'center',
   },
   iconCircle: {
     width: 72,
     height: 72,
     borderRadius: 36,
-    backgroundColor: theme.colors.dangerBg,
+    backgroundColor: theme.colors.surfaceRaised,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: theme.spacing.base,
@@ -107,7 +109,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: theme.typography.styles.h2.fontSize,
     lineHeight: theme.typography.styles.h2.lineHeight,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     textAlign: 'center',
     marginBottom: theme.spacing.xs,
   },
@@ -115,21 +117,23 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.body.fontSize,
     lineHeight: theme.typography.styles.body.lineHeight,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     marginBottom: theme.spacing.base,
   },
   debugBox: {
     width: '100%',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.input,
     marginBottom: theme.spacing.base,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
   },
   debugText: {
     fontFamily: 'monospace',
     fontSize: 12,
-    color: theme.colors.danger,
+    color: theme.colors.textPrimary,
   },
   retryButton: {
     marginTop: theme.spacing.sm,

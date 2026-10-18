@@ -75,7 +75,7 @@ export default function SignInScreen() {
         <Card style={styles.card}>
           <View style={styles.headerBox}>
             <View style={styles.iconCircle}>
-              <LogIn size={28} color={theme.colors.primary600} />
+              <LogIn size={28} color={theme.colors.lime} />
             </View>
             <Text style={styles.title}>Welcome Back</Text>
             <Text style={styles.subtitle}>
@@ -216,6 +216,8 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 440,
     padding: theme.spacing.xl,
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.radii.card,
   },
   headerBox: {
     alignItems: 'center',
@@ -225,16 +227,16 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.darkGreen,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: theme.spacing.sm,
   },
   title: {
-    fontFamily: theme.typography.fonts.serifBold,
-    fontSize: theme.typography.styles.h2.fontSize,
-    lineHeight: theme.typography.styles.h2.lineHeight,
-    color: theme.colors.ink900,
+    fontFamily: theme.typography.fonts.uiSemiBold,
+    fontSize: 24,
+    lineHeight: 30,
+    color: theme.colors.textPrimary,
     textAlign: 'center',
     marginBottom: theme.spacing.xs,
   },
@@ -242,20 +244,22 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.small.fontSize,
     lineHeight: theme.typography.styles.small.lineHeight,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     paddingHorizontal: theme.spacing.xs,
   },
   demoSection: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     padding: theme.spacing.sm,
-    borderRadius: theme.radius.input,
+    borderRadius: theme.radii.input,
     marginBottom: theme.spacing.base,
+    borderWidth: 1,
+    borderColor: theme.colors.line,
   },
   demoSectionLabel: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     marginBottom: theme.spacing.xs,
@@ -270,17 +274,17 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.xs,
   },
   errorBox: {
-    backgroundColor: theme.colors.dangerBg,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.sm,
-    borderRadius: theme.radius.input,
+    borderRadius: theme.radii.input,
     marginBottom: theme.spacing.base,
     borderWidth: 1,
-    borderColor: theme.colors.red200,
+    borderColor: theme.colors.textPrimary,
   },
   errorText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.danger,
+    color: theme.colors.textPrimary,
     textAlign: 'center',
   },
   form: {
@@ -299,11 +303,11 @@ const styles = StyleSheet.create({
   footerText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.small.fontSize,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   linkText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: theme.typography.styles.small.fontSize,
-    color: theme.colors.primary600,
+    color: theme.colors.lime,
   },
 });

@@ -169,117 +169,121 @@ export interface NotificationMeta {
  * Returns icon, visual color, and semantic label for any NotificationType.
  */
 export function getNotificationMeta(type: NotificationType): NotificationMeta {
+  const defaultBg = theme.colors.surface; // #2A2D29
+  const limeColor = theme.colors.lime;    // #9FE870
+  const offWhite = theme.colors.textPrimary; // #F2F5EE
+
   switch (type) {
     case 'SUBMISSION_RECEIVED':
       return {
         iconName: 'FileText',
-        color: theme.colors.info,
-        bgColor: theme.colors.infoBg,
+        color: limeColor,
+        bgColor: defaultBg,
         categoryLabel: 'Submission',
       };
     case 'CAMPAIGN_APPROVED':
       return {
         iconName: 'CheckCircle2',
-        color: theme.colors.success,
-        bgColor: theme.colors.successBg,
+        color: limeColor,
+        bgColor: defaultBg,
         categoryLabel: 'Approved',
       };
     case 'CHANGES_REQUESTED':
       return {
         iconName: 'AlertCircle',
-        color: theme.colors.warning,
-        bgColor: theme.colors.warningBg,
+        color: offWhite,
+        bgColor: defaultBg,
         categoryLabel: 'Action Required',
       };
     case 'CAMPAIGN_REJECTED':
       return {
         iconName: 'XCircle',
-        color: theme.colors.danger,
-        bgColor: theme.colors.dangerBg,
+        color: offWhite,
+        bgColor: defaultBg,
         categoryLabel: 'Review Note',
       };
     case 'FUNDING_OPEN':
       return {
         iconName: 'Rocket',
-        color: theme.colors.primary600,
-        bgColor: theme.colors.primary50,
+        color: limeColor,
+        bgColor: defaultBg,
         categoryLabel: 'Funding Open',
       };
     case 'MILESTONE_REACHED':
       return {
         iconName: 'Trophy',
-        color: theme.colors.primary600,
-        bgColor: theme.colors.primary50,
+        color: limeColor,
+        bgColor: defaultBg,
         categoryLabel: 'Milestone',
       };
     case 'DEADLINE_APPROACHING':
       return {
         iconName: 'Clock',
-        color: theme.colors.warning,
-        bgColor: theme.colors.warningBg,
+        color: offWhite,
+        bgColor: defaultBg,
         categoryLabel: 'Closing Soon',
       };
     case 'CONTRIBUTION_SUCCEEDED':
       return {
         iconName: 'Receipt',
-        color: theme.colors.success,
-        bgColor: theme.colors.successBg,
+        color: limeColor,
+        bgColor: defaultBg,
         categoryLabel: 'Contribution',
       };
     case 'CONTRIBUTION_FAILED':
       return {
         iconName: 'AlertOctagon',
-        color: theme.colors.danger,
-        bgColor: theme.colors.dangerBg,
+        color: offWhite,
+        bgColor: defaultBg,
         categoryLabel: 'Payment Alert',
       };
     case 'PROMOTION_STARTED':
       return {
         iconName: 'Radio',
-        color: theme.colors.primary600,
-        bgColor: theme.colors.primary50,
+        color: limeColor,
+        bgColor: defaultBg,
         categoryLabel: 'Ad Distribution',
       };
     case 'DISTRIBUTION_PROGRESS':
       return {
         iconName: 'BarChart2',
-        color: theme.colors.primary600,
-        bgColor: theme.colors.primary50,
+        color: limeColor,
+        bgColor: defaultBg,
         categoryLabel: 'Ad Progress',
       };
     case 'CAMPAIGN_COMPLETED':
       return {
         iconName: 'Flag',
-        color: theme.colors.success,
-        bgColor: theme.colors.successBg,
+        color: limeColor,
+        bgColor: defaultBg,
         categoryLabel: 'Completed',
       };
     case 'REPORT_READY':
       return {
         iconName: 'FileSpreadsheet',
-        color: theme.colors.ink800,
-        bgColor: theme.colors.bgMuted,
+        color: limeColor,
+        bgColor: defaultBg,
         categoryLabel: 'Final Report',
       };
     case 'CAMPAIGN_UPDATE':
       return {
         iconName: 'MessageSquare',
-        color: theme.colors.primary600,
-        bgColor: theme.colors.primary50,
+        color: limeColor,
+        bgColor: defaultBg,
         categoryLabel: 'Creator Update',
       };
     case 'SECURITY_ALERT':
       return {
         iconName: 'ShieldAlert',
-        color: theme.colors.ink700,
-        bgColor: theme.colors.bgMuted,
+        color: offWhite,
+        bgColor: defaultBg,
         categoryLabel: 'Security',
       };
     default:
       return {
         iconName: 'Bell',
-        color: theme.colors.primary600,
-        bgColor: theme.colors.primary50,
+        color: limeColor,
+        bgColor: defaultBg,
         categoryLabel: 'Activity',
       };
   }

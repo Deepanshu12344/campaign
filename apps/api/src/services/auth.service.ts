@@ -9,9 +9,11 @@ import {
   UserRole,
   UpdateProfileInput,
   ChangePasswordInput,
+  isAllowedStorageUrl,
 } from '@campaigns/shared';
 import { generateTokenPair, verifyRefreshToken } from '../utils/jwt';
-import { ConflictError, UnauthorizedError, NotFoundError } from '../utils/errors';
+import { ConflictError, UnauthorizedError, NotFoundError, BadRequestError } from '../utils/errors';
+import { envConfig } from '../config/env';
 
 export class AuthService {
   async signUp(input: SignUpInput): Promise<AuthResponse> {
@@ -126,6 +128,12 @@ export class AuthService {
   }
 
   async updateMe(userId: string, input: UpdateProfileInput): Promise<UserProfile> {
+    if (input.avatarUrl !== undefined && input.avatarUrl !== null) {
+      if (!isAllowedStorageUrl(input.avatarUrl, envConfig.SUPABASE_URL)) {
+        throw new BadRequestError('Avatar URL must belong to the verified platform storage host');
+      }
+    }
+
     const user = await prisma.user.findUnique({
       where: { id: userId },
     });

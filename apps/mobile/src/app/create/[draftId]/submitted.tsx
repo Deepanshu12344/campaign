@@ -130,7 +130,7 @@ export default function CreateSubmittedScreen() {
 
           {/* Explicit callout about distribution preparation */}
           <View style={styles.distributionNoteBox}>
-            <Info size={18} color={theme.colors.primary700} style={{ marginTop: 2 }} />
+            <Info size={18} color={theme.colors.lime} style={{ marginTop: 2 }} />
             <Text style={styles.distributionNoteText}>
               <Text style={styles.distributionNoteBold}>Why is there a Distribution Preparation stage?</Text>{' '}
               Unlike classic donations, reaching a campaign's financial goal does not finish the work. Ad budget must be deployed into live ad networks with strict compliance verification, image sizing, and targeting setup before advertising starts.
@@ -146,7 +146,7 @@ export default function CreateSubmittedScreen() {
           variant="primary"
           size="lg"
           fullWidth
-          iconLeft={<LayoutDashboard size={18} color="#FFFFFF" />}
+          iconLeft={<LayoutDashboard size={18} color={theme.colors.onLime} />}
           onPress={handleDashboard}
         />
 
@@ -157,7 +157,7 @@ export default function CreateSubmittedScreen() {
             size="md"
             fullWidth
             disabled={true}
-            iconLeft={<Share2 size={16} color={theme.colors.ink400} />}
+            iconLeft={<Share2 size={16} color={theme.colors.textSecondary} />}
             onPress={() => {}}
           />
           <Text style={styles.shareDisabledNote}>
@@ -170,7 +170,7 @@ export default function CreateSubmittedScreen() {
           variant="ghost"
           size="md"
           fullWidth
-          iconLeft={<PlusCircle size={16} color={theme.colors.ink600} />}
+          iconLeft={<PlusCircle size={16} color={theme.colors.textSecondary} />}
           onPress={handleCreateAnother}
         />
       </Animated.View>
@@ -198,25 +198,25 @@ const styles = StyleSheet.create({
     width: 76,
     height: 76,
     borderRadius: 38,
-    backgroundColor: theme.colors.successBg,
+    backgroundColor: theme.colors.tintedPillBg,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 4,
     borderWidth: 1,
-    borderColor: '#BBF7D0',
+    borderColor: theme.colors.lime,
   },
   heroTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 26,
     lineHeight: 32,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     textAlign: 'center',
   },
   heroSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 21,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     maxWidth: 440,
   },
@@ -233,13 +233,13 @@ const styles = StyleSheet.create({
   timelineHeading: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   timelineSubheading: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   timelineComponent: {
     paddingVertical: theme.spacing.xs,
@@ -248,11 +248,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 8,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.md,
     borderRadius: theme.radius.sm,
     borderWidth: 1,
-    borderColor: theme.colors.primary100,
+    borderColor: theme.colors.line,
     marginTop: 4,
   },
   distributionNoteText: {
@@ -260,10 +260,11 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 18,
-    color: theme.colors.primary800,
+    color: theme.colors.textSecondary,
   },
   distributionNoteBold: {
     fontFamily: theme.typography.fonts.uiBold,
+    color: theme.colors.textPrimary,
   },
   actionsContainer: {
     width: '100%',
@@ -275,7 +276,7 @@ const styles = StyleSheet.create({
   shareDisabledNote: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     paddingHorizontal: theme.spacing.sm,
   },

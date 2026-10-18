@@ -1,0 +1,46 @@
+import math
+from PIL import Image, ImageDraw
+
+def create_logo_svg():
+    svg = '''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Dark green #163300 fill for light/lime backgrounds -->
+    <style>
+      .mark { fill: #163300; }
+      .stroke-mark { stroke: #163300; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+  
+  <!-- Geometric Campaigns Icon: Amplification Cone + Broadcast Beams -->
+  <g id="campaigns-mark">
+    <!-- Base Cone / Megaphone Body -->
+    <path class="mark" d="M 120 220 
+             C 120 208, 128 200, 140 200 
+             L 170 200 
+             L 280 148 
+             C 292 142, 306 151, 306 165 
+             L 306 347 
+             C 306 361, 292 370, 280 364 
+             L 170 312 
+             L 140 312 
+             C 128 312, 120 304, 120 292 
+             Z" />
+             
+    <!-- Central Sound Signal Circle -->
+    <circle class="mark" cx="213" cy="256" r="28" fill="#9FE870" />
+    
+    <!-- Amplification Wave 1 (Inner Arc) -->
+    <path class="stroke-mark" stroke-width="36" 
+          d="M 352 195 A 90 90 0 0 1 352 317" />
+          
+    <!-- Amplification Wave 2 (Outer Arc) -->
+    <path class="stroke-mark" stroke-width="36" 
+          d="M 405 152 A 155 155 0 0 1 405 360" />
+  </g>
+</svg>'''
+    return svg
+
+with open("apps/mobile/assets/logo.svg", "w") as f:
+    f.write(create_logo_svg())
+
+print("Saved apps/mobile/assets/logo.svg")

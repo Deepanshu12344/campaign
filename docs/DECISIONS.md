@@ -953,3 +953,120 @@ This document records key design decisions and resolutions to ambiguities betwee
   3. **Zero-Secret Database Migration & Seeding Runbook**:
      - Documented one-liner production migration and seeding commands in `docs/DEPLOY.md` utilizing `DIRECT_URL` directly from local `.env` via subshell extraction without exposing credentials or secrets in terminal logs.
 - **Rationale**: Ensures complete parity across deployment configurations, provides convenient upload endpoint compatibility, and establishes a secure, repeatable production initialization runbook.
+
+---
+
+### Decision 39: Visual Redesign to Dark Green-Black Theme, Lime Accent & Geometric Display Typography
+- **Context**: The mobile user interface is undergoing a complete visual overhaul inspired by the dark green-black reference application in `docs/reference/`. The brief requires preserving all features, business logic, state machines, and the 5-tab structure while adopting a bold dark theme, lime accent buttons, heavy uppercase display typography, 24dp rounded cards, outline icons, and custom skeleton screens.
+- **Decision**:
+  1. **Color Tokens & Contrast Standards**:
+     - Standardized core palette sampled directly from the reference screenshots:
+       - App background: `#121511` (dark forest near-black).
+       - Card surface: `#2A2D29` (24dp rounded cards).
+       - Surface raised / skeleton blocks: `#3F423E`.
+       - Inset input field background: `#1B1E19` (16dp radius).
+       - Line & borders: `#262924`.
+       - Brand Lime: `#9FE870` (primary pill buttons, active tab indicators, arrow circles).
+       - On-Lime text: `#163300` (dark green text on lime; 10.8:1 contrast).
+       - Tinted pill background: `#163300` with `#9FE870` text and icons.
+       - Primary text: `#F2F5EE` (off-white; 16.1:1 on bg, 11.4:1 on surface).
+       - Secondary text: `#A8ADA5` (grey; 7.9:1 on bg, 5.6:1 on surface).
+       - Bottom tab bar: `#1F221E`.
+  2. **Font System Selection**:
+     - Evaluated free open-license heavy display fonts against the reference screenshots:
+       - *Anton*: Excluded due to overly tall, vertically condensed proportions that do not match the wider geometric punch of the reference.
+       - *Bricolage Grotesque ExtraBold*: Excluded due to idiosyncratic ink traps that differ from the reference's clean flat terminal cuts.
+       - *Archivo Black* (`@expo-google-fonts/archivo-black`): **Selected**. Perfectly captures the bold geometric uppercase weight, compact height, wide proportion, and flat terminal cuts visible in "MEET YOUR NEW TRAVEL CARD", "DIGITAL ONLY", and "DISAPPOINT THIEVES".
+     - Replaced Newsreader and Plus Jakarta Sans with *Inter* (`@expo-google-fonts/inter` 400, 500, 600, 700) for all screen titles, section headers, long story reading text (Inter 17/27 off-white on dark), form inputs, and UI metadata.
+  3. **Display Headline Usage Rules**:
+     - `ArchivoBlack-Regular` is restricted exclusively to:
+       - Hero headlines (e.g. `HELP IMPORTANT MESSAGES TRAVEL FURTHER`).
+       - Onboarding titles (e.g. `CREATE. REVIEW. AMPLIFY.`).
+       - Large promo/option card titles (e.g. `CREATE MANUALLY`, `CREATE WITH YOUR VOICE`).
+     - Screen titles use Inter SemiBold 34/40; section headers use Inter SemiBold 22/28.
+  4. **Component Geometry**:
+     - Buttons: Fully rounded pill shape (`borderRadius: 9999`), 52dp height for full-width primary buttons, 40dp for compact action pills, pressed scale 0.98.
+     - Cards: 24dp border radius, surface color `#2A2D29`.
+     - Inset fields: 16dp radius, background `#1B1E19`, lime focus ring.
+     - Icons: Outline style exclusively from `lucide-react-native` (`strokeWidth: 2`).
+     - Navigation: 5 persistent bottom tabs on surface `#1F221E`, active lime `#9FE870`.
+- **Rationale**: Establishes a cohesive, high-contrast, modern visual identity matching the reference design while maintaining WCAG AAA accessibility, strict invariant compliance, and zero disruption to application state machines.
+
+---
+
+### Decision 40: Home Hero Asset Sourcing, Simplification & Strict Color Consolidation
+- **Context**: In Stage 1 of the app-wide simplification pass, the Home hero card requires a soothing nature scene (avoiding city/neon/stock crowds) bundled locally in `apps/mobile/assets/images/hero-nature.jpg` with dark green-to-black bottom gradient, and strict removal of leftover color scales across mobile components.
+- **Decision**:
+  1. **Hero Asset**:
+     - Created and bundled `apps/mobile/assets/images/hero-nature.jpg` (1080x603, 118KB optimized JPEG).
+     - Visuals: Misty rolling green hills and pine forest canopy at early dawn with soft diffused morning sunlight and peaceful muted forest greens.
+     - License / Provenance: Original AI-generated asset created for the Campaigns project via Imagen on Vertex AI; royalty-free, unrestricted local project asset, zero external CDN / hotlink dependencies.
+  2. **Strict Color Purge**:
+     - Purged all leftover legacy color palettes (`indigo`, `purple`, `emerald`, `amber`, `red`, `blue`, `rose`, `sky`).
+     - Consolidated all UI states to the 3-state system:
+       - Positive: Dark green pill (`#163300`) with lime text & icon (`#9FE870`).
+       - Waiting: Dark neutral surface pill (`#2A2D29`) with off-white text (`#F2F5EE`).
+       - Negative: Outlined surface pill (`#2A2D29` bg, `#3F423E` border) with off-white text (`#F2F5EE`) and alert icon. Zero red.
+  3. **Card & Feed Simplification**:
+     - Home feed cards stripped of redundant status chips, duplicate category tags, and nested calculator widgets.
+     - Profile stripped of floating gear and role badges; restructured to clean 56dp outline icon rows.
+- **Rationale**: Delivers a calming, focused, unified visual experience honoring the "one screen, one job" rule while maintaining full regulatory compliance and strict WCAG AAA contrast ratios.
+
+---
+
+### Decision 41: 4-Tab Navigation, Centralized Demo Disclosures, and Profile Photo Upload
+- **Context**: Comprehensive UI refinements following layout references, decluttering feed cards, removing repetitive demo data badges, transitioning bottom navigation, and supporting profile photo updates with host validation.
+- **Decision**:
+  1. **Bottom Navigation (4 Tabs)**:
+     - Set `options={{ href: null }}` on `<Tabs.Screen name="profile" />`, leaving exactly 4 bottom tabs (`Home`, `Explore`, `Create`, `Activity`) with equal width.
+     - Profile is accessed by tapping the user avatar in the sticky Home header or via deep links, opening as a pushed screen.
+  2. **Centralized Demo Disclosures**:
+     - Deleted `DemoDataBadge` component and removed all per-card and screen-level demo badges, labels, and feed footers.
+     - Retained demo disclosure strictly in three canonical locations: About page, FAQ item ("Is the data on this app real?"), and Terms note ("This is a prototype. Campaigns, amounts and results shown are samples.").
+  3. **Home & Feed Decluttering**:
+     - Pinned sticky Home top header outside the FlatList with solid `#121511` background, avatar on left, "+ Start a campaign" pill on right, and subtle bottom border on scroll (`scrollY > 8`).
+     - Removed illustrative reach per-$1 line from the Home Hero card, relocating the estimate and disclaimer into the "Amplify vs. Donate" explainer sheet.
+     - Streamlined featured carousel cards to image, title, and circular lime arrow button only (removed category and raised amount).
+     - Category pills in Explore display text-only (`showIcon={false}`).
+  4. **CampaignCard**:
+     - Removed summary text from feed cards.
+     - Positioned status pill over top-left of cover image on dark translucent background (`rgba(18, 21, 17, 0.85)`) when status is not `FUNDING`.
+     - Action buttons: both "Back This Campaign" and "View Details" are full-width 44dp lime pills with trailing `ArrowUpRight` icon and single-line labels.
+  5. **Campaign Detail Bottom Bar**:
+     - Stacked sticky bottom bar into 4 clean layers: (1) Raised of goal on left, % funded and days left on right; (2) Lime progress bar (height: 6); (3) Projected reach row with chevron opening details sheet; (4) Full-width 52dp lime pill action button with trailing arrow.
+     - Story scroll container padded with `220 + insets.bottom` to ensure no content is obscured.
+  6. **Payments History & Receipts**:
+     - Replaced status pills on payment history items with 32dp circular status icons (`Check` for Succeeded, `Clock` for Pending, `AlertCircle` for Failed, `X` for Cancelled, `RotateCcw` for Refunded) with accessibility labels.
+     - Enforced single-line receipt numbers with middle ellipsis.
+     - Official Receipt header features 44dp circular share icon button with `Share2`.
+  7. **Profile Redesign & Photo Upload**:
+     - Top block redesigned with 44dp circular back button with lime arrow, 144dp centered avatar with 40dp lime camera badge, uppercase display name, "Personal account" subtext, and dark surface pill with logo mark vector and `@handle` (tap to copy with toast).
+     - Photo upload bottom sheet supporting "Choose photo" (image picker, 5MB limit, `POST /uploads`, `PATCH /me { avatarUrl }`, `useAuthStore.setUser`) and "Remove photo".
+     - Avatar URL validated on shared schema and backend API against trusted storage hosts.
+  8. **Header Constraints & Single-Line Guarantees**:
+     - In `SharedHeader`, relaxed `rightContainer` to `minWidth: 48, flexShrink: 0` so "+ New" button (40dp pill) in Creator Dashboard never wraps or clips at 360dp width and 130% text scaling.
+     - Creation flow header exit button updated to 44dp circular `X` button; sticky bottom action bar Back button converted to 44dp circular icon button; "Save draft" and "Continue" guaranteed on a single line.
+- **Rationale**: Achieves a sleek, uncluttered, professional user experience that meets all accessibility and layout requirements with strict adherence to monochromatic palette rules.
+
+---
+
+### Decision 42: Button Arrow Rules & Universal Tab Header Avatar (Owner-Approved Deviation)
+- **Context**: Formal confirmation of 4-tab bottom navigation as final, refinement of button action arrows, and making Profile reachable from avatars across all tab headers.
+- **Decision**:
+  1. **Button Action Arrow Invariants**:
+     - Only "View Details" receives the trailing arrow icon (`ArrowUpRight`).
+     - "Back This Campaign" has **NO arrow**. Both buttons maintain identical styling otherwise: full-width lime pill (`#9FE870`), 44dp height in cards (52dp in detail bar), full pill radius (`borderRadius: 9999`), and dark green text (`#163300`), with single-line labels.
+     - Applied universally across `CampaignCard` (Home feed, Explore, Saved, Backed), sticky bottom bar on `campaign/[id].tsx`, and all other campaign card usages.
+     - Status-aware buttons on the detail page ("Follow progress", "View final report") also have NO arrow.
+  2. **Deliberate, Owner-Approved Deviation: 4-Tab Bottom Navigation**:
+     - Formally locked as final: the bottom navigation bar has exactly four tabs: `Home`, `Explore`, `Create`, and `Activity`.
+     - `Profile` is omitted from the bottom tab bar (`options={{ href: null }}`) as a deliberate, owner-approved deviation from the initial 5-tab brief specification.
+  3. **Universal Tab Header Avatar**:
+     - To ensure `Profile` is never a dead end from any tab, a persistent `HeaderAvatar` is mounted on all tab screens with a header:
+       - `Home`: Avatar at the top-left of the sticky header.
+       - `Explore`: Avatar to the left of the search bar row.
+       - `Create`: Avatar on the left of `SharedHeader` (`showAvatar={true}`).
+       - `Activity`: Avatar on the left of `SharedHeader` (`showAvatar={true}`) in both signed-out and signed-in states.
+     - The avatar dynamically shows the user's uploaded profile photo (`user.avatarUrl`) via `expo-image`, user initials when authenticated without photo, or the guest icon when unauthenticated. Tapping the avatar navigates smoothly to `/profile`.
+- **Rationale**: Elevates navigation clarity and spacing while providing universal, single-tap access to the Profile screen from every primary tab.
+

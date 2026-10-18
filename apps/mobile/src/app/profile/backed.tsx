@@ -92,7 +92,7 @@ export default function BackedCampaignsScreen() {
           <RefreshControl
             refreshing={isRefetching}
             onRefresh={refetch}
-            tintColor={theme.colors.primary600}
+            tintColor={theme.colors.lime}
           />
         }
         showsVerticalScrollIndicator={false}
@@ -122,7 +122,7 @@ export default function BackedCampaignsScreen() {
                     />
                   ) : (
                     <View style={[styles.coverThumbnail, styles.coverPlaceholder]}>
-                      <TrendingUp size={20} color={theme.colors.ink400} />
+                      <TrendingUp size={20} color={theme.colors.textSecondary} />
                     </View>
                   )}
 
@@ -160,7 +160,7 @@ export default function BackedCampaignsScreen() {
                     )}
                   </View>
 
-                  <ChevronRight size={18} color={theme.colors.ink400} />
+                  <ChevronRight size={18} color={theme.colors.textSecondary} />
                 </Pressable>
 
                 <View style={styles.divider} />
@@ -202,7 +202,7 @@ export default function BackedCampaignsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.bg,
   },
   scrollView: {
     flex: 1,
@@ -230,20 +230,20 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: theme.radius.md,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   coverPlaceholder: {
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   campaignMetaCol: {
     flex: 1,
   },
   campaignTitle: {
     ...theme.typography.styles.h3,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     flex: 1,
   },
   titleRow: {
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
   },
   fundedText: {
     ...theme.typography.styles.small,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
     fontFamily: theme.typography.fonts.uiSemiBold,
     marginTop: 2,
   },
@@ -264,23 +264,23 @@ const styles = StyleSheet.create({
   },
   progressBarBg: {
     height: 5,
-    backgroundColor: theme.colors.line,
+    backgroundColor: theme.colors.border,
     borderRadius: 3,
     overflow: 'hidden',
     marginBottom: 3,
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
   },
   progressLabel: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   divider: {
     height: 1,
-    backgroundColor: theme.colors.line,
+    backgroundColor: theme.colors.border,
     marginVertical: theme.spacing.md,
   },
   cardActionsRow: {

@@ -32,6 +32,7 @@ export interface CategoryChipProps extends Omit<PressableProps, 'style'> {
   label?: string;
   selected?: boolean;
   count?: number;
+  showIcon?: boolean;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -40,6 +41,7 @@ export function CategoryChip({
   label,
   selected = false,
   count,
+  showIcon = true,
   onPress,
   style,
   ...rest
@@ -49,7 +51,7 @@ export function CategoryChip({
     onPress?.(e);
   };
 
-  const icon = getCategoryIcon(category, selected);
+  const icon = showIcon ? getCategoryIcon(category, selected) : null;
 
   return (
     <Pressable
@@ -65,7 +67,7 @@ export function CategoryChip({
       hitSlop={{ top: 8, bottom: 8, left: 4, right: 4 }}
       {...rest}
     >
-      <View style={styles.iconContainer}>{icon}</View>
+      {showIcon && <View style={styles.iconContainer}>{icon}</View>}
       <Text
         style={[
           styles.label,
@@ -76,7 +78,7 @@ export function CategoryChip({
       </Text>
       {selected && (
         <View style={styles.selectedCheckWrap}>
-          <Check size={12} color={theme.colors.primary600} strokeWidth={2.5} />
+          <Check size={12} color={theme.colors.onLime} strokeWidth={2.5} />
         </View>
       )}
       {count !== undefined && (
@@ -101,32 +103,32 @@ export function CategoryChip({
 }
 
 export function getCategoryIcon(category: Category | 'All', selected = false, size = 16) {
-  const color = selected ? theme.colors.primary600 : theme.colors.ink500;
+  const color = selected ? theme.colors.onLime : theme.colors.textSecondary;
 
   switch (category) {
     case 'All':
-      return <Layers size={size} color={color} />;
+      return <Layers size={size} color={color} strokeWidth={2} />;
     case 'Environment':
-      return <Leaf size={size} color={color} />;
+      return <Leaf size={size} color={color} strokeWidth={2} />;
     case 'Health':
-      return <HeartPulse size={size} color={color} />;
+      return <HeartPulse size={size} color={color} strokeWidth={2} />;
     case 'Science':
-      return <FlaskConical size={size} color={color} />;
+      return <FlaskConical size={size} color={color} strokeWidth={2} />;
     case 'Education':
-      return <GraduationCap size={size} color={color} />;
+      return <GraduationCap size={size} color={color} strokeWidth={2} />;
     case 'Public Policy':
-      return <Landmark size={size} color={color} />;
+      return <Landmark size={size} color={color} strokeWidth={2} />;
     case 'Economic Policy':
-      return <TrendingUp size={size} color={color} />;
+      return <TrendingUp size={size} color={color} strokeWidth={2} />;
     case 'Community':
-      return <Users size={size} color={color} />;
+      return <Users size={size} color={color} strokeWidth={2} />;
     case 'Arts & Culture':
-      return <Palette size={size} color={color} />;
+      return <Palette size={size} color={color} strokeWidth={2} />;
     case 'Business':
-      return <Briefcase size={size} color={color} />;
+      return <Briefcase size={size} color={color} strokeWidth={2} />;
     case 'Other':
     default:
-      return <Sparkles size={size} color={color} />;
+      return <Sparkles size={size} color={color} strokeWidth={2} />;
   }
 }
 
@@ -134,10 +136,10 @@ const styles = StyleSheet.create({
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: theme.spacing.sm,
-    paddingHorizontal: theme.spacing.md,
-    borderRadius: theme.radius.pill,
-    minHeight: 38,
+    paddingVertical: 7,
+    paddingHorizontal: 14,
+    borderRadius: theme.radii.pill,
+    minHeight: 36,
     borderWidth: 1,
   },
   unselectedChip: {
@@ -145,45 +147,45 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.line,
   },
   selectedChip: {
-    backgroundColor: theme.colors.primary50,
-    borderColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
+    borderColor: theme.colors.lime,
   },
   iconContainer: {
     marginRight: 6,
   },
   label: {
     fontFamily: theme.typography.fonts.uiMedium,
-    fontSize: theme.typography.styles.small.fontSize,
-    lineHeight: theme.typography.styles.small.lineHeight,
+    fontSize: 13,
+    lineHeight: 18,
   },
   unselectedLabel: {
-    color: theme.colors.ink700,
+    color: theme.colors.textPrimary,
   },
   selectedLabel: {
-    color: theme.colors.primary600,
-    fontFamily: theme.typography.fonts.uiSemiBold,
+    color: theme.colors.onLime,
+    fontFamily: theme.typography.fonts.uiBold,
   },
   countBadge: {
     marginLeft: 6,
     paddingHorizontal: 6,
     paddingVertical: 1,
-    borderRadius: theme.radius.pill,
+    borderRadius: theme.radii.pill,
   },
   unselectedCountBadge: {
-    backgroundColor: theme.colors.line,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   selectedCountBadge: {
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.onLime,
   },
   countText: {
     fontSize: 11,
     fontFamily: theme.typography.fonts.uiSemiBold,
   },
   unselectedCountText: {
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   selectedCountText: {
-    color: '#FFFFFF',
+    color: theme.colors.lime,
   },
   selectedCheckWrap: {
     marginLeft: 4,

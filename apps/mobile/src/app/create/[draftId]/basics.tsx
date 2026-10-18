@@ -505,9 +505,9 @@ export default function CreateBasicsScreen() {
               size="sm"
               iconLeft={
                 aiBasicsMutation.isPending ? (
-                  <ActivityIndicator size="small" color={theme.colors.primary600} />
+                  <ActivityIndicator size="small" color={theme.colors.lime} />
                 ) : (
-                  <Sparkles size={14} color={theme.colors.primary600} />
+                  <Sparkles size={14} color={theme.colors.lime} />
                 )
               }
               onPress={handleSuggestWithAi}
@@ -526,15 +526,15 @@ export default function CreateBasicsScreen() {
         >
           {isComplete ? (
             <>
-              <CheckCircle2 size={16} color={theme.colors.success} />
-              <Text style={[styles.statusBannerText, { color: theme.colors.success }]}>
+              <CheckCircle2 size={16} color={theme.colors.lime} />
+              <Text style={[styles.statusBannerText, { color: theme.colors.lime }]}>
                 Step 1 complete — all required basics filled out.
               </Text>
             </>
           ) : (
             <>
-              <AlertCircle size={16} color={theme.colors.warning} />
-              <Text style={[styles.statusBannerText, { color: theme.colors.warning }]}>
+              <AlertCircle size={16} color={theme.colors.textSecondary} />
+              <Text style={[styles.statusBannerText, { color: theme.colors.textSecondary }]}>
                 {overallErrors[0]} ({overallErrors.length} required field
                 {overallErrors.length > 1 ? 's' : ''} remaining)
               </Text>
@@ -554,13 +554,13 @@ export default function CreateBasicsScreen() {
             style={styles.helpHeaderRow}
           >
             <View style={styles.helpTitleGroup}>
-              <HelpCircle size={18} color={theme.colors.primary600} />
+              <HelpCircle size={18} color={theme.colors.lime} />
               <Text style={styles.helpCardTitle}>Need help getting started?</Text>
             </View>
             {helpExpanded ? (
-              <ChevronUp size={18} color={theme.colors.ink600} />
+              <ChevronUp size={18} color={theme.colors.textSecondary} />
             ) : (
-              <ChevronDown size={18} color={theme.colors.ink600} />
+              <ChevronDown size={18} color={theme.colors.textSecondary} />
             )}
           </Pressable>
 
@@ -571,7 +571,7 @@ export default function CreateBasicsScreen() {
               </Text>
 
               <View style={styles.promptItem}>
-                <Lightbulb size={16} color={theme.colors.primary600} style={styles.promptIcon} />
+                <Lightbulb size={16} color={theme.colors.lime} style={styles.promptIcon} />
                 <View style={styles.promptTextCol}>
                   <Text style={styles.promptLabel}>1. What the campaign is about</Text>
                   <Text style={styles.promptDesc}>
@@ -581,7 +581,7 @@ export default function CreateBasicsScreen() {
               </View>
 
               <View style={styles.promptItem}>
-                <Target size={16} color={theme.colors.primary600} style={styles.promptIcon} />
+                <Target size={16} color={theme.colors.lime} style={styles.promptIcon} />
                 <View style={styles.promptTextCol}>
                   <Text style={styles.promptLabel}>2. Who it should reach</Text>
                   <Text style={styles.promptDesc}>
@@ -591,7 +591,7 @@ export default function CreateBasicsScreen() {
               </View>
 
               <View style={styles.promptItem}>
-                <Flame size={16} color={theme.colors.primary600} style={styles.promptIcon} />
+                <Flame size={16} color={theme.colors.lime} style={styles.promptIcon} />
                 <View style={styles.promptTextCol}>
                   <Text style={styles.promptLabel}>3. Why it matters</Text>
                   <Text style={styles.promptDesc}>
@@ -601,7 +601,7 @@ export default function CreateBasicsScreen() {
               </View>
 
               <View style={styles.promptItem}>
-                <BarChart3 size={16} color={theme.colors.primary600} style={styles.promptIcon} />
+                <BarChart3 size={16} color={theme.colors.lime} style={styles.promptIcon} />
                 <View style={styles.promptTextCol}>
                   <Text style={styles.promptLabel}>4. What evidence supports it</Text>
                   <Text style={styles.promptDesc}>
@@ -631,7 +631,7 @@ export default function CreateBasicsScreen() {
               </Text>
               {aiSuggestedFields.title && (
                 <View style={styles.aiTagBadge}>
-                  <Sparkles size={10} color={theme.colors.primary600} />
+                  <Sparkles size={10} color={theme.colors.lime} />
                   <Text style={styles.aiTagText}>AI-suggested</Text>
                 </View>
               )}
@@ -663,7 +663,7 @@ export default function CreateBasicsScreen() {
               </Text>
               {aiSuggestedFields.category && (
                 <View style={styles.aiTagBadge}>
-                  <Sparkles size={10} color={theme.colors.primary600} />
+                  <Sparkles size={10} color={theme.colors.lime} />
                   <Text style={styles.aiTagText}>AI-suggested</Text>
                 </View>
               )}
@@ -683,7 +683,7 @@ export default function CreateBasicsScreen() {
             >
               <View style={styles.pickerTriggerLeft}>
                 <View style={styles.pickerIconCircle}>
-                  <CategoryIconComponent size={18} color={theme.colors.primary600} />
+                  <CategoryIconComponent size={18} color={theme.colors.lime} />
                 </View>
                 <View>
                   <Text style={styles.pickerTriggerText}>
@@ -697,7 +697,7 @@ export default function CreateBasicsScreen() {
                 </View>
               </View>
 
-              <ChevronDown size={18} color={theme.colors.ink500} />
+              <ChevronDown size={18} color={theme.colors.textSecondary} />
             </Pressable>
 
             {inlineErrors.category ? (
@@ -721,7 +721,7 @@ export default function CreateBasicsScreen() {
               </Text>
               {aiSuggestedFields.creatorName && (
                 <View style={styles.aiTagBadge}>
-                  <Sparkles size={10} color={theme.colors.primary600} />
+                  <Sparkles size={10} color={theme.colors.lime} />
                   <Text style={styles.aiTagText}>AI-suggested</Text>
                 </View>
               )}
@@ -776,10 +776,10 @@ export default function CreateBasicsScreen() {
                       >
                         <Icon
                           size={16}
-                          color={isSelected ? theme.colors.primary600 : theme.colors.ink600}
+                          color={isSelected ? theme.colors.onLime : theme.colors.textSecondary}
                         />
                       </View>
-                      {isSelected && <Check size={16} color={theme.colors.primary600} />}
+                      {isSelected && <Check size={16} color={theme.colors.lime} />}
                     </View>
                     <Text
                       style={[
@@ -812,7 +812,7 @@ export default function CreateBasicsScreen() {
               </Text>
               {aiSuggestedFields.summary && (
                 <View style={styles.aiTagBadge}>
-                  <Sparkles size={10} color={theme.colors.primary600} />
+                  <Sparkles size={10} color={theme.colors.lime} />
                   <Text style={styles.aiTagText}>AI-suggested</Text>
                 </View>
               )}
@@ -850,7 +850,7 @@ export default function CreateBasicsScreen() {
 
                 {isUploadingCover && (
                   <View style={styles.uploadingOverlay}>
-                    <ActivityIndicator size="small" color="#FFFFFF" />
+                    <ActivityIndicator size="small" color={theme.colors.lime} />
                     <Text style={styles.uploadingText}>Uploading cover image...</Text>
                   </View>
                 )}
@@ -860,7 +860,7 @@ export default function CreateBasicsScreen() {
                     title="Replace"
                     variant="secondary"
                     size="sm"
-                    iconLeft={<Camera size={14} color={theme.colors.ink800} />}
+                    iconLeft={<Camera size={14} color={theme.colors.textPrimary} />}
                     onPress={handlePickCoverImage}
                     disabled={isUploadingCover}
                   />
@@ -868,7 +868,7 @@ export default function CreateBasicsScreen() {
                     title="Remove"
                     variant="ghost"
                     size="sm"
-                    iconLeft={<Trash2 size={14} color={theme.colors.danger} />}
+                    iconLeft={<Trash2 size={14} color={theme.colors.textPrimary} />}
                     onPress={handleRemoveCover}
                     disabled={isUploadingCover}
                   />
@@ -883,13 +883,13 @@ export default function CreateBasicsScreen() {
               >
                 {isUploadingCover ? (
                   <View style={styles.emptyCoverInner}>
-                    <ActivityIndicator size="small" color={theme.colors.primary600} />
+                    <ActivityIndicator size="small" color={theme.colors.lime} />
                     <Text style={styles.emptyCoverTitle}>Uploading cover image...</Text>
                   </View>
                 ) : (
                   <View style={styles.emptyCoverInner}>
                     <View style={styles.cameraIconCircle}>
-                      <Camera size={22} color={theme.colors.primary600} />
+                      <Camera size={22} color={theme.colors.lime} />
                     </View>
                     <Text style={styles.emptyCoverTitle}>Choose a Cover Image</Text>
                     <Text style={styles.emptyCoverSubtitle}>
@@ -902,13 +902,13 @@ export default function CreateBasicsScreen() {
 
             {coverUploadError && (
               <View style={styles.uploadErrorBox}>
-                <AlertCircle size={14} color={theme.colors.danger} />
+                <AlertCircle size={14} color={theme.colors.textPrimary} />
                 <Text style={styles.uploadErrorText}>{coverUploadError}</Text>
                 <Button
                   title="Retry"
                   variant="ghost"
                   size="sm"
-                  iconLeft={<RefreshCw size={12} color={theme.colors.danger} />}
+                  iconLeft={<RefreshCw size={12} color={theme.colors.textPrimary} />}
                   onPress={handlePickCoverImage}
                 />
               </View>
@@ -966,7 +966,7 @@ export default function CreateBasicsScreen() {
                     >
                       <Icon
                         size={18}
-                        color={isSelected ? theme.colors.primary600 : theme.colors.ink600}
+                        color={isSelected ? theme.colors.onLime : theme.colors.textSecondary}
                       />
                     </View>
                     <View style={styles.categoryOptionMeta}>
@@ -982,7 +982,7 @@ export default function CreateBasicsScreen() {
                     </View>
                   </View>
 
-                  {isSelected && <Check size={18} color={theme.colors.primary600} />}
+                  {isSelected && <Check size={18} color={theme.colors.lime} />}
                 </Pressable>
               );
             })}
@@ -1028,7 +1028,7 @@ export default function CreateBasicsScreen() {
                   }
                   hitSlop={8}
                 >
-                  <Edit3 size={16} color={theme.colors.primary600} />
+                  <Edit3 size={16} color={theme.colors.lime} />
                 </Pressable>
               </View>
 
@@ -1107,7 +1107,7 @@ export default function CreateBasicsScreen() {
                   }
                   hitSlop={8}
                 >
-                  <Edit3 size={16} color={theme.colors.primary600} />
+                  <Edit3 size={16} color={theme.colors.lime} />
                 </Pressable>
               </View>
 
@@ -1163,7 +1163,7 @@ export default function CreateBasicsScreen() {
                   }
                   hitSlop={8}
                 >
-                  <Edit3 size={16} color={theme.colors.primary600} />
+                  <Edit3 size={16} color={theme.colors.lime} />
                 </Pressable>
               </View>
 
@@ -1257,18 +1257,18 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 22,
     lineHeight: 28,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   stepSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 20,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: 4,
   },
   aiButton: {
-    borderColor: theme.colors.primary300,
-    backgroundColor: theme.colors.primary50,
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   statusBanner: {
     flexDirection: 'row',
@@ -1280,12 +1280,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   statusBannerSuccess: {
-    backgroundColor: theme.colors.successBg,
-    borderColor: theme.colors.emerald100,
+    backgroundColor: theme.colors.tintedPillBg,
+    borderColor: theme.colors.line,
   },
   statusBannerPending: {
-    backgroundColor: theme.colors.warningBg,
-    borderColor: theme.colors.amber200,
+    backgroundColor: theme.colors.surfaceRaised,
+    borderColor: theme.colors.line,
   },
   statusBannerText: {
     fontFamily: theme.typography.fonts.uiMedium,
@@ -1294,8 +1294,8 @@ const styles = StyleSheet.create({
   },
   helpCard: {
     padding: theme.spacing.base,
-    backgroundColor: theme.colors.bg,
-    borderColor: theme.colors.line,
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.border,
   },
   helpHeaderRow: {
     flexDirection: 'row',
@@ -1310,7 +1310,7 @@ const styles = StyleSheet.create({
   helpCardTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 15,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   helpBody: {
     marginTop: theme.spacing.md,
@@ -1320,18 +1320,18 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginBottom: 4,
   },
   promptItem: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 8,
-    backgroundColor: theme.colors.white,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.sm,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   promptIcon: {
     marginTop: 2,
@@ -1342,19 +1342,19 @@ const styles = StyleSheet.create({
   promptLabel: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   promptDesc: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 16,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   helpFootnote: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     fontStyle: 'italic',
     marginTop: 6,
   },
@@ -1373,31 +1373,31 @@ const styles = StyleSheet.create({
   fieldLabel: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   requiredStar: {
-    color: theme.colors.danger,
+    color: theme.colors.textSecondary,
   },
   optionalNotice: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   aiTagBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.tintedPillBg,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: theme.colors.primary200,
+    borderColor: theme.colors.line,
   },
   aiTagText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: theme.colors.primary700,
+    color: theme.colors.tintedPillText,
   },
   categoryPickerTrigger: {
     flexDirection: 'row',
@@ -1407,12 +1407,12 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: theme.radius.sm,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     backgroundColor: theme.colors.surface,
   },
   pickerTriggerError: {
-    borderColor: theme.colors.danger,
-    backgroundColor: theme.colors.red50,
+    borderColor: theme.colors.textPrimary,
+    backgroundColor: theme.colors.surface,
   },
   pickerTriggerLeft: {
     flexDirection: 'row',
@@ -1424,31 +1424,31 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
   },
   pickerTriggerText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 14,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   pickerTriggerDesc: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   fieldHelperText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 4,
   },
   inlineErrorText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.danger,
+    color: theme.colors.textPrimary,
     marginTop: 4,
   },
   creatorTypeGrid: {
@@ -1459,12 +1459,12 @@ const styles = StyleSheet.create({
     padding: theme.spacing.md,
     borderRadius: theme.radius.sm,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     backgroundColor: theme.colors.surface,
   },
   creatorTypeCardSelected: {
-    borderColor: theme.colors.primary600,
-    backgroundColor: theme.colors.primary50,
+    borderColor: theme.colors.lime,
+    backgroundColor: theme.colors.tintedPillBg,
   },
   creatorTypeCardHeader: {
     flexDirection: 'row',
@@ -1476,25 +1476,25 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
   },
   creatorTypeIconBoxSelected: {
-    backgroundColor: theme.colors.white,
+    backgroundColor: theme.colors.lime,
   },
   creatorTypeTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   creatorTypeTitleSelected: {
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   creatorTypeDescription: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   coverSection: {
@@ -1506,7 +1506,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.md,
     overflow: 'hidden',
     position: 'relative',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surface,
   },
   coverImage: {
     width: '100%',
@@ -1518,7 +1518,7 @@ const styles = StyleSheet.create({
     right: 8,
     flexDirection: 'row',
     gap: 8,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: theme.colors.surface,
     padding: 4,
     borderRadius: theme.radius.sm,
   },
@@ -1528,7 +1528,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: 'rgba(18, 21, 17, 0.85)',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
@@ -1536,7 +1536,7 @@ const styles = StyleSheet.create({
   uploadingText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.white,
+    color: theme.colors.textPrimary,
   },
   emptyCoverBox: {
     width: '100%',
@@ -1544,15 +1544,14 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.md,
     borderWidth: 1.5,
     borderStyle: 'dashed',
-    borderColor: theme.colors.line,
-    backgroundColor: theme.colors.bg,
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
     padding: theme.spacing.base,
   },
   emptyCoverBoxError: {
-    borderColor: theme.colors.danger,
-    backgroundColor: theme.colors.red50,
+    borderColor: theme.colors.textPrimary,
   },
   emptyCoverInner: {
     alignItems: 'center',
@@ -1562,7 +1561,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 8,
@@ -1570,12 +1569,12 @@ const styles = StyleSheet.create({
   emptyCoverTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   emptyCoverSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
     textAlign: 'center',
   },
@@ -1585,13 +1584,15 @@ const styles = StyleSheet.create({
     gap: 6,
     marginTop: 8,
     padding: 8,
-    backgroundColor: theme.colors.red50,
+    backgroundColor: theme.colors.surfaceRaised,
+    borderColor: theme.colors.border,
+    borderWidth: 1,
     borderRadius: 6,
   },
   uploadErrorText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.danger,
+    color: theme.colors.textPrimary,
     flex: 1,
   },
   bottomFormActions: {
@@ -1621,12 +1622,12 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: theme.radius.sm,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     backgroundColor: theme.colors.surface,
   },
   categoryOptionSelected: {
-    borderColor: theme.colors.primary600,
-    backgroundColor: theme.colors.primary50,
+    borderColor: theme.colors.lime,
+    backgroundColor: theme.colors.tintedPillBg,
   },
   categoryOptionLeft: {
     flexDirection: 'row',
@@ -1638,12 +1639,12 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
   },
   categoryOptionIconCircleSelected: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.colors.lime,
   },
   categoryOptionMeta: {
     flex: 1,
@@ -1651,15 +1652,15 @@ const styles = StyleSheet.create({
   categoryOptionTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   categoryOptionTitleSelected: {
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   categoryOptionDesc: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   aiSheetHeader: {
@@ -1669,7 +1670,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   demoBadgeRow: {
     marginTop: 8,
@@ -1677,9 +1678,9 @@ const styles = StyleSheet.create({
   demoSuggestionsBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     borderRadius: theme.radius.full,
     alignSelf: 'flex-start',
     paddingVertical: 2,
@@ -1689,12 +1690,12 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: theme.colors.amber500,
+    backgroundColor: theme.colors.textSecondary,
     marginRight: theme.spacing.xxs,
   },
   demoSuggestionsText: {
     fontFamily: theme.typography.fonts.uiMedium,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     fontSize: 10,
@@ -1703,8 +1704,8 @@ const styles = StyleSheet.create({
   suggestionCard: {
     padding: 12,
     marginBottom: 12,
-    borderColor: theme.colors.primary200,
-    backgroundColor: theme.colors.primary50,
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   suggestionHeaderRow: {
     flexDirection: 'row',
@@ -1721,28 +1722,28 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 11,
     letterSpacing: 0.5,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   charLimitPill: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   suggestionText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 20,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: 10,
   },
   suggestionInput: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 20,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     borderWidth: 1,
-    borderColor: theme.colors.primary400,
-    backgroundColor: theme.colors.white,
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.inputBg,
     borderRadius: theme.radius.sm,
     padding: 8,
     marginBottom: 10,

@@ -55,7 +55,7 @@ export function Accordion({
           <Text style={styles.titleText}>{title}</Text>
         </View>
         <Animated.View style={chevronAnimatedStyle}>
-          <ChevronDown size={20} color={theme.colors.ink500} />
+          <ChevronDown size={20} color={theme.colors.textSecondary} />
         </Animated.View>
       </Pressable>
 
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     overflow: 'hidden',
   },
   header: {
@@ -93,13 +93,13 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: theme.typography.styles.h3.fontSize,
     lineHeight: theme.typography.styles.h3.lineHeight,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   content: {
     paddingHorizontal: theme.spacing.base,
     paddingBottom: theme.spacing.base,
     paddingTop: theme.spacing.xs,
     borderTopWidth: 1,
-    borderTopColor: theme.colors.line,
+    borderTopColor: theme.colors.border,
   },
 });

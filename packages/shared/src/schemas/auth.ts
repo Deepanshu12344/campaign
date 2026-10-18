@@ -62,9 +62,50 @@ export const AuthResponseSchema = z.object({
 
 export type AuthResponse = z.infer<typeof AuthResponseSchema>;
 
+export function isAllowedStorageUrl(url: string, allowedHost?: string): boolean {
+  if (!url || typeof url !== 'string') return false;
+  // Relative upload path on local server
+  if (url.startsWith('/uploads/')) {
+    return true;
+  }
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+      return false;
+    }
+    const host = parsed.hostname.toLowerCase();
+    // Allow localhost or 127.0.0.1 in development/testing
+    if (host === 'localhost' || host === '127.0.0.1') {
+      return true;
+    }
+    // Allow explicitly configured storage host
+    if (allowedHost) {
+      const parts = allowedHost.replace(/^https?:\/\//, '').split('/');
+      const allowedClean = (parts[0] ?? '').toLowerCase();
+      if (allowedClean && (host === allowedClean || host.endsWith('.' + allowedClean))) {
+        return true;
+      }
+    }
+    // Allow default supabase storage domain
+    if (host.endsWith('.supabase.co')) {
+      return true;
+    }
+    return false;
+  } catch {
+    return false;
+  }
+}
+
 export const UpdateProfileInputSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').max(60).optional(),
-  avatarUrl: z.string().url('Avatar must be a valid URL').optional().nullable(),
+  avatarUrl: z
+    .string()
+    .refine(
+      (val) => isAllowedStorageUrl(val),
+      'Avatar URL must belong to the verified platform storage host'
+    )
+    .optional()
+    .nullable(),
 });
 
 export type UpdateProfileInput = z.infer<typeof UpdateProfileInputSchema>;

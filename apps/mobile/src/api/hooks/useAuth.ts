@@ -71,3 +71,20 @@ export function useSignOut() {
     queryClient.invalidateQueries();
   };
 }
+
+export function useUpdateProfile(): UseMutationResult<
+  UserProfile,
+  ApiError,
+  { name?: string; avatarUrl?: string | null }
+> {
+  const queryClient = useQueryClient();
+
+  return useMutation<UserProfile, ApiError, { name?: string; avatarUrl?: string | null }>({
+    mutationFn: async (input) => {
+      return apiClient.patch<UserProfile>('/me', input);
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(['auth', 'me'], data);
+    },
+  });
+}

@@ -28,6 +28,12 @@ export const FAQ_ITEMS: FaqItem[] = [
       'No. Your contribution pays to spread this message. It is NOT a donation to the cause or the creator. 100% of the net funds strictly purchase digital advertising impressions across online feeds, search, and networks to amplify the campaign narrative.',
   },
   {
+    id: 'is-data-real',
+    category: 'Basics',
+    question: 'Is the data on this app real?',
+    answer: 'This is a prototype. Campaigns, amounts and results shown are samples.',
+  },
+  {
     id: 'what-do-fees-pay-for',
     category: 'Basics',
     question: 'What do fees pay for?',
@@ -189,7 +195,6 @@ export const DEMO_PARTNERS = [
   {
     id: 'partner-global-ad-exchange',
     name: 'Global Ad Exchange Network',
-    badge: 'Demo partner',
     role: 'Multi-Channel Programmatic Exchange',
     description:
       'Automated real-time bidding infrastructure serving banner and native sponsored placements across major digital news outlets and content feeds.',
@@ -197,7 +202,6 @@ export const DEMO_PARTNERS = [
   {
     id: 'partner-civic-display',
     name: 'Civic Media Display Registry',
-    badge: 'Demo partner',
     role: 'Contextual News & Display Syndication',
     description:
       'Curated network of regional publications and independent journalism outlets supporting transparent public interest issue advertising.',
@@ -205,7 +209,6 @@ export const DEMO_PARTNERS = [
   {
     id: 'partner-video-stream',
     name: 'Digital Stream & Feed Syndication',
-    badge: 'Demo partner',
     role: 'Mobile Video & Feed Placements',
     description:
       'High-engagement video and social feed delivery platform designed for multimedia visual campaigns requiring targeted regional distribution.',
@@ -213,7 +216,6 @@ export const DEMO_PARTNERS = [
   {
     id: 'partner-audio-network',
     name: 'Civic Audio & Podcast Network',
-    badge: 'Demo partner',
     role: 'Streaming Audio & Podcast Sponsorships',
     description:
       'Dynamic audio insertion network delivering public interest announcements across educational, civic, and community podcasts.',
@@ -254,6 +256,12 @@ export const TERMS_SECTIONS: LegalSection[] = [
     paragraphs: [
       'Creators warrant that all narrative claims of fact are accurate and substantiated by cited sources, and that all uploaded imagery and video assets comply with digital advertising policies.',
       'By submitting a campaign, creators grant Campaigns a non-exclusive license to format, distribute, and serve campaign media assets across advertising exchange networks for the sole purpose of executing campaign promotion.',
+    ],
+  },
+  {
+    title: '6. Prototype Demonstration Terms',
+    paragraphs: [
+      'This is a prototype. Campaigns, amounts and results shown are samples.',
     ],
   },
 ];

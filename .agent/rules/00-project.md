@@ -83,14 +83,14 @@ estimatedReachHigh  = Math.round(estimatedReachMid * (1 + rangePct))
 ### Mandatory Labeling Rule:
 - Always label reach estimates: **"Estimated reach · based on demo assumptions · not a guarantee."**
 - Never display fixed audience numbers as guarantees.
-- Always display `DemoDataBadge` on demonstration data.
+- Prototype demonstration disclosures are centralized strictly in three locations: the About page, the FAQ entry ("Is the data on this app real?"), and the Terms note ("This is a prototype. Campaigns, amounts and results shown are samples."). Individual per-figure and screen-level demo badges have been removed.
 
 ---
 
 ## 6. Technology Decisions (Non-Negotiable)
 - **Monorepo**: npm workspaces (`apps/mobile`, `apps/api`, `packages/shared`).
 - **Mobile Client**: Expo (latest stable SDK) + React Native + TypeScript.
-- **Mobile Navigation**: Expo Router (file-based navigation) with stable 5-tab bar.
+- **Mobile Navigation**: Expo Router (file-based navigation) with stable 4-tab bar (`Home`, `Explore`, `Create`, `Activity`). `Profile` is accessed via the sticky top header avatar or deep links as a pushed screen.
 - **Styling**: Vanilla `StyleSheet` + typed design tokens. **No NativeWind/Tailwind**.
 - **Animation & Haptics**: `react-native-reanimated` + `expo-haptics`.
 - **Media**: `expo-image` (caching/blurhash), `expo-image-picker`, `expo-document-picker`.

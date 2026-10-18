@@ -89,7 +89,7 @@ export const TextField = React.forwardRef<TextInput, TextFieldProps>(function Te
             setIsFocused(false);
             onBlur?.(e);
           }}
-          placeholderTextColor={theme.colors.ink500}
+          placeholderTextColor={theme.colors.textSecondary}
           style={[styles.input, rightAccessory ? styles.inputWithAccessory : null, style]}
           {...rest}
         />
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: theme.typography.styles.small.fontSize,
     lineHeight: theme.typography.styles.small.lineHeight,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   requiredAsterisk: {
     color: theme.colors.danger,
@@ -129,14 +129,14 @@ const styles = StyleSheet.create({
   counterText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.caption.fontSize,
-    color: theme.colors.ink500,
+    color: theme.colors.textMuted,
   },
   inputWrapper: {
     minHeight: theme.touchTargets.minTouchSize,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.inputBg, // #1B1E19
     borderWidth: 1,
-    borderColor: theme.colors.line,
-    borderRadius: theme.radius.input,
+    borderColor: theme.colors.inputBorder, // #262924
+    borderRadius: theme.radii.input, // 16dp
     flexDirection: 'row',
     alignItems: 'center',
     position: 'relative',
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.base,
     paddingVertical: theme.spacing.sm,
     fontSize: theme.typography.styles.body.fontSize,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     fontFamily: theme.typography.fonts.uiRegular,
   },
   inputWithAccessory: {
@@ -159,18 +159,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   focusedInput: {
-    borderColor: theme.colors.primary600,
+    borderColor: theme.colors.inputFocusRing, // #9FE870
+    borderWidth: 1.5,
   },
   errorInput: {
     borderColor: theme.colors.danger,
   },
   disabledInput: {
     backgroundColor: theme.colors.bgMuted,
+    opacity: 0.6,
   },
   helperText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.caption.fontSize,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: theme.spacing.xs,
   },
   errorText: {

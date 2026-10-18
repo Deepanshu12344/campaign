@@ -13,6 +13,11 @@ import {
   Calendar,
   ChevronRight,
   UserPlus,
+  Check,
+  Clock,
+  AlertCircle,
+  X,
+  RotateCcw,
 } from 'lucide-react-native';
 import {
   useMyContributions,
@@ -24,7 +29,6 @@ import { useAuthStore } from '../../store/authStore';
 import { SharedHeader } from '../../components/layout/SharedHeader';
 import {
   Card,
-  StatusPill,
   Button,
   Skeleton,
   EmptyState,
@@ -97,7 +101,7 @@ export default function PaymentsHistoryScreen() {
           <RefreshControl
             refreshing={isRefetching}
             onRefresh={refetch}
-            tintColor={theme.colors.primary600}
+            tintColor={theme.colors.lime}
           />
         }
         showsVerticalScrollIndicator={false}
@@ -106,7 +110,7 @@ export default function PaymentsHistoryScreen() {
         {isAuthenticated && guestTokens.length > 0 && (
           <Card style={styles.claimBanner}>
             <View style={styles.claimHeaderRow}>
-              <UserPlus size={20} color={theme.colors.primary700} />
+              <UserPlus size={20} color={theme.colors.lime} />
               <Text style={styles.claimTitle}>Unclaimed Guest Receipts Found</Text>
             </View>
             <Text style={styles.claimDesc}>
@@ -163,16 +167,22 @@ export default function PaymentsHistoryScreen() {
                       >
                         <View style={styles.receiptTopRow}>
                           <View style={styles.receiptIconWrapper}>
-                            <Receipt size={20} color={theme.colors.primary700} />
+                            <Receipt size={20} color={theme.colors.lime} />
                           </View>
                           <View style={styles.receiptMetaCol}>
-                            <Text style={styles.receiptNoText}>{item.receiptNo}</Text>
+                            <Text
+                              style={styles.receiptNoText}
+                              numberOfLines={1}
+                              ellipsizeMode="middle"
+                            >
+                              {item.receiptNo}
+                            </Text>
                             <View style={styles.dateRow}>
-                              <Calendar size={12} color={theme.colors.ink500} />
+                              <Calendar size={12} color={theme.colors.textSecondary} />
                               <Text style={styles.dateText}>{formattedDate}</Text>
                             </View>
                           </View>
-                          <StatusPill status={item.status} />
+                          <PaymentStatusIcon status={item.status} />
                         </View>
 
                         <Text style={styles.campaignTitle} numberOfLines={1}>
@@ -185,7 +195,7 @@ export default function PaymentsHistoryScreen() {
                           </Text>
                           <View style={styles.viewDetailsRow}>
                             <Text style={styles.viewDetailsText}>View Itemized</Text>
-                            <ChevronRight size={16} color={theme.colors.primary700} />
+                            <ChevronRight size={16} color={theme.colors.lime} />
                           </View>
                         </View>
                       </Pressable>
@@ -212,13 +222,13 @@ export default function PaymentsHistoryScreen() {
               >
                 <View style={styles.receiptTopRow}>
                   <View style={styles.receiptIconWrapper}>
-                    <Receipt size={20} color={theme.colors.primary700} />
+                    <Receipt size={20} color={theme.colors.lime} />
                   </View>
                   <View style={styles.receiptMetaCol}>
                     <Text style={styles.receiptNoText}>Contribution Receipt</Text>
                     <Text style={styles.dateText}>Tap to view itemized breakdown</Text>
                   </View>
-                  <ChevronRight size={18} color={theme.colors.ink500} />
+                  <ChevronRight size={18} color={theme.colors.textSecondary} />
                 </View>
               </Pressable>
             ))}
@@ -242,7 +252,7 @@ export default function PaymentsHistoryScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.bg,
   },
   scrollView: {
     flex: 1,
@@ -258,7 +268,8 @@ const styles = StyleSheet.create({
     padding: theme.spacing.base,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: theme.colors.primary100,
+    borderColor: theme.colors.lime,
+    backgroundColor: theme.colors.tintedPillBg,
     marginBottom: theme.spacing.base,
   },
   claimHeaderRow: {
@@ -269,11 +280,11 @@ const styles = StyleSheet.create({
   },
   claimTitle: {
     ...theme.typography.styles.smallMedium,
-    color: theme.colors.primary800,
+    color: theme.colors.lime,
   },
   claimDesc: {
     ...theme.typography.styles.small,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     lineHeight: 20,
   },
   listContainer: {
@@ -281,14 +292,14 @@ const styles = StyleSheet.create({
   },
   guestSectionTitle: {
     ...theme.typography.styles.smallMedium,
-    color: theme.colors.ink700,
+    color: theme.colors.textPrimary,
     marginBottom: theme.spacing.xs,
   },
   receiptCard: {
     padding: theme.spacing.base,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     backgroundColor: theme.colors.surface,
   },
   receiptTopRow: {
@@ -301,7 +312,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -310,7 +321,7 @@ const styles = StyleSheet.create({
   },
   receiptNoText: {
     ...theme.typography.styles.smallMedium,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   dateRow: {
     flexDirection: 'row',
@@ -320,11 +331,11 @@ const styles = StyleSheet.create({
   },
   dateText: {
     ...theme.typography.styles.caption,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   campaignTitle: {
     ...theme.typography.styles.body,
-    color: theme.colors.ink800,
+    color: theme.colors.textSecondary,
     marginVertical: theme.spacing.xs,
   },
   receiptBottomRow: {
@@ -334,11 +345,11 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.sm,
     paddingTop: theme.spacing.sm,
     borderTopWidth: 1,
-    borderTopColor: theme.colors.bgMuted,
+    borderTopColor: theme.colors.border,
   },
   amountText: {
     ...theme.typography.styles.h3,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     fontFamily: theme.typography.fonts.uiBold,
   },
   viewDetailsRow: {
@@ -348,7 +359,7 @@ const styles = StyleSheet.create({
   },
   viewDetailsText: {
     ...theme.typography.styles.captionSemiBold,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   monthGroup: {
     marginBottom: theme.spacing.lg,
@@ -362,14 +373,66 @@ const styles = StyleSheet.create({
   },
   monthHeaderText: {
     ...theme.typography.styles.h3,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     fontFamily: theme.typography.fonts.uiBold,
   },
   monthCountText: {
     ...theme.typography.styles.caption,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   monthItemsContainer: {
     gap: theme.spacing.sm,
   },
+  statusCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: theme.colors.surfaceRaised,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
+
+function PaymentStatusIcon({ status }: { status: string }) {
+  let icon: React.ReactNode;
+  let label: string;
+
+  switch (status) {
+    case 'SUCCEEDED':
+      icon = <Check size={16} color={theme.colors.lime} strokeWidth={2.5} />;
+      label = 'Status: Succeeded';
+      break;
+    case 'PENDING':
+      icon = <Clock size={16} color={theme.colors.textSecondary} strokeWidth={2} />;
+      label = 'Status: Pending';
+      break;
+    case 'FAILED':
+      icon = <AlertCircle size={16} color={theme.colors.textPrimary} strokeWidth={2} />;
+      label = 'Status: Failed';
+      break;
+    case 'CANCELLED':
+      icon = <X size={16} color={theme.colors.textSecondary} strokeWidth={2} />;
+      label = 'Status: Cancelled';
+      break;
+    case 'REFUNDED':
+      icon = <RotateCcw size={16} color={theme.colors.textSecondary} strokeWidth={2} />;
+      label = 'Status: Refunded';
+      break;
+    default:
+      icon = <Check size={16} color={theme.colors.lime} strokeWidth={2.5} />;
+      label = `Status: ${status}`;
+      break;
+  }
+
+  return (
+    <View
+      style={styles.statusCircle}
+      accessibilityRole="text"
+      accessibilityLabel={label}
+    >
+      {icon}
+    </View>
+  );
+}

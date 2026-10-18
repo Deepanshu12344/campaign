@@ -23,7 +23,7 @@ import {
 } from 'lucide-react-native';
 import { theme } from '../../theme';
 import { SharedHeader } from '../../components/layout/SharedHeader';
-import { Card, DemoDataBadge, useToast, Button } from '../../components/ui';
+import { Card, useToast, Button } from '../../components/ui';
 import { useCurrentUser } from '../../api/hooks/useAuth';
 import { useNotificationPrefs } from '../../api/hooks/useActivity';
 import { NotificationPrefs } from '@campaigns/shared';
@@ -74,7 +74,7 @@ function PreferenceRow({
                 badgeType === 'active' && styles.badgeActive,
               ]}
             >
-              {badgeType === 'lock' && <Lock size={10} color={theme.colors.ink700} style={{ marginRight: 3 }} />}
+              {badgeType === 'lock' && <Lock size={10} color={theme.colors.textSecondary} style={{ marginRight: 3 }} />}
               <Text
                 style={[
                   styles.badgeText,
@@ -96,8 +96,8 @@ function PreferenceRow({
         value={value}
         onValueChange={onValueChange}
         disabled={disabled}
-        trackColor={{ false: theme.colors.line, true: theme.colors.primary600 }}
-        thumbColor={Platform.OS === 'android' ? theme.colors.surface : undefined}
+        trackColor={{ false: theme.colors.border, true: theme.colors.lime }}
+        thumbColor={Platform.OS === 'android' ? (value ? theme.colors.onLime : theme.colors.textSecondary) : undefined}
       />
     </View>
   );
@@ -167,13 +167,6 @@ export default function NotificationSettingsScreen() {
         showsVerticalScrollIndicator={false}
       >
         <Card style={styles.card}>
-          <View style={styles.badgeRow}>
-            <DemoDataBadge size="sm" />
-            <View style={styles.routePill}>
-              <Text style={styles.routeText}>/profile/notifications-settings</Text>
-            </View>
-          </View>
-
           <View style={styles.introBox}>
             <Text style={styles.introTitle}>Real-time Alert Preferences</Text>
             <Text style={styles.introSubtitle}>
@@ -187,7 +180,7 @@ export default function NotificationSettingsScreen() {
             <Text style={styles.sectionHeader}>Alert Categories</Text>
 
             <PreferenceRow
-              icon={<FileText size={20} color={theme.colors.primary600} />}
+              icon={<FileText size={20} color={theme.colors.lime} />}
               title="Campaign Status"
               description="Reviewer decisions, revision requests, approvals, and distribution launch confirmations."
               value={prefs.campaignStatus}
@@ -197,7 +190,7 @@ export default function NotificationSettingsScreen() {
             <View style={styles.separator} />
 
             <PreferenceRow
-              icon={<TrendingUp size={20} color={theme.colors.primary600} />}
+              icon={<TrendingUp size={20} color={theme.colors.lime} />}
               title="Funding Milestones"
               description="Reach progress updates when campaigns hit 25%, 50%, 75%, 100%, and approaching deadlines."
               value={prefs.fundingMilestones}
@@ -207,7 +200,7 @@ export default function NotificationSettingsScreen() {
             <View style={styles.separator} />
 
             <PreferenceRow
-              icon={<Receipt size={20} color={theme.colors.primary600} />}
+              icon={<Receipt size={20} color={theme.colors.lime} />}
               title="Contributions & Receipts"
               description="Payment confirmation receipts, distribution allocations, and refund notifications."
               value={prefs.contributions}
@@ -217,7 +210,7 @@ export default function NotificationSettingsScreen() {
             <View style={styles.separator} />
 
             <PreferenceRow
-              icon={<MessageSquare size={20} color={theme.colors.primary600} />}
+              icon={<MessageSquare size={20} color={theme.colors.lime} />}
               title="Campaign Updates"
               description="Field reports, investigative updates, and post-campaign ad performance reports."
               value={prefs.campaignUpdates}
@@ -227,7 +220,7 @@ export default function NotificationSettingsScreen() {
             <View style={styles.separator} />
 
             <PreferenceRow
-              icon={<ShieldCheck size={20} color={theme.colors.ink700} />}
+              icon={<ShieldCheck size={20} color={theme.colors.textSecondary} />}
               title="Security Alerts"
               description="Password changes, suspicious login attempts, and account permission modifications."
               value={true}
@@ -242,7 +235,7 @@ export default function NotificationSettingsScreen() {
             <Text style={styles.sectionHeader}>Delivery Channels</Text>
 
             <PreferenceRow
-              icon={<Bell size={20} color={theme.colors.primary600} />}
+              icon={<Bell size={20} color={theme.colors.lime} />}
               title="In-App Feed"
               description="Real-time notifications in your Activity tab with day grouping and badges."
               value={true}
@@ -254,7 +247,7 @@ export default function NotificationSettingsScreen() {
             <View style={styles.separator} />
 
             <PreferenceRow
-              icon={<Mail size={20} color={theme.colors.primary600} />}
+              icon={<Mail size={20} color={theme.colors.lime} />}
               title="Email Notifications"
               description="Send email alerts for important milestones, review audits, and receipts."
               value={prefs.emailNotifications ?? true}
@@ -264,7 +257,7 @@ export default function NotificationSettingsScreen() {
             <View style={styles.separator} />
 
             <PreferenceRow
-              icon={<Smartphone size={20} color={theme.colors.ink400} />}
+              icon={<Smartphone size={20} color={theme.colors.textSecondary} />}
               title="Push Notifications"
               description="Browser and device push notifications will be supported in the next release. No dead toggles."
               value={false}
@@ -281,7 +274,7 @@ export default function NotificationSettingsScreen() {
               variant="secondary"
               size="md"
               fullWidth
-              iconLeft={<Clock size={18} color={theme.colors.primary600} />}
+              iconLeft={<Clock size={18} color={theme.colors.lime} />}
               onPress={() => router.push('/(tabs)/activity')}
             />
           </View>
@@ -308,7 +301,8 @@ const styles = StyleSheet.create({
     padding: theme.spacing.xl,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.surface,
   },
   badgeRow: {
     flexDirection: 'row',
@@ -318,17 +312,17 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.md,
   },
   routePill: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     paddingHorizontal: theme.spacing.sm,
     paddingVertical: theme.spacing.xxs,
     borderRadius: theme.radius.pill,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   routeText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: theme.typography.styles.caption.fontSize,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   introBox: {
     marginBottom: theme.spacing.xl,
@@ -337,29 +331,28 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 20,
     lineHeight: 26,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: 4,
   },
   introSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 19,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   section: {
     marginBottom: theme.spacing.xl,
     backgroundColor: theme.colors.surface,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     padding: theme.spacing.base,
-    ...theme.shadows.card,
   },
   sectionHeader: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 14,
     lineHeight: 18,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     textTransform: 'uppercase',
     letterSpacing: 0.6,
     marginBottom: theme.spacing.md,
@@ -377,7 +370,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
@@ -395,7 +388,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
     lineHeight: 18,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   badge: {
     flexDirection: 'row',
@@ -405,15 +398,19 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.pill,
   },
   badgeLock: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   badgeSoon: {
-    backgroundColor: theme.colors.warningBg,
+    backgroundColor: theme.colors.surfaceRaised,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
   },
   badgeActive: {
-    backgroundColor: theme.colors.successBg,
+    backgroundColor: theme.colors.tintedPillBg,
+    borderWidth: 1,
+    borderColor: theme.colors.lime,
   },
   badgeText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
@@ -421,23 +418,23 @@ const styles = StyleSheet.create({
     lineHeight: 12,
   },
   badgeTextLock: {
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   badgeTextSoon: {
-    color: theme.colors.warning,
+    color: theme.colors.textSecondary,
   },
   badgeTextActive: {
-    color: theme.colors.success,
+    color: theme.colors.lime,
   },
   rowDesc: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 16,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   separator: {
     height: 1,
-    backgroundColor: theme.colors.line,
+    backgroundColor: theme.colors.border,
     marginVertical: theme.spacing.xs,
   },
   footerActions: {

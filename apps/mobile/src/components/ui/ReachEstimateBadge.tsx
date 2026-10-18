@@ -35,7 +35,7 @@ export function ReachEstimateBadge({
       >
         <Users
           size={isSm ? 12 : 14}
-          color={theme.colors.primary600}
+          color={theme.colors.lime}
           style={styles.icon}
         />
         <Text
@@ -49,7 +49,7 @@ export function ReachEstimateBadge({
             <InfoTip
               term="estimatedReach"
               size={isSm ? 14 : 16}
-              color={theme.colors.primary600}
+              color={theme.colors.lime}
             />
           </View>
         )}
@@ -68,10 +68,10 @@ const styles = StyleSheet.create({
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.tintedPillBg,
     borderRadius: theme.radius.full,
     borderWidth: 1,
-    borderColor: theme.colors.primary100,
+    borderColor: theme.colors.lime,
   },
   badgeMd: {
     paddingVertical: theme.spacing.xxs,
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: theme.typography.fonts.uiMedium,
-    color: theme.colors.primary800,
+    color: theme.colors.lime,
   },
   textMd: {
     fontSize: theme.typography.styles.caption.fontSize,
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
     lineHeight: 14,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: theme.spacing.xxs,
   },
 });

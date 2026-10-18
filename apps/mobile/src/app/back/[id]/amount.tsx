@@ -26,7 +26,6 @@ import {
   Card,
   ProgressBar,
   InfoTip,
-  DemoDataBadge,
   Skeleton,
   ErrorState,
   Button,
@@ -163,7 +162,7 @@ export default function BackAmountScreen() {
           fallbackRoute={`/campaign/${id}`}
         />
         <View style={styles.closedContainer}>
-          <AlertCircle size={48} color={theme.colors.ink500} />
+          <AlertCircle size={48} color={theme.colors.textSecondary} />
           <Text style={styles.closedTitle}>This campaign is not accepting funds</Text>
           <Text style={styles.closedMessage}>
             Only campaigns currently in the FUNDING status can accept contributions.
@@ -215,7 +214,7 @@ export default function BackAmountScreen() {
               />
             ) : (
               <View style={[styles.coverThumbnail, styles.coverPlaceholder]}>
-                <TrendingUp size={20} color={theme.colors.ink400} />
+                <TrendingUp size={20} color={theme.colors.textSecondary} />
               </View>
             )}
             <View style={styles.campaignTextCol}>
@@ -246,7 +245,7 @@ export default function BackAmountScreen() {
 
           {remainingCents > 0 && (
             <View style={styles.remainingBadge}>
-              <Info size={14} color={theme.colors.ink600} />
+              <Info size={14} color={theme.colors.textSecondary} />
               <Text style={styles.remainingText}>
                 ${(remainingCents / 100).toLocaleString()} needed to reach goal
               </Text>
@@ -257,7 +256,7 @@ export default function BackAmountScreen() {
         {/* Milestone Celebration Banner */}
         {willFullyFund && (
           <View style={styles.fullyFundedBanner}>
-            <Sparkles size={20} color={theme.colors.primary700} />
+            <Sparkles size={20} color={theme.colors.lime} />
             <View style={styles.fullyFundedTextCol}>
               <Text style={styles.fullyFundedTitle}>Goal Milestone!</Text>
               <Text style={styles.fullyFundedDesc}>
@@ -320,7 +319,7 @@ export default function BackAmountScreen() {
                 onChangeText={handleInputChange}
                 keyboardType="number-pad"
                 placeholder="0"
-                placeholderTextColor={theme.colors.ink400}
+                placeholderTextColor={theme.colors.textSecondary}
                 maxLength={6}
                 selectTextOnFocus
               />
@@ -328,7 +327,7 @@ export default function BackAmountScreen() {
 
             {inputTouched && amountCents < 100 && (
               <View style={styles.errorRow}>
-                <AlertCircle size={14} color={theme.colors.danger} />
+                <AlertCircle size={14} color={theme.colors.textPrimary} />
                 <Text style={styles.errorText}>
                   Minimum contribution amount is $1.00
                 </Text>
@@ -337,7 +336,7 @@ export default function BackAmountScreen() {
 
             {inputTouched && amountCents > 1000000 && (
               <View style={styles.errorRow}>
-                <AlertCircle size={14} color={theme.colors.danger} />
+                <AlertCircle size={14} color={theme.colors.textPrimary} />
                 <Text style={styles.errorText}>
                   Maximum contribution amount is $10,000
                 </Text>
@@ -351,13 +350,12 @@ export default function BackAmountScreen() {
           <Card style={styles.reachImpactCard}>
             <View style={styles.reachCardHeader}>
               <View style={styles.reachIconWrapper}>
-                <Sparkles size={18} color={theme.colors.primary700} />
+                <Sparkles size={18} color={theme.colors.lime} />
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={styles.reachCardHeading}>Estimated Ad Reach</Text>
                 <View style={styles.estimateBadgeRow}>
                   <Text style={styles.estimateBadgeLabel}>Estimate · not a guarantee</Text>
-                  <DemoDataBadge size="sm" />
                 </View>
               </View>
             </View>
@@ -426,13 +424,13 @@ const styles = StyleSheet.create({
   },
   closedTitle: {
     ...theme.typography.styles.h2,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginTop: theme.spacing.base,
     textAlign: 'center',
   },
   closedMessage: {
     ...theme.typography.styles.body,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: theme.spacing.sm,
     textAlign: 'center',
     lineHeight: 22,
@@ -450,7 +448,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: theme.radius.md,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     marginRight: theme.spacing.md,
   },
   coverPlaceholder: {
@@ -464,11 +462,11 @@ const styles = StyleSheet.create({
   },
   campaignTitle: {
     ...theme.typography.styles.h3,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   creatorName: {
     ...theme.typography.styles.small,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   progressSection: {
@@ -482,21 +480,21 @@ const styles = StyleSheet.create({
   },
   raisedLabel: {
     ...theme.typography.styles.smallMedium,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   goalLabel: {
     ...theme.typography.styles.small,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   percentLabel: {
     ...theme.typography.styles.captionSemiBold,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   remainingBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: theme.spacing.sm,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     paddingHorizontal: theme.spacing.sm,
     paddingVertical: theme.spacing.xs,
     borderRadius: theme.radius.sm,
@@ -504,12 +502,12 @@ const styles = StyleSheet.create({
   },
   remainingText: {
     ...theme.typography.styles.small,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   fullyFundedBanner: {
     flexDirection: 'row',
-    backgroundColor: theme.colors.primary50,
-    borderColor: theme.colors.primary100,
+    backgroundColor: theme.colors.tintedPillBg,
+    borderColor: theme.colors.line,
     borderWidth: 1,
     borderRadius: theme.radius.md,
     padding: theme.spacing.md,
@@ -522,11 +520,11 @@ const styles = StyleSheet.create({
   },
   fullyFundedTitle: {
     ...theme.typography.styles.smallMedium,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   fullyFundedDesc: {
     ...theme.typography.styles.small,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   sectionContainer: {
@@ -534,12 +532,12 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     ...theme.typography.styles.h3,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: 4,
   },
   sectionSubtitle: {
     ...theme.typography.styles.small,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginBottom: theme.spacing.md,
   },
   presetsGrid: {
@@ -556,23 +554,23 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.md,
     borderWidth: 1.5,
     borderColor: theme.colors.line,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
   },
   presetChipSelected: {
-    borderColor: theme.colors.primary600,
-    backgroundColor: theme.colors.primary50,
+    borderColor: theme.colors.lime,
+    backgroundColor: theme.colors.tintedPillBg,
   },
   presetChipPressed: {
     opacity: 0.8,
   },
   presetChipText: {
     ...theme.typography.styles.h3,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   presetChipTextSelected: {
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
     fontFamily: theme.typography.fonts.uiBold,
   },
   customInputContainer: {
@@ -580,32 +578,32 @@ const styles = StyleSheet.create({
   },
   customInputLabel: {
     ...theme.typography.styles.smallMedium,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     marginBottom: theme.spacing.xs,
   },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     borderWidth: 1.5,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.inputBorder,
     borderRadius: theme.radius.input,
     paddingHorizontal: theme.spacing.md,
     height: 52,
   },
   inputWrapperError: {
-    borderColor: theme.colors.danger,
-    backgroundColor: theme.colors.red50,
+    borderColor: theme.colors.textPrimary,
+    backgroundColor: theme.colors.inputBg,
   },
   dollarSign: {
     ...theme.typography.styles.h2,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginRight: theme.spacing.xs,
   },
   numericInput: {
     flex: 1,
     ...theme.typography.styles.h2,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     padding: 0,
   },
   errorRow: {
@@ -616,13 +614,13 @@ const styles = StyleSheet.create({
   },
   errorText: {
     ...theme.typography.styles.small,
-    color: theme.colors.danger,
+    color: theme.colors.textPrimary,
   },
   reachImpactCard: {
     padding: theme.spacing.base,
     borderRadius: theme.radius.card,
-    backgroundColor: theme.colors.surface,
-    borderColor: theme.colors.primary100,
+    backgroundColor: theme.colors.surfaceRaised,
+    borderColor: theme.colors.line,
     borderWidth: 1.5,
     marginBottom: theme.spacing.base,
   },
@@ -636,13 +634,13 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.tintedPillBg,
     alignItems: 'center',
     justifyContent: 'center',
   },
   reachCardHeading: {
     ...theme.typography.styles.smallMedium,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   estimateBadgeRow: {
     flexDirection: 'row',
@@ -652,24 +650,24 @@ const styles = StyleSheet.create({
   },
   estimateBadgeLabel: {
     ...theme.typography.styles.caption,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   reachNumberContainer: {
     marginVertical: theme.spacing.sm,
   },
   reachRangeText: {
     ...theme.typography.styles.display,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
     fontSize: 28,
   },
   reachUnitText: {
     ...theme.typography.styles.body,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   reachFootnote: {
     ...theme.typography.styles.small,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     lineHeight: 18,
     marginTop: theme.spacing.sm,
   },

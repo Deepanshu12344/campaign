@@ -46,7 +46,6 @@ import {
   Avatar,
   Card,
   ReachEstimateBadge,
-  DemoDataBadge,
   useToast,
 } from '../../../components/ui';
 import { theme } from '../../../theme';
@@ -129,14 +128,13 @@ export default function CreatePreviewScreen() {
     <View style={styles.container}>
       {/* Top Preview Banner */}
       <View style={styles.previewNoticeBanner}>
-        <Eye size={18} color={theme.colors.primary700} />
+        <Eye size={18} color={theme.colors.lime} />
         <View style={styles.previewNoticeTextCol}>
           <Text style={styles.previewNoticeTitle}>Preview Mode — Not Published</Text>
           <Text style={styles.previewNoticeSubtitle}>
             This is how community backers will view your campaign. Backing is disabled in preview.
           </Text>
         </View>
-        <DemoDataBadge size="sm" />
       </View>
 
       <ScrollView
@@ -158,7 +156,7 @@ export default function CreatePreviewScreen() {
             />
           ) : (
             <View style={styles.heroCoverFallback}>
-              <Sparkles size={48} color={theme.colors.ink400} />
+              <Sparkles size={48} color={theme.colors.textSecondary} />
               <Text style={styles.heroCoverFallbackText}>No cover image chosen</Text>
             </View>
           )}
@@ -249,7 +247,7 @@ export default function CreatePreviewScreen() {
         <View style={styles.sourcesSection}>
           <View style={styles.sourcesHeader}>
             <View style={styles.sourcesTitleRow}>
-              <FileCheck2 size={20} color={theme.colors.primary600} />
+              <FileCheck2 size={20} color={theme.colors.lime} />
               <Text style={styles.sourcesTitle}>Verified Sources & Citations</Text>
             </View>
             <Text style={styles.sourcesDisclaimer}>
@@ -279,12 +277,12 @@ export default function CreatePreviewScreen() {
           <Accordion
             title="Use of Funds & Not a Donation"
             defaultOpen={true}
-            icon={<PieChart size={18} color={theme.colors.primary600} />}
+            icon={<PieChart size={18} color={theme.colors.lime} />}
             style={styles.accordionSpacing}
           >
             <View style={styles.accordionInner}>
               <View style={styles.nonDonationNoticeBox}>
-                <ShieldCheck size={18} color={theme.colors.primary600} style={{ marginTop: 2 }} />
+                <ShieldCheck size={18} color={theme.colors.lime} style={{ marginTop: 2 }} />
                 <Text style={styles.nonDonationNoticeText}>
                   <Text style={styles.boldText}>Contributions strictly fund digital ad distribution</Text>
                   , never direct gifts or donations to the creator or cause.
@@ -318,7 +316,7 @@ export default function CreatePreviewScreen() {
           <Accordion
             title="Audience & Distribution"
             defaultOpen={false}
-            icon={<Target size={18} color={theme.colors.primary600} />}
+            icon={<Target size={18} color={theme.colors.lime} />}
             style={styles.accordionSpacing}
           >
             <View style={styles.accordionInner}>
@@ -360,7 +358,7 @@ export default function CreatePreviewScreen() {
           title="Back to Editing"
           variant="secondary"
           size="md"
-          iconLeft={<ArrowLeft size={16} color={theme.colors.ink800} />}
+          iconLeft={<ArrowLeft size={16} color={theme.colors.textPrimary} />}
           onPress={handleBackToEditing}
           style={styles.bottomSecondaryBtn}
         />
@@ -370,7 +368,7 @@ export default function CreatePreviewScreen() {
           variant="primary"
           size="md"
           loading={isSubmitting}
-          iconRight={<Send size={16} color="#FFFFFF" />}
+          iconRight={<Send size={16} color={theme.colors.onLime} />}
           onPress={handleSubmitForReview}
           style={styles.bottomPrimaryBtn}
         />
@@ -382,16 +380,16 @@ export default function CreatePreviewScreen() {
 function getCreatorTypeIcon(type?: CreatorType) {
   switch (type) {
     case 'nonprofit':
-      return <HeartHandshake size={14} color={theme.colors.primary600} />;
+      return <HeartHandshake size={14} color={theme.colors.lime} />;
     case 'business':
-      return <Building2 size={14} color={theme.colors.primary600} />;
+      return <Building2 size={14} color={theme.colors.lime} />;
     case 'community':
-      return <Users size={14} color={theme.colors.primary600} />;
+      return <Users size={14} color={theme.colors.lime} />;
     case 'creator':
-      return <Sparkles size={14} color={theme.colors.primary600} />;
+      return <Sparkles size={14} color={theme.colors.lime} />;
     case 'individual':
     default:
-      return <User size={14} color={theme.colors.primary600} />;
+      return <User size={14} color={theme.colors.lime} />;
   }
 }
 
@@ -420,11 +418,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.tintedPillBg,
     paddingVertical: theme.spacing.sm,
     paddingHorizontal: theme.spacing.base,
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.primary100,
+    borderBottomColor: theme.colors.border,
   },
   previewNoticeTextCol: {
     flex: 1,
@@ -432,13 +430,13 @@ const styles = StyleSheet.create({
   previewNoticeTitle: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 13,
-    color: theme.colors.primary800,
+    color: theme.colors.lime,
   },
   previewNoticeSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
     lineHeight: 15,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   scrollView: {
     flex: 1,
@@ -449,7 +447,7 @@ const styles = StyleSheet.create({
   heroCoverWrapper: {
     width: '100%',
     aspectRatio: 16 / 9,
-    backgroundColor: theme.colors.ink900,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   heroCoverImage: {
     width: '100%',
@@ -458,7 +456,7 @@ const styles = StyleSheet.create({
   heroCoverFallback: {
     width: '100%',
     height: '100%',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
@@ -466,7 +464,7 @@ const styles = StyleSheet.create({
   heroCoverFallbackText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   editorialHeader: {
     paddingHorizontal: theme.spacing.lg,
@@ -482,14 +480,14 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 26,
     lineHeight: 34,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: 6,
   },
   campaignSummary: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 15,
     lineHeight: 22,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     marginBottom: theme.spacing.base,
   },
   creatorRow: {
@@ -505,7 +503,7 @@ const styles = StyleSheet.create({
   creatorNameText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   creatorSubRow: {
     flexDirection: 'row',
@@ -520,16 +518,16 @@ const styles = StyleSheet.create({
   creatorTypeText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   metaBullet: {
     fontSize: 12,
-    color: theme.colors.ink400,
+    color: theme.colors.textSecondary,
   },
   publishDateText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   editorialDivider: {
     height: 1,
@@ -554,17 +552,17 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 22,
     lineHeight: 28,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   fundingGoalText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   fundingStatusSub: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   progressBarSpacing: {
@@ -574,7 +572,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     borderRadius: theme.radius.sm,
     padding: theme.spacing.sm,
   },
@@ -585,18 +583,18 @@ const styles = StyleSheet.create({
   splitDivider: {
     width: 1,
     height: 30,
-    backgroundColor: theme.colors.line,
+    backgroundColor: theme.colors.border,
     marginHorizontal: theme.spacing.sm,
   },
   splitLabel: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   splitValue: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 14,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   sourcesSection: {
     paddingHorizontal: theme.spacing.lg,
@@ -615,13 +613,13 @@ const styles = StyleSheet.create({
   sourcesTitle: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   sourcesDisclaimer: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 17,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   sourcesList: {
     gap: theme.spacing.sm,
@@ -629,7 +627,7 @@ const styles = StyleSheet.create({
   noSourcesText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink500,
+    color: theme.colors.textMuted,
     fontStyle: 'italic',
   },
   accordionsSection: {
@@ -648,18 +646,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 8,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.tintedPillBg,
     padding: theme.spacing.md,
     borderRadius: theme.radius.sm,
     borderWidth: 1,
-    borderColor: theme.colors.primary100,
+    borderColor: theme.colors.border,
   },
   nonDonationNoticeText: {
     flex: 1,
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.primary800,
+    color: theme.colors.lime,
   },
   boldText: {
     fontFamily: theme.typography.fonts.uiBold,
@@ -668,10 +666,10 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 19,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   termsBox: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     padding: theme.spacing.md,
     borderRadius: theme.radius.sm,
     gap: 4,
@@ -679,13 +677,13 @@ const styles = StyleSheet.create({
   termsHeading: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   termsText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 17,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   detailRow: {
     flexDirection: 'row',
@@ -696,13 +694,13 @@ const styles = StyleSheet.create({
     width: 140,
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   detailValue: {
     flex: 1,
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   stickyBottomBar: {
     flexDirection: 'row',

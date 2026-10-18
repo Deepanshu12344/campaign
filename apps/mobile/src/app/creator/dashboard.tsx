@@ -115,8 +115,10 @@ export default function CreatorDashboardScreen() {
             accessibilityRole="button"
             accessibilityLabel="Create campaign"
           >
-            <Plus size={18} color={theme.colors.primary700} />
-            <Text style={styles.headerNewText}>New</Text>
+            <Plus size={16} color={theme.colors.onLime} strokeWidth={2.5} />
+            <Text style={styles.headerNewText} numberOfLines={1}>
+              New
+            </Text>
           </Pressable>
         }
       />
@@ -128,7 +130,7 @@ export default function CreatorDashboardScreen() {
           <RefreshControl
             refreshing={isRefetching}
             onRefresh={refetch}
-            tintColor={theme.colors.primary600}
+            tintColor={theme.colors.lime}
           />
         }
       >
@@ -137,7 +139,7 @@ export default function CreatorDashboardScreen() {
           <View style={styles.summaryStrip}>
             <View style={styles.summaryItem}>
               <View style={styles.summaryIconCircle}>
-                <TrendingUp size={16} color={theme.colors.emerald700} />
+                <TrendingUp size={16} color={theme.colors.lime} />
               </View>
               <Text style={styles.summaryValue}>{formatCurrency(summary.totalRaisedCents)}</Text>
               <Text style={styles.summaryLabel}>Total Raised</Text>
@@ -147,7 +149,7 @@ export default function CreatorDashboardScreen() {
 
             <View style={styles.summaryItem}>
               <View style={styles.summaryIconCircle}>
-                <Radio size={16} color={theme.colors.primary700} />
+                <Radio size={16} color={theme.colors.lime} />
               </View>
               <Text style={styles.summaryValue}>{summary.activeCount}</Text>
               <Text style={styles.summaryLabel}>Active Campaigns</Text>
@@ -157,7 +159,7 @@ export default function CreatorDashboardScreen() {
 
             <View style={styles.summaryItem}>
               <View style={styles.summaryIconCircle}>
-                <Sparkles size={16} color={theme.colors.amber700} />
+                <Sparkles size={16} color={theme.colors.lime} />
               </View>
               <Text style={styles.summaryValue}>{totalContributionsCount}</Text>
               <Text style={styles.summaryLabel}>Total Backers</Text>
@@ -295,7 +297,7 @@ function CampaignRowCard({
           <Image source={{ uri: campaign.coverUrl }} style={styles.thumbnail} />
         ) : (
           <View style={styles.thumbnailPlaceholder}>
-            <Layers size={24} color={theme.colors.ink400} />
+            <Layers size={24} color={theme.colors.textSecondary} />
           </View>
         )}
 
@@ -329,7 +331,7 @@ function CampaignRowCard({
 
         <View style={styles.deadlineRow}>
           <View style={styles.deadlineLeft}>
-            <Clock size={13} color={theme.colors.ink500} />
+            <Clock size={13} color={theme.colors.textSecondary} />
             <Text style={styles.deadlineText}>
               {campaign.daysRemaining !== null
                 ? `${campaign.daysRemaining} days remaining`
@@ -341,7 +343,7 @@ function CampaignRowCard({
 
           {campaign.status === 'CHANGES_REQUESTED' && (
             <View style={styles.alertNotice}>
-              <AlertCircle size={12} color={theme.colors.amber700} />
+              <AlertCircle size={12} color={theme.colors.textPrimary} />
               <Text style={styles.alertNoticeText}>Revisions needed</Text>
             </View>
           )}
@@ -364,7 +366,7 @@ function CampaignRowCard({
           accessibilityLabel="View campaign management"
         >
           <Text style={styles.detailsChevronText}>Hub</Text>
-          <ArrowRight size={14} color={theme.colors.primary700} />
+          <ArrowRight size={14} color={theme.colors.lime} />
         </Pressable>
       </View>
     </Card>
@@ -374,7 +376,7 @@ function CampaignRowCard({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.bg,
   },
   scrollContent: {
     padding: theme.spacing.base,
@@ -385,20 +387,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.lime,
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    height: 40,
     borderRadius: theme.radius.pill,
-    borderWidth: 1,
-    borderColor: theme.colors.primary200,
+    justifyContent: 'center',
   },
   headerNewButtonPressed: {
-    backgroundColor: theme.colors.primary100,
+    backgroundColor: theme.colors.limePressed,
   },
   headerNewText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.primary700,
+    color: theme.colors.onLime,
   },
   summaryCard: {
     padding: theme.spacing.base,
@@ -416,7 +417,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 4,
@@ -424,19 +425,19 @@ const styles = StyleSheet.create({
   summaryValue: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 17,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   summaryLabel: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
     textAlign: 'center',
   },
   summaryDivider: {
     width: 1,
     height: 36,
-    backgroundColor: theme.colors.line,
+    backgroundColor: theme.colors.border,
   },
   filterTabsContainer: {
     gap: 8,
@@ -446,54 +447,54 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.surfaceRaised,
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: theme.radius.pill,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   filterTabActive: {
-    backgroundColor: theme.colors.primary700,
-    borderColor: theme.colors.primary700,
+    backgroundColor: theme.colors.lime,
+    borderColor: theme.colors.lime,
   },
   filterTabActionRequired: {
-    borderColor: theme.colors.amber500,
+    borderColor: theme.colors.border,
   },
   filterTabText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   filterTabTextActive: {
-    color: theme.colors.white,
+    color: theme.colors.onLime,
     fontFamily: theme.typography.fonts.uiSemiBold,
   },
   filterTabActionRequiredText: {
-    color: theme.colors.amber800,
+    color: theme.colors.textPrimary,
   },
   tabCountPill: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surface,
     paddingHorizontal: 6,
     paddingVertical: 1,
     borderRadius: theme.radius.pill,
   },
   tabCountPillActive: {
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    backgroundColor: theme.colors.onLime,
   },
   tabCountPillActionRequired: {
-    backgroundColor: theme.colors.amber100,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   tabCountPillText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 11,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   tabCountPillTextActive: {
-    color: theme.colors.white,
+    color: theme.colors.lime,
   },
   tabCountPillTextActionRequired: {
-    color: theme.colors.amber800,
+    color: theme.colors.textPrimary,
   },
   skeletonContainer: {
     gap: theme.spacing.base,
@@ -524,13 +525,13 @@ const styles = StyleSheet.create({
     width: 76,
     height: 76,
     borderRadius: theme.radius.md,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   thumbnailPlaceholder: {
     width: 76,
     height: 76,
     borderRadius: theme.radius.md,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -546,23 +547,23 @@ const styles = StyleSheet.create({
   categoryLabel: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   campaignTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 15,
     lineHeight: 20,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginTop: 2,
   },
   reachEstimateText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
     marginTop: 2,
   },
   progressSection: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.md,
     gap: 6,
@@ -575,16 +576,16 @@ const styles = StyleSheet.create({
   raisedAmountText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   goalText: {
     fontFamily: theme.typography.fonts.uiRegular,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   percentText: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 13,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   progressBar: {
     height: 6,
@@ -603,13 +604,13 @@ const styles = StyleSheet.create({
   deadlineText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   alertNotice: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: theme.colors.amber50,
+    backgroundColor: theme.colors.surfaceRaised,
     paddingHorizontal: 6,
     paddingVertical: 1,
     borderRadius: theme.radius.sm,
@@ -617,7 +618,7 @@ const styles = StyleSheet.create({
   alertNoticeText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: theme.colors.amber800,
+    color: theme.colors.textPrimary,
   },
   actionRow: {
     flexDirection: 'row',
@@ -638,6 +639,6 @@ const styles = StyleSheet.create({
   detailsChevronText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
 });

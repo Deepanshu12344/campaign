@@ -17,9 +17,10 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
+import { ArrowRight } from 'lucide-react-native';
 import { theme } from '../../theme';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'tinted' | 'white';
 export type ButtonSize = 'lg' | 'md' | 'sm';
 
 export interface ButtonProps extends Omit<PressableProps, 'style'> {
@@ -36,6 +37,7 @@ export interface ButtonProps extends Omit<PressableProps, 'style'> {
   iconRight?: React.ReactNode;
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
+  numberOfLines?: number;
 }
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -54,6 +56,7 @@ export function Button({
   iconRight,
   style,
   textStyle,
+  numberOfLines,
   onPress,
   ...rest
 }: ButtonProps) {
@@ -102,6 +105,8 @@ export function Button({
   const variantStyle = {
     primary: styles.variantPrimary,
     secondary: styles.variantSecondary,
+    tinted: styles.variantTinted,
+    white: styles.variantWhite,
     ghost: styles.variantGhost,
     danger: styles.variantDanger,
   }[variant];
@@ -109,6 +114,8 @@ export function Button({
   const variantTextStyle = {
     primary: styles.textPrimary,
     secondary: styles.textSecondary,
+    tinted: styles.textTinted,
+    white: styles.textWhite,
     ghost: styles.textGhost,
     danger: styles.textDanger,
   }[variant];
@@ -117,6 +124,8 @@ export function Button({
 
   const content = children || (
     <Text
+      numberOfLines={numberOfLines ?? 1}
+      ellipsizeMode="tail"
       style={[
         styles.baseText,
         sizeTextStyle,
@@ -128,6 +137,17 @@ export function Button({
       {resolvedTitle}
     </Text>
   );
+
+  const spinnerColor =
+    variant === 'primary'
+      ? theme.colors.onLime
+      : variant === 'white'
+        ? theme.colors.black
+        : variant === 'tinted'
+          ? theme.colors.lime
+          : variant === 'danger'
+            ? theme.colors.textPrimary
+            : theme.colors.textPrimary;
 
   return (
     <AnimatedPressable
@@ -150,10 +170,7 @@ export function Button({
       {...rest}
     >
       {loading ? (
-        <ActivityIndicator
-          size="small"
-          color={variant === 'primary' || variant === 'danger' ? '#FFFFFF' : theme.colors.primary600}
-        />
+        <ActivityIndicator size="small" color={spinnerColor} />
       ) : (
         <View style={styles.innerRow}>
           {resolvedIconLeft && <View style={styles.iconMargin}>{resolvedIconLeft}</View>}
@@ -165,9 +182,110 @@ export function Button({
   );
 }
 
+export interface IconButtonProps extends Omit<PressableProps, 'style'> {
+  icon: React.ReactNode;
+  size?: number;
+  variant?: 'surface' | 'lime' | 'ghost';
+  style?: StyleProp<ViewStyle>;
+  accessibilityLabel: string;
+}
+
+export function IconButton({
+  icon,
+  size = 44,
+  variant = 'surface',
+  style,
+  onPress,
+  disabled,
+  accessibilityLabel,
+  ...rest
+}: IconButtonProps) {
+  const scale = useSharedValue(1);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
+  const handlePressIn = () => {
+    if (!disabled) {
+      scale.value = withTiming(theme.motion.pressScale, {
+        duration: theme.motion.durationShort,
+      });
+    }
+  };
+
+  const handlePressOut = () => {
+    if (!disabled) {
+      scale.value = withTiming(1, {
+        duration: theme.motion.durationShort,
+      });
+    }
+  };
+
+  const handlePress = (e: GestureResponderEvent) => {
+    if (disabled) return;
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+    onPress?.(e);
+  };
+
+  const bgStyle =
+    variant === 'lime'
+      ? styles.iconButtonLime
+      : variant === 'ghost'
+        ? styles.iconButtonGhost
+        : styles.iconButtonSurface;
+
+  return (
+    <AnimatedPressable
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      disabled={disabled}
+      onPress={handlePress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      style={[
+        styles.iconButtonBase,
+        { width: size, height: size, borderRadius: size / 2 },
+        bgStyle,
+        disabled && styles.buttonDisabled,
+        animatedStyle,
+        style,
+      ]}
+      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+      {...rest}
+    >
+      {icon}
+    </AnimatedPressable>
+  );
+}
+
+export interface ArrowButtonProps extends Omit<PressableProps, 'style'> {
+  size?: number;
+  style?: StyleProp<ViewStyle>;
+  accessibilityLabel?: string;
+}
+
+export function ArrowButton({
+  size = 44,
+  style,
+  accessibilityLabel = 'Next',
+  ...rest
+}: ArrowButtonProps) {
+  return (
+    <IconButton
+      size={size}
+      variant="lime"
+      icon={<ArrowRight size={20} color={theme.colors.onLime} strokeWidth={2.5} />}
+      accessibilityLabel={accessibilityLabel}
+      style={style}
+      {...rest}
+    />
+  );
+}
+
 const styles = StyleSheet.create({
   baseButton: {
-    borderRadius: theme.radius.input,
+    borderRadius: theme.radii.pill,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -184,7 +302,7 @@ const styles = StyleSheet.create({
   iconMargin: {
     marginHorizontal: theme.spacing.xs,
   },
-  // Sizes
+  // Sizes (52dp, 44dp, 36dp)
   sizeLg: {
     height: theme.touchTargets.buttonHeightLg,
     paddingHorizontal: theme.spacing.xl,
@@ -199,22 +317,32 @@ const styles = StyleSheet.create({
   },
   // Variants
   variantPrimary: {
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
   },
   variantSecondary: {
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.darkPillBg,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.darkPillBorder,
+  },
+  variantTinted: {
+    backgroundColor: theme.colors.tintedPillBg,
+    borderWidth: 1,
+    borderColor: '#234F02',
+  },
+  variantWhite: {
+    backgroundColor: theme.colors.white,
   },
   variantGhost: {
     backgroundColor: 'transparent',
   },
   variantDanger: {
-    backgroundColor: theme.colors.danger,
+    backgroundColor: theme.colors.surfaceRaised,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
   },
   // Disabled state
   buttonDisabled: {
-    opacity: 0.5,
+    opacity: 0.45,
   },
   // Text Styles
   baseText: {
@@ -222,30 +350,55 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   textLg: {
-    fontSize: theme.typography.styles.body.fontSize,
-    lineHeight: theme.typography.styles.body.lineHeight,
+    fontSize: 16,
+    lineHeight: 22,
   },
   textMd: {
-    fontSize: theme.typography.styles.small.fontSize,
-    lineHeight: theme.typography.styles.small.lineHeight,
+    fontSize: 15,
+    lineHeight: 20,
   },
   textSm: {
-    fontSize: theme.typography.styles.caption.fontSize,
-    lineHeight: theme.typography.styles.caption.lineHeight,
+    fontSize: 13,
+    lineHeight: 18,
   },
   textPrimary: {
-    color: '#FFFFFF',
+    color: theme.colors.onLime,
+    fontFamily: theme.typography.fonts.uiBold,
   },
   textSecondary: {
-    color: theme.colors.primary600,
+    color: theme.colors.textPrimary,
+  },
+  textTinted: {
+    color: theme.colors.tintedPillText,
+    fontFamily: theme.typography.fonts.uiSemiBold,
+  },
+  textWhite: {
+    color: theme.colors.black,
+    fontFamily: theme.typography.fonts.uiBold,
   },
   textGhost: {
-    color: theme.colors.ink700,
+    color: theme.colors.textPrimary,
   },
   textDanger: {
-    color: '#FFFFFF',
+    color: theme.colors.textPrimary,
   },
   textDisabled: {
-    color: theme.colors.ink500,
+    color: theme.colors.textMuted,
+  },
+  // Circular Icon Buttons
+  iconButtonBase: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconButtonSurface: {
+    backgroundColor: theme.colors.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.line,
+  },
+  iconButtonLime: {
+    backgroundColor: theme.colors.lime,
+  },
+  iconButtonGhost: {
+    backgroundColor: 'transparent',
   },
 });

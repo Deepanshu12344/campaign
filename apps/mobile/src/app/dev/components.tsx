@@ -9,37 +9,29 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack, useRouter } from 'expo-router';
 import {
   ArrowLeft,
-  Sparkles,
-  Send,
-  AlertCircle,
-  CheckCircle,
+  Upload,
 } from 'lucide-react-native';
 import { CATEGORIES, CAMPAIGN_STATUSES } from '@campaigns/shared';
 import { theme } from '../../theme';
 import {
   Button,
+  IconButton,
+  ArrowButton,
   Card,
   ProgressBar,
   StatusPill,
   CategoryChip,
-  Skeleton,
-  EmptyState,
-  ErrorState,
   useToast,
   Accordion,
-  InfoTip,
-  Sheet,
   Segmented,
   TextField,
   TextArea,
   Avatar,
   Stat,
-  Timeline,
   StepIndicator,
   StickyActionBar,
   SourceItem,
   ReachEstimateBadge,
-  DemoDataBadge,
 } from '../../components/ui';
 import { CampaignCard } from '../../components/campaign/CampaignCard';
 import { MOCK_CAMPAIGNS } from '../../mocks/campaigns';
@@ -51,8 +43,7 @@ export default function ComponentsShowcaseScreen() {
   // Interactive States
   const [selectedCategory, setSelectedCategory] = useState<string>('Health');
   const [segmentedIndex, setSegmentedIndex] = useState(0);
-  const [currentStep, setCurrentStep] = useState(1);
-  const [sheetOpen, setSheetOpen] = useState(false);
+  const [currentStep, setCurrentStep] = useState(2);
   const [inputVal, setInputVal] = useState('Clean Water for Everyone');
   const [errorInputVal, setErrorInputVal] = useState('Invalid headline');
   const [textAreaVal, setTextAreaVal] = useState(
@@ -71,17 +62,15 @@ export default function ComponentsShowcaseScreen() {
       />
 
       <View style={styles.header}>
-        <Button
-          variant="ghost"
-          size="sm"
+        <IconButton
+          icon={<ArrowLeft size={20} color={theme.colors.textPrimary} strokeWidth={2} />}
           onPress={() => router.back()}
-          iconLeft={<ArrowLeft size={18} color={theme.colors.ink800} />}
           accessibilityLabel="Go back"
         />
         <View style={styles.headerTitleWrap}>
-          <Text style={styles.headerTitle}>Design System Gallery</Text>
+          <Text style={styles.headerTitle}>DESIGN SYSTEM</Text>
           <Text style={styles.headerSubtitle}>
-            Tokens, UI Components & States
+            Dark Green-Black & Brand Lime Tokens
           </Text>
         </View>
       </View>
@@ -90,65 +79,104 @@ export default function ComponentsShowcaseScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* SECTION: Theme & Typography */}
+        {/* SECTION: Display & Typography */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>1. Typography & Tokens</Text>
+          <Text style={styles.sectionTitle}>1. Typography & Display Headlines</Text>
           <Card>
-            <Text style={styles.h1}>Heading 1 (Newsreader Bold 30)</Text>
-            <Text style={styles.h2}>Heading 2 (Newsreader SemiBold 24)</Text>
-            <Text style={styles.h3}>Heading 3 (Newsreader SemiBold 20)</Text>
+            <Text style={styles.displayHero}>SPREAD THE WORD</Text>
+            <Text style={styles.displayCard}>REAL AUDIENCE REACH</Text>
+            <View style={{ height: 8 }} />
+            <Text style={styles.screenTitle}>Screen Title (Inter SemiBold 34)</Text>
+            <Text style={styles.h1}>Heading 1 (Inter SemiBold 26)</Text>
+            <Text style={styles.h2}>Heading 2 (Inter SemiBold 20)</Text>
+            <Text style={styles.bodyStory}>
+              Body Story (Inter Regular 17 / 27). High-legibility editorial text
+              rendering off-white on dark slate surface.
+            </Text>
             <Text style={styles.bodyText}>
-              Body text (Plus Jakarta Sans Regular 15 / 22). Clean high-contrast
-              editorial layout matching the Campaigns guidelines.
+              UI Body (Inter Regular 15 / 22). Clean crisp interface copy.
             </Text>
             <Text style={styles.captionText}>
-              Caption (Plus Jakarta Sans Medium 13 / 18) for secondary metrics.
+              Caption (Inter Medium 12 / 16) for metadata and timestamps.
             </Text>
           </Card>
         </View>
 
-        {/* SECTION: Buttons */}
+        {/* SECTION: Pill Buttons */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>2. Buttons</Text>
+          <Text style={styles.sectionTitle}>2. Pill Buttons (All Variants)</Text>
           <Text style={styles.sectionDesc}>
-            Primary, secondary, ghost, danger with loading & disabled states.
+            Lime primary, dark surface secondary, dark green tinted, white, ghost, and danger.
           </Text>
           <Card style={styles.columnGap}>
             <View style={styles.rowWrap}>
-              <Button title="Primary (lg)" size="lg" variant="primary" />
+              <Button title="Primary Lime (lg)" size="lg" variant="primary" />
               <Button title="Primary (md)" size="md" variant="primary" />
               <Button title="Primary (sm)" size="sm" variant="primary" />
             </View>
 
             <View style={styles.rowWrap}>
-              <Button title="Secondary" variant="secondary" />
+              <Button title="Secondary Dark" variant="secondary" />
+              <Button
+                title="Upload"
+                variant="tinted"
+                iconLeft={<Upload size={16} color={theme.colors.lime} strokeWidth={2} />}
+              />
+              <Button title="Continue as guest" variant="white" />
+            </View>
+
+            <View style={styles.rowWrap}>
               <Button title="Ghost" variant="ghost" />
               <Button title="Danger" variant="danger" />
+              <Button title="Loading" variant="primary" loading />
+              <Button title="Disabled" variant="primary" disabled />
             </View>
 
             <View style={styles.rowWrap}>
-              <Button
-                title="With Left Icon"
-                variant="primary"
-                iconLeft={<Sparkles size={16} color="#FFFFFF" />}
+              <Text style={styles.groupLabel}>Circular Action Buttons:</Text>
+              <IconButton
+                icon={<ArrowLeft size={20} color={theme.colors.textPrimary} strokeWidth={2} />}
+                accessibilityLabel="Back"
               />
-              <Button
-                title="With Right Icon"
-                variant="secondary"
-                iconRight={<Send size={16} color={theme.colors.ink800} />}
-              />
+              <ArrowButton accessibilityLabel="Next slide" />
             </View>
+          </Card>
+        </View>
 
-            <View style={styles.rowWrap}>
-              <Button title="Loading State" variant="primary" loading />
-              <Button title="Disabled State" variant="primary" disabled />
-            </View>
+        {/* SECTION: Cards & Surfaces */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>3. Cards & Surfaces (24dp Radius)</Text>
+          <Text style={styles.sectionDesc}>
+            Surface, dashed action card, and promo deep olive container.
+          </Text>
+
+          <Card variant="surface" style={{ marginBottom: 12 }}>
+            <Text style={styles.cardHeader}>Standard Surface Card (#2A2D29)</Text>
+            <Text style={styles.bodyText}>
+              24dp radius container with subtle 1dp border (#262924) and 20dp padding.
+            </Text>
+          </Card>
+
+          <Card variant="dashed" style={{ marginBottom: 12 }}>
+            <Text style={styles.cardHeader}>Dashed Action Card (Upload / Create)</Text>
+            <Text style={styles.bodyText}>
+              Dashed border with transparent surface for secondary actions.
+            </Text>
+          </Card>
+
+          <Card variant="promo">
+            <Text style={[styles.cardHeader, { color: theme.colors.lime }]}>
+              Promo Olive Card (#122606)
+            </Text>
+            <Text style={styles.bodyText}>
+              Deep forest undertone used for highlights, campaigns, or notifications.
+            </Text>
           </Card>
         </View>
 
         {/* SECTION: Status Pills */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>3. Status Pills (13 Lifecycle States)</Text>
+          <Text style={styles.sectionTitle}>4. Status Pills (13 Lifecycle States)</Text>
           <Text style={styles.sectionDesc}>
             Dedicated icon + label for every state. Never color-only.
           </Text>
@@ -163,9 +191,9 @@ export default function ComponentsShowcaseScreen() {
 
         {/* SECTION: Category Chips */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>4. Category Chips (10 Categories)</Text>
+          <Text style={styles.sectionTitle}>5. Category Filter Chips (10 Categories)</Text>
           <Text style={styles.sectionDesc}>
-            Tappable filter chips with category icons and optional count badges.
+            Selected chips turn brand lime (#9FE870) with dark green text (#163300).
           </Text>
           <Card>
             <View style={styles.chipsGrid}>
@@ -184,51 +212,52 @@ export default function ComponentsShowcaseScreen() {
 
         {/* SECTION: Badges */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>5. Badges & Disclaimers</Text>
+          <Text style={styles.sectionTitle}>6. Badges & Invariant Disclaimers</Text>
           <Card style={styles.columnGap}>
             <Text style={styles.groupLabel}>Reach Estimate Badge:</Text>
             <ReachEstimateBadge low={45000} high={98000} showSubtitle />
             <ReachEstimateBadge low={120000} high={250000} size="sm" />
-
-            <Text style={[styles.groupLabel, { marginTop: theme.spacing.sm }]}>
-              Demo Data Disclaimers:
-            </Text>
-            <View style={styles.rowWrap}>
-              <DemoDataBadge size="sm" />
-              <DemoDataBadge size="md" />
-            </View>
           </Card>
         </View>
 
-        {/* SECTION: Progress Bars */}
+        {/* SECTION: Progress Bars & Segmented Steps */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>6. Progress Bars</Text>
-          <Text style={styles.sectionDesc}>
-            Animated fill on mount. Turns emerald green at 100%+.
-          </Text>
+          <Text style={styles.sectionTitle}>7. Lime Progress & 5-Segment Indicator</Text>
           <Card style={styles.columnGap}>
             <View>
-              <Text style={styles.captionText}>0% Funded (sm)</Text>
-              <ProgressBar value={0} size="sm" />
+              <Text style={styles.captionText}>Funding Progress: 68%</Text>
+              <ProgressBar value={68} size="md" />
             </View>
-            <View>
-              <Text style={styles.captionText}>42% Funded (md)</Text>
-              <ProgressBar value={42} size="md" />
-            </View>
-            <View>
-              <Text style={styles.captionText}>75% Funded (lg)</Text>
-              <ProgressBar value={75} size="lg" />
-            </View>
-            <View>
-              <Text style={styles.captionText}>100% Funded (Completed Success)</Text>
-              <ProgressBar value={100} size="md" />
+
+            <View style={{ marginTop: 8 }}>
+              <Text style={styles.groupLabel}>5-Segment Creation Flow Indicator:</Text>
+              <StepIndicator
+                currentStep={currentStep}
+                onStepPress={(step) => setCurrentStep(step)}
+              />
+              <View style={styles.stepControls}>
+                <Button
+                  title="Previous"
+                  size="sm"
+                  variant="secondary"
+                  disabled={currentStep <= 1}
+                  onPress={() => setCurrentStep((s) => Math.max(1, s - 1))}
+                />
+                <Button
+                  title="Next Step"
+                  size="sm"
+                  variant="primary"
+                  disabled={currentStep >= 5}
+                  onPress={() => setCurrentStep((s) => Math.min(5, s + 1))}
+                />
+              </View>
             </View>
           </Card>
         </View>
 
-        {/* SECTION: Form Fields */}
+        {/* SECTION: Inset Form Fields */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>7. Form Fields</Text>
+          <Text style={styles.sectionTitle}>8. Inset Form Fields (#1B1E19)</Text>
           <Card style={styles.columnGap}>
             <TextField
               label="Campaign Title"
@@ -247,7 +276,7 @@ export default function ComponentsShowcaseScreen() {
             />
 
             <TextField
-              label="Disabled Field"
+              label="Disabled Inset Field"
               value="Fixed system identifier"
               disabled
               helperText="Cannot be changed after submission."
@@ -267,24 +296,20 @@ export default function ComponentsShowcaseScreen() {
 
         {/* SECTION: Segmented Controls */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>8. Segmented Control</Text>
+          <Text style={styles.sectionTitle}>9. Segmented Control</Text>
           <Card>
             <Segmented
               options={['All Campaigns', 'Active', 'Funded', 'Completed']}
               selectedIndex={segmentedIndex}
               onChange={setSegmentedIndex}
             />
-            <Text style={[styles.captionText, { marginTop: theme.spacing.sm }]}>
-              Selected tab: {['All Campaigns', 'Active', 'Funded', 'Completed'][segmentedIndex]}
-            </Text>
           </Card>
         </View>
 
         {/* SECTION: Avatars & Stats */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>9. Avatars & Stats</Text>
+          <Text style={styles.sectionTitle}>10. Avatars & Stats</Text>
           <Card style={styles.columnGap}>
-            <Text style={styles.groupLabel}>Avatars (Initials & Images):</Text>
             <View style={styles.rowWrap}>
               <Avatar name="Elena Rostova" size="sm" />
               <Avatar name="Jackson Coalition" size="md" />
@@ -296,9 +321,6 @@ export default function ComponentsShowcaseScreen() {
               <Avatar name="Clean Water" size="xl" />
             </View>
 
-            <Text style={[styles.groupLabel, { marginTop: theme.spacing.sm }]}>
-              Key Statistics:
-            </Text>
             <View style={styles.rowWrap}>
               <Stat
                 value="$1,125"
@@ -314,51 +336,13 @@ export default function ComponentsShowcaseScreen() {
           </Card>
         </View>
 
-        {/* SECTION: InfoTips & Sheets */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>10. InfoTips & Bottom Sheet</Text>
-          <Text style={styles.sectionDesc}>
-            Built-in presets explaining reach, fees, and review principles.
-          </Text>
-          <Card style={styles.columnGap}>
-            <View style={styles.infoTipRow}>
-              <Text style={styles.bodyText}>Estimated Reach Info:</Text>
-              <InfoTip term="estimatedReach" />
-            </View>
-            <View style={styles.infoTipRow}>
-              <Text style={styles.bodyText}>Platform Fee (10%):</Text>
-              <InfoTip term="platformFee" />
-            </View>
-            <View style={styles.infoTipRow}>
-              <Text style={styles.bodyText}>Use of Funds ("Not a Donation"):</Text>
-              <InfoTip term="useOfFunds" />
-            </View>
-            <View style={styles.infoTipRow}>
-              <Text style={styles.bodyText}>Review & Fact-checking:</Text>
-              <InfoTip term="reviewProcess" />
-            </View>
-            <View style={styles.infoTipRow}>
-              <Text style={styles.bodyText}>CPM & Impressions:</Text>
-              <InfoTip term="cpmAndImpressions" />
-            </View>
-
-            <Button
-              title="Open Custom Bottom Sheet"
-              variant="secondary"
-              onPress={() => setSheetOpen(true)}
-              style={{ marginTop: theme.spacing.sm }}
-            />
-          </Card>
-        </View>
-
         {/* SECTION: Accordions */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>11. Accordions</Text>
+          <Text style={styles.sectionTitle}>11. Accordions & Required Disclosures</Text>
           <Accordion title="Where do the funds actually go?" defaultOpen>
             <Text style={styles.accordionBody}>
-              90% of contributions strictly fund external digital ad inventory
-              (social feeds, display banners, search amplification) to spread
-              the campaign message. 10% covers fact-checking and platform hosting.
+              NOT a donation. 90% of contributions strictly fund external digital ad inventory
+              to spread the campaign message. 10% covers platform operation and verification.
             </Text>
           </Accordion>
           <Accordion title="Is this tax-deductible?">
@@ -375,181 +359,20 @@ export default function ComponentsShowcaseScreen() {
           </Accordion>
         </View>
 
-        {/* SECTION: Timeline */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>12. Timeline</Text>
-          <Card>
-            <Timeline
-              items={[
-                {
-                  id: '1',
-                  title: 'Campaign Submitted',
-                  description: 'Draft submitted by creator for editorial verification.',
-                  date: 'Oct 12, 2026',
-                  status: 'completed',
-                },
-                {
-                  id: '2',
-                  title: 'Editorial & Source Verification',
-                  description: 'All 3 citations verified against public records.',
-                  date: 'Oct 13, 2026',
-                  status: 'completed',
-                },
-                {
-                  id: '3',
-                  title: 'Public Funding Period',
-                  description: 'Crowd-funding ad budget towards $1,500 goal.',
-                  date: 'Current',
-                  status: 'current',
-                },
-                {
-                  id: '4',
-                  title: 'Ad Distribution Launch',
-                  description: 'Targeted reach across selected regions begins.',
-                  date: 'Scheduled',
-                  status: 'upcoming',
-                },
-              ]}
-            />
-          </Card>
-        </View>
-
-        {/* SECTION: Step Indicator */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>13. Step Indicator (5-Step Creation)</Text>
-          <Text style={styles.sectionDesc}>
-            1 Basics → 2 Story → 3 Visuals → 4 Reach → 5 Submit (tap to jump)
-          </Text>
-          <Card>
-            <StepIndicator
-              currentStep={currentStep}
-              onStepPress={(step) => setCurrentStep(step)}
-            />
-            <View style={styles.stepControls}>
-              <Button
-                title="Previous"
-                size="sm"
-                variant="secondary"
-                disabled={currentStep <= 1}
-                onPress={() => setCurrentStep((s) => Math.max(1, s - 1))}
-              />
-              <Button
-                title="Next Step"
-                size="sm"
-                variant="primary"
-                disabled={currentStep >= 5}
-                onPress={() => setCurrentStep((s) => Math.min(5, s + 1))}
-              />
-            </View>
-          </Card>
-        </View>
-
         {/* SECTION: SourceItem */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>14. Source Item</Text>
-          <Text style={styles.sectionDesc}>
-            Transparent citations with external link and verification badge.
-          </Text>
+          <Text style={styles.sectionTitle}>12. Public Sources</Text>
           <SourceItem
             title="Jackson Water Crisis Lead & Copper Rule Compliance Report"
             url="https://www.epa.gov/ms/jackson-water-crisis-updates"
             publisher="US Environmental Protection Agency"
             verified
           />
-          <View style={{ height: theme.spacing.sm }} />
-          <SourceItem
-            title="Community Water Center: Central Valley Well Testing Data"
-            url="https://www.communitywatercenter.org/data"
-            publisher="Community Water Center"
-            verified
-          />
-        </View>
-
-        {/* SECTION: Feedback States & Toasts */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>15. Interactive Toasts & Feedback</Text>
-          <Card style={styles.columnGap}>
-            <View style={styles.rowWrap}>
-              <Button
-                title="Success Toast"
-                variant="primary"
-                size="sm"
-                iconLeft={<CheckCircle size={14} color="#FFFFFF" />}
-                onPress={() =>
-                  toast.success(
-                    'Contribution recorded! $50 added to the ad distribution pool.'
-                  )
-                }
-              />
-              <Button
-                title="Info Toast"
-                variant="secondary"
-                size="sm"
-                onPress={() =>
-                  toast.info('Ad targeting updated: Jackson metro area selected.')
-                }
-              />
-              <Button
-                title="Warning Toast"
-                variant="secondary"
-                size="sm"
-                onPress={() =>
-                  toast.warning('Goal deadline approaching: 48 hours left.')
-                }
-              />
-              <Button
-                title="Error Toast"
-                variant="danger"
-                size="sm"
-                iconLeft={<AlertCircle size={14} color="#FFFFFF" />}
-                onPress={() =>
-                  toast.error('Payment failed: Card expired or network error.')
-                }
-              />
-            </View>
-          </Card>
-        </View>
-
-        {/* SECTION: Empty & Error States */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>16. Empty & Error States</Text>
-          <Card style={styles.columnGap}>
-            <EmptyState
-              title="No campaigns found"
-              description="Try adjusting your category filter or search keywords to discover active causes."
-              buttonTitle="Reset Filters"
-              onPress={() => setSelectedCategory('Health')}
-            />
-            <View style={styles.divider} />
-            <ErrorState
-              title="Connection Error"
-              message="Failed to fetch latest ad distribution metrics from the server."
-              onRetry={() => toast.info('Retrying connection...')}
-            />
-          </Card>
-        </View>
-
-        {/* SECTION: Skeletons */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>17. Shimmer Skeletons</Text>
-          <Card style={styles.columnGap}>
-            <View style={styles.rowWrap}>
-              <Skeleton width={50} height={50} radius={25} />
-              <View style={{ flex: 1, gap: 6 }}>
-                <Skeleton width="80%" height={16} />
-                <Skeleton width="50%" height={12} />
-              </View>
-            </View>
-            <Skeleton width="100%" height={120} radius={theme.radius.md} />
-          </Card>
         </View>
 
         {/* SECTION: Campaign Cards */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>18. Campaign Cards</Text>
-          <Text style={styles.sectionDesc}>
-            All 4 card variants: Featured, Default, Compact, and Skeleton.
-          </Text>
+          <Text style={styles.sectionTitle}>13. Campaign Cards</Text>
 
           {/* Featured Variant */}
           <Text style={styles.cardVariantLabel}>Variant: Featured (Hero)</Text>
@@ -596,7 +419,7 @@ export default function ComponentsShowcaseScreen() {
         <View style={{ height: 120 }} />
       </ScrollView>
 
-      {/* SECTION: Sticky Action Bar */}
+      {/* Sticky Action Bar */}
       <StickyActionBar
         primaryAction={{
           title: 'Simulate Contribution',
@@ -608,26 +431,6 @@ export default function ComponentsShowcaseScreen() {
           amount: '$25.00',
         }}
       />
-
-      {/* Bottom Sheet Modal */}
-      <Sheet
-        visible={sheetOpen}
-        onClose={() => setSheetOpen(false)}
-        title="Interactive Bottom Sheet"
-      >
-        <View style={{ gap: theme.spacing.md, paddingVertical: theme.spacing.sm }}>
-          <Text style={styles.bodyText}>
-            This bottom sheet includes touch-dismiss, drag handle, backdrop blur,
-            and keyboard safe area padding.
-          </Text>
-          <Button
-            title="Close Sheet"
-            variant="secondary"
-            fullWidth
-            onPress={() => setSheetOpen(false)}
-          />
-        </View>
-      </Sheet>
     </SafeAreaView>
   );
 }
@@ -644,20 +447,21 @@ const styles = StyleSheet.create({
     paddingVertical: theme.spacing.sm,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.line,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.bg,
   },
   headerTitleWrap: {
-    marginLeft: theme.spacing.sm,
+    marginLeft: theme.spacing.md,
   },
   headerTitle: {
-    fontFamily: theme.typography.fonts.serifSemiBold,
-    fontSize: 20,
-    color: theme.colors.ink900,
+    fontFamily: theme.typography.fonts.display,
+    fontSize: 18,
+    letterSpacing: -0.3,
+    color: theme.colors.textPrimary,
   },
   headerSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   scrollContent: {
     padding: theme.spacing.base,
@@ -667,14 +471,14 @@ const styles = StyleSheet.create({
     gap: theme.spacing.xs,
   },
   sectionTitle: {
-    fontFamily: theme.typography.fonts.serifSemiBold,
+    fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 18,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   sectionDesc: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginBottom: theme.spacing.xxs,
   },
   columnGap: {
@@ -686,38 +490,62 @@ const styles = StyleSheet.create({
     gap: theme.spacing.sm,
     alignItems: 'center',
   },
+  displayHero: {
+    fontFamily: theme.typography.fonts.display,
+    fontSize: 32,
+    lineHeight: 34,
+    color: theme.colors.lime,
+    marginBottom: 4,
+  },
+  displayCard: {
+    fontFamily: theme.typography.fonts.display,
+    fontSize: 22,
+    lineHeight: 24,
+    color: theme.colors.textPrimary,
+    marginBottom: 8,
+  },
+  screenTitle: {
+    fontFamily: theme.typography.fonts.uiSemiBold,
+    fontSize: 24,
+    color: theme.colors.textPrimary,
+    marginBottom: 4,
+  },
   h1: {
-    fontFamily: theme.typography.fonts.serifBold,
-    fontSize: theme.typography.styles.h1.fontSize,
-    lineHeight: theme.typography.styles.h1.lineHeight,
-    color: theme.colors.ink900,
-    marginBottom: 6,
+    fontFamily: theme.typography.fonts.uiSemiBold,
+    fontSize: 20,
+    color: theme.colors.textPrimary,
+    marginBottom: 4,
   },
   h2: {
-    fontFamily: theme.typography.fonts.serifSemiBold,
-    fontSize: theme.typography.styles.h2.fontSize,
-    lineHeight: theme.typography.styles.h2.lineHeight,
-    color: theme.colors.ink900,
+    fontFamily: theme.typography.fonts.uiSemiBold,
+    fontSize: 17,
+    color: theme.colors.textPrimary,
     marginBottom: 6,
   },
-  h3: {
-    fontFamily: theme.typography.fonts.serifSemiBold,
-    fontSize: theme.typography.styles.h3.fontSize,
-    lineHeight: theme.typography.styles.h3.lineHeight,
-    color: theme.colors.ink900,
-    marginBottom: 6,
+  bodyStory: {
+    fontFamily: theme.typography.fonts.uiRegular,
+    fontSize: 17,
+    lineHeight: 27,
+    color: theme.colors.textPrimary,
+    marginBottom: 8,
   },
   bodyText: {
     fontFamily: theme.typography.fonts.uiRegular,
-    fontSize: theme.typography.styles.body.fontSize,
-    lineHeight: theme.typography.styles.body.lineHeight,
-    color: theme.colors.ink700,
+    fontSize: 15,
+    lineHeight: 22,
+    color: theme.colors.textPrimary,
   },
   captionText: {
     fontFamily: theme.typography.fonts.uiMedium,
-    fontSize: theme.typography.styles.caption.fontSize,
-    lineHeight: theme.typography.styles.caption.lineHeight,
-    color: theme.colors.ink500,
+    fontSize: 12,
+    lineHeight: 16,
+    color: theme.colors.textSecondary,
+  },
+  cardHeader: {
+    fontFamily: theme.typography.fonts.uiSemiBold,
+    fontSize: 16,
+    color: theme.colors.textPrimary,
+    marginBottom: 4,
   },
   pillsGrid: {
     flexDirection: 'row',
@@ -732,19 +560,13 @@ const styles = StyleSheet.create({
   groupLabel: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink800,
-  },
-  infoTipRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: theme.spacing.xxs,
+    color: theme.colors.textPrimary,
   },
   accordionBody: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 20,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   stepControls: {
     flexDirection: 'row',
@@ -752,17 +574,12 @@ const styles = StyleSheet.create({
     gap: theme.spacing.sm,
     marginTop: theme.spacing.base,
   },
-  divider: {
-    height: 1,
-    backgroundColor: theme.colors.line,
-    marginVertical: theme.spacing.xs,
-  },
   cardVariantLabel: {
     fontFamily: theme.typography.fonts.uiSemiBold,
-    fontSize: 13,
-    color: theme.colors.primary700,
+    fontSize: 12,
+    color: theme.colors.lime,
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    letterSpacing: 0.8,
     marginBottom: 6,
   },
 });

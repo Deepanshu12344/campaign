@@ -1,224 +1,403 @@
+/**
+ * Design System Tokens — Dark Green-Black & Lime Theme
+ *
+ * Sampled and matched directly against reference screenshots in docs/reference/:
+ * - App Background: #121511 (Dark near-black with subtle forest undertone)
+ * - Card Surface:   #2A2D29 (Slate-olive surface, 24dp radius)
+ * - Surface Raised: #3F423E (Elevated cards, skeleton placeholders, tag pills)
+ * - Line / Border:  #262924 (Subtle inset separators and field borders)
+ * - Inset Field:    #1B1E19 (Darker than card surface, 16dp radius)
+ * - Tab Bar:        #1F221E (Surface navigation bar)
+ * - Brand Lime:     #9FE870 (Primary pill buttons, active tab indicators, arrow circles)
+ * - On-Lime Text:   #163300 (Dark green high-contrast text on lime)
+ * - Tinted Pill:    #163300 bg with #9FE870 text/icon
+ * - Text Primary:   #F2F5EE (Off-white, 16.1:1 contrast on background, 11.4:1 on surface)
+ * - Text Secondary: #A8ADA5 (7.9:1 contrast on background, 5.6:1 on surface)
+ */
+
 export const colors = {
-  // Brand Primary (Indigo)
-  primary600: '#4F46E5',
-  primary700: '#4338CA',
-  primary800: '#3730A3',
-  primary100: '#E0E7FF',
-  primary50: '#EEF2FF',
+  // Core Backgrounds & Surfaces
+  bg: '#121511',
+  bgMuted: '#171A15',
+  surface: '#2A2D29',
+  surfaceRaised: '#3F423E',
+  skeleton: '#3F423E',
+  line: '#262924',
+  border: '#262924',
+  inputBg: '#1B1E19',
+  inputBorder: '#262924',
+  inputFocusRing: '#9FE870',
+  tabBarBg: '#1F221E',
+  tabBarBorder: '#262924',
+  tabBarActive: '#9FE870',
+  tabBarInactive: '#A8ADA5',
 
-  // Slate Inks
-  ink900: '#0F172A', // Headings, display
-  ink800: '#1E293B', // High contrast elements
-  ink700: '#334155', // Primary body, form labels
-  ink600: '#475569', // Secondary body, labels
-  ink500: '#64748B', // Captions, helper text, placeholders
-  ink400: '#94A3B8', // Muted timestamps, icons
+  // Brand Lime (Primary)
+  primary: '#9FE870',
+  primaryPressed: '#8BD65C',
+  onPrimary: '#163300',
+  lime: '#9FE870',
+  limePressed: '#8BD65C',
+  onLime: '#163300',
 
-  // Borders & Surfaces
-  line: '#E2E8F0', // Card borders, dividers, input borders
-  bg: '#F8FAFC', // Main app background
-  bgMuted: '#F1F5F9', // Muted container background
-  surface: '#FFFFFF', // Cards, sheets, elevated surfaces
-  slate100: '#F1F5F9',
-  slate200: '#E2E8F0',
+  // Dark Green Tinted Pill ("Upload" style)
+  tintedPillBg: '#163300',
+  tintedPillText: '#9FE870',
+  darkGreen: '#163300',
+  promoCardBg: '#122606',
 
-  // Semantic Alerts & Badges
-  success: '#16A34A',
-  successBg: '#DCFCE7',
+  // Secondary Dark Pill
+  darkPillBg: '#2A2D29',
+  darkPillText: '#F2F5EE',
+  darkPillBorder: '#3F423E',
 
-  warning: '#D97706',
-  warningBg: '#FEF3C7',
-  amber500: '#F59E0B',
-
-  danger: '#DC2626',
-  dangerBg: '#FEE2E2',
-
-  info: '#0284C7',
-  infoBg: '#E0F2FE',
-
-  // Additional semantic palette tokens
-  black: '#000000',
+  // Text & Typography
+  textPrimary: '#F2F5EE',
+  textSecondary: '#A8ADA5',
+  textMuted: '#70756D',
+  textInverse: '#121511',
   white: '#FFFFFF',
-  primary200: '#C7D2FE',
-  primary300: '#A5B4FC',
-  primary400: '#818CF8',
-  primary500: '#6366F1',
-  emerald50: '#ECFDF5',
-  emerald100: '#BBF7D0',
-  emerald200: '#A7F3D0',
-  emerald300: '#6EE7B7',
-  emerald500: '#10B981',
-  emerald600: '#059669',
-  emerald700: '#047857',
-  emerald800: '#065F46',
-  emerald900: '#064E3B',
-  rose50: '#FFF1F2',
-  rose100: '#FFE4E6',
-  rose200: '#FECDD3',
-  rose600: '#E11D48',
-  rose800: '#9F1239',
-  rose900: '#881337',
-  amber50: '#FFFBEB',
-  amber100: '#FEF3C7',
-  amber200: '#FDE68A',
-  amber300: '#FCD34D',
-  amber600: '#D97706',
-  amber700: '#B45309',
-  amber800: '#92400E',
-  amber900: '#78350F',
-  red50: '#FEF2F2',
-  red200: '#FECACA',
-  red600: '#DC2626',
-  purple50: '#FAF5FF',
-  sky200: '#BAE6FD',
-  slate50: '#F8FAFC',
-  slate300: '#CBD5E1',
-  slate400: '#94A3B8',
-  slate500: '#64748B',
-  slate600: '#475569',
-  slate700: '#334155',
-  slate800: '#1E293B',
-  slate900: '#0F172A',
+  black: '#000000',
+
+  // Ink Aliases (High contrast on dark background)
+  ink900: '#F2F5EE', // Headings, display off-white
+  ink800: '#E4E8DF', // High contrast elements
+  ink700: '#D1D7CB', // Primary body
+  ink600: '#A8ADA5', // Secondary body, labels
+  ink500: '#70756D', // Captions, helper text, placeholders
+  ink400: '#545851', // Muted timestamps, icons
+  ink300: '#3F423E',
+  ink200: '#2A2D29',
+  ink100: '#1B1E19',
+
+  // Primary Shades (Lime to forest green)
+  primary50: '#163300',
+  primary100: '#1F4700',
+  primary200: '#2F6B00',
+  primary300: '#489E00',
+  primary400: '#76CC35',
+  primary500: '#9FE870',
+  primary600: '#9FE870',
+  primary700: '#8BD65C',
+  primary800: '#73B846',
+
+  // Slate Neutral Shades (Dark theme slate)
+  slate50: '#F2F5EE',
+  slate100: '#E4E8DF',
+  slate200: '#A8ADA5',
+  slate300: '#70756D',
+  slate400: '#545851',
+  slate500: '#3F423E',
+  slate600: '#2A2D29',
+  slate700: '#1F221E',
+  slate800: '#1B1E19',
+  slate900: '#121511',
+
+  // Semantic Status (Strict dark green, lime, surface and off-white only; zero red/amber/blue)
+  success: '#9FE870',
+  successBg: '#163300',
+  warning: '#F2F5EE',
+  warningBg: '#2A2D29',
+  danger: '#F2F5EE', // Forms & errors use off-white outline and text
+  dangerBg: '#2A2D29',
+  info: '#A8ADA5',
+  infoBg: '#2A2D29',
+
+  // Legacy scale compatibility mapped strictly to approved palette
+  emerald50: '#163300',
+  emerald100: '#163300',
+  emerald200: '#163300',
+  emerald300: '#9FE870',
+  emerald500: '#9FE870',
+  emerald600: '#9FE870',
+  emerald700: '#9FE870',
+  emerald800: '#9FE870',
+  emerald900: '#163300',
+
+  amber50: '#2A2D29',
+  amber100: '#2A2D29',
+  amber200: '#3F423E',
+  amber300: '#A8ADA5',
+  amber500: '#F2F5EE',
+  amber600: '#F2F5EE',
+  amber700: '#F2F5EE',
+  amber800: '#A8ADA5',
+  amber900: '#2A2D29',
+
+  red50: '#2A2D29',
+  red200: '#3F423E',
+  red600: '#F2F5EE',
+  rose50: '#2A2D29',
+  rose100: '#2A2D29',
+  rose200: '#3F423E',
+  rose600: '#F2F5EE',
+  rose800: '#F2F5EE',
+  rose900: '#2A2D29',
+
+  purple50: '#2A2D29',
+  sky200: '#2A2D29',
 } as const;
 
 export const typography = {
   fonts: {
-    uiRegular: 'PlusJakartaSans-Regular',
-    uiMedium: 'PlusJakartaSans-Medium',
-    uiSemiBold: 'PlusJakartaSans-SemiBold',
-    uiBold: 'PlusJakartaSans-Bold',
-    serifRegular: 'Newsreader-Regular',
-    serifSemiBold: 'Newsreader-SemiBold',
-    serifBold: 'Newsreader-Bold',
-    storyRegular: 'Newsreader-Regular',
-    storyItalic: 'Newsreader-MediumItalic',
+    display: 'ArchivoBlack-Regular',
+    uiRegular: 'Inter-Regular',
+    uiMedium: 'Inter-Medium',
+    uiSemiBold: 'Inter-SemiBold',
+    uiBold: 'Inter-Bold',
+    storyRegular: 'Inter-Regular',
+    storyMedium: 'Inter-Medium',
+    storySemiBold: 'Inter-SemiBold',
+    storyBold: 'Inter-Bold',
+    // Fallback aliases for existing components
+    serifRegular: 'Inter-Regular',
+    serifSemiBold: 'Inter-SemiBold',
+    serifBold: 'Inter-Bold',
+    storyItalic: 'Inter-Regular',
   },
   styles: {
+    // Heavy uppercase display headline (used for hero banners, onboarding, large card titles)
     display: {
-      fontFamily: 'PlusJakartaSans-Bold',
+      fontFamily: 'ArchivoBlack-Regular',
       fontSize: 32,
-      lineHeight: 38,
-      color: colors.ink900,
+      lineHeight: 32,
+      textTransform: 'uppercase' as const,
+      letterSpacing: -0.5,
+      color: colors.textPrimary,
     },
+    displayHero: {
+      fontFamily: 'ArchivoBlack-Regular',
+      fontSize: 36,
+      lineHeight: 36,
+      textTransform: 'uppercase' as const,
+      letterSpacing: -0.5,
+      color: colors.textPrimary,
+    },
+    displayCard: {
+      fontFamily: 'ArchivoBlack-Regular',
+      fontSize: 24,
+      lineHeight: 24,
+      textTransform: 'uppercase' as const,
+      letterSpacing: -0.3,
+      color: colors.textPrimary,
+    },
+
+    // Screen Titles ("Recipients" / "Explore" style)
+    screenTitle: {
+      fontFamily: 'Inter-SemiBold',
+      fontSize: 34,
+      lineHeight: 40,
+      letterSpacing: -0.5,
+      color: colors.textPrimary,
+    },
+    // Section Titles ("Featured", "Reach calculator", "Explore" style)
+    sectionTitle: {
+      fontFamily: 'Inter-SemiBold',
+      fontSize: 22,
+      lineHeight: 28,
+      letterSpacing: -0.3,
+      color: colors.textPrimary,
+    },
+    // Card Title
+    cardTitle: {
+      fontFamily: 'Inter-SemiBold',
+      fontSize: 18,
+      lineHeight: 24,
+      color: colors.textPrimary,
+    },
+
+    // Standard Headings
     h1: {
-      fontFamily: 'PlusJakartaSans-Bold',
+      fontFamily: 'Inter-SemiBold',
       fontSize: 26,
       lineHeight: 32,
-      color: colors.ink900,
+      color: colors.textPrimary,
     },
     h2: {
-      fontFamily: 'PlusJakartaSans-SemiBold',
+      fontFamily: 'Inter-SemiBold',
       fontSize: 20,
       lineHeight: 26,
-      color: colors.ink900,
+      color: colors.textPrimary,
     },
     h3: {
-      fontFamily: 'PlusJakartaSans-SemiBold',
+      fontFamily: 'Inter-SemiBold',
       fontSize: 17,
-      lineHeight: 24,
-      color: colors.ink900,
+      lineHeight: 23,
+      color: colors.textPrimary,
     },
     h4: {
-      fontFamily: 'PlusJakartaSans-SemiBold',
+      fontFamily: 'Inter-SemiBold',
       fontSize: 15,
       lineHeight: 22,
-      color: colors.ink900,
+      color: colors.textPrimary,
     },
+
+    // Body text (Inter 17/27 for long story text, Inter 15/22 for UI)
     body: {
-      fontFamily: 'PlusJakartaSans-Regular',
-      fontSize: 16,
-      lineHeight: 24,
-      color: colors.ink700,
-    },
-    bodySm: {
-      fontFamily: 'PlusJakartaSans-Regular',
-      fontSize: 13,
-      lineHeight: 18,
-      color: colors.ink700,
+      fontFamily: 'Inter-Regular',
+      fontSize: 15,
+      lineHeight: 22,
+      color: colors.textPrimary,
     },
     bodyMedium: {
-      fontFamily: 'PlusJakartaSans-Medium',
-      fontSize: 16,
-      lineHeight: 24,
-      color: colors.ink700,
+      fontFamily: 'Inter-Medium',
+      fontSize: 15,
+      lineHeight: 22,
+      color: colors.textPrimary,
+    },
+    bodyStory: {
+      fontFamily: 'Inter-Regular',
+      fontSize: 17,
+      lineHeight: 27,
+      color: colors.textPrimary,
+    },
+    bodyMuted: {
+      fontFamily: 'Inter-Regular',
+      fontSize: 15,
+      lineHeight: 22,
+      color: colors.textSecondary,
+    },
+    bodySmall: {
+      fontFamily: 'Inter-Regular',
+      fontSize: 13,
+      lineHeight: 18,
+      color: colors.textSecondary,
+    },
+    bodySm: {
+      fontFamily: 'Inter-Regular',
+      fontSize: 13,
+      lineHeight: 18,
+      color: colors.textSecondary,
     },
     small: {
-      fontFamily: 'PlusJakartaSans-Regular',
+      fontFamily: 'Inter-Regular',
       fontSize: 14,
       lineHeight: 20,
-      color: colors.ink500,
+      color: colors.textSecondary,
     },
     smallMedium: {
-      fontFamily: 'PlusJakartaSans-Medium',
+      fontFamily: 'Inter-Medium',
       fontSize: 14,
       lineHeight: 20,
-      color: colors.ink700,
-    },
-    caption: {
-      fontFamily: 'PlusJakartaSans-Regular',
-      fontSize: 12,
-      lineHeight: 16,
-      color: colors.ink500,
-    },
-    captionSemiBold: {
-      fontFamily: 'PlusJakartaSans-SemiBold',
-      fontSize: 12,
-      lineHeight: 16,
-      color: colors.ink500,
+      color: colors.textPrimary,
     },
     storyBody: {
-      fontFamily: 'Newsreader-Regular',
-      fontSize: 18,
-      lineHeight: 28,
-      color: colors.ink900,
+      fontFamily: 'Inter-Regular',
+      fontSize: 17,
+      lineHeight: 27,
+      color: colors.textPrimary,
     },
-    storyItalic: {
-      fontFamily: 'Newsreader-MediumItalic',
-      fontSize: 18,
+
+    // Captions & Metadata
+    caption: {
+      fontFamily: 'Inter-Medium',
+      fontSize: 12,
+      lineHeight: 16,
+      color: colors.textSecondary,
+    },
+    captionBold: {
+      fontFamily: 'Inter-SemiBold',
+      fontSize: 12,
+      lineHeight: 16,
+      color: colors.textPrimary,
+    },
+    captionSemiBold: {
+      fontFamily: 'Inter-SemiBold',
+      fontSize: 12,
+      lineHeight: 16,
+      color: colors.textPrimary,
+    },
+
+    // Buttons
+    button: {
+      fontFamily: 'Inter-SemiBold',
+      fontSize: 15,
+      lineHeight: 20,
+      color: colors.onLime,
+    },
+    buttonSmall: {
+      fontFamily: 'Inter-SemiBold',
+      fontSize: 13,
+      lineHeight: 18,
+      color: colors.onLime,
+    },
+    buttonDark: {
+      fontFamily: 'Inter-SemiBold',
+      fontSize: 15,
+      lineHeight: 20,
+      color: colors.textPrimary,
+    },
+
+    // Stat & Numbers
+    statNumber: {
+      fontFamily: 'Inter-Bold',
+      fontSize: 24,
       lineHeight: 28,
-      color: colors.ink900,
+      color: colors.textPrimary,
+    },
+    statLabel: {
+      fontFamily: 'Inter-Medium',
+      fontSize: 13,
+      lineHeight: 18,
+      color: colors.textSecondary,
     },
   },
 } as const;
 
 export const spacing = {
+  // 4px Base Spacing Scale
   xxs: 2,
   xs: 4,
   sm: 8,
   md: 12,
   base: 16,
-  lg: 20, // Standard screen horizontal padding
+  lg: 20,
   xl: 24,
   '2xl': 32,
   '3xl': 40,
-  '4xl': 56,
+  '4xl': 48,
+  '5xl': 64,
+
+  // Reference Layout Spacings
+  horizontal: 16,
+  cardPadding: 20,
+  sectionGap: 24,
+  rowGap: 16,
+  itemGap: 12,
 } as const;
 
-export const radius = {
+export const radii = {
   none: 0,
+  xxs: 2,
   xs: 4,
   sm: 8,
   md: 12,
-  input: 12,
   lg: 16,
-  card: 16,
+  card: 24, // 24dp for surface cards and promo cards
+  xl: 24,
+  '2xl': 32,
   sheet: 24,
-  pill: 999,
-  full: 999,
+  pill: 9999, // Pill buttons and filter chips
+  button: 9999,
+  full: 9999,
+  avatar: 9999,
+  input: 16, // Inset input fields
 } as const;
+
+export const radius = radii;
 
 export const shadows = {
   card: {
-    shadowColor: '#0F172A',
+    shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.25,
     shadowRadius: 8,
     elevation: 2,
   },
   elevated: {
-    shadowColor: '#0F172A',
+    shadowColor: '#000000',
     shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.08,
+    shadowOpacity: 0.35,
     shadowRadius: 12,
     elevation: 8,
   },
@@ -242,10 +421,16 @@ export const theme = {
   colors,
   typography,
   spacing,
-  radius,
+  radii,
+  radius: radii,
   shadows,
   motion,
   touchTargets,
 } as const;
 
 export type Theme = typeof theme;
+export type Colors = typeof colors;
+export type Typography = typeof typography;
+export type Spacing = typeof spacing;
+export type Radii = typeof radii;
+

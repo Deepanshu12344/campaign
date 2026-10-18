@@ -45,7 +45,7 @@ function SavedCampaignCard({ campaign, onPress, onRemove, isRemoving }: SavedCar
             />
           ) : (
             <View style={[styles.coverImage, styles.imagePlaceholder]}>
-              <TrendingUp size={20} color={theme.colors.ink400} />
+              <TrendingUp size={20} color={theme.colors.textSecondary} />
             </View>
           )}
         </View>
@@ -82,7 +82,7 @@ function SavedCampaignCard({ campaign, onPress, onRemove, isRemoving }: SavedCar
           title="Remove"
           variant="ghost"
           size="sm"
-          iconLeft={<Trash2 size={14} color={theme.colors.ink500} />}
+          iconLeft={<Trash2 size={14} color={theme.colors.textSecondary} />}
           loading={isRemoving}
           onPress={onRemove}
           accessibilityLabel={`Remove ${campaign.title} from saved`}
@@ -132,7 +132,7 @@ export default function SavedCampaignsScreen() {
           <RefreshControl
             refreshing={isRefetching}
             onRefresh={refetch}
-            tintColor={theme.colors.primary600}
+            tintColor={theme.colors.lime}
           />
         }
         showsVerticalScrollIndicator={false}
@@ -165,7 +165,7 @@ export default function SavedCampaignsScreen() {
             description="Keep track of inspiring causes and editorial stories you want to follow or contribute to before their funding windows conclude."
             actionTitle="Discover Campaigns"
             onAction={() => router.push('/(tabs)/explore')}
-            icon={<Bookmark size={36} color={theme.colors.primary600} />}
+            icon={<Bookmark size={36} color={theme.colors.lime} />}
           />
         )}
       </ScrollView>
@@ -195,9 +195,8 @@ const styles = StyleSheet.create({
     padding: theme.spacing.base,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     backgroundColor: theme.colors.surface,
-    ...theme.shadows.card,
   },
   cardPressable: {
     flexDirection: 'row',
@@ -209,7 +208,7 @@ const styles = StyleSheet.create({
     height: 68,
     borderRadius: theme.radius.md,
     overflow: 'hidden',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   coverImage: {
     width: '100%',
@@ -219,7 +218,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   metaCol: {
     flex: 1,
@@ -233,7 +232,7 @@ const styles = StyleSheet.create({
   categoryText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 11,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
@@ -241,7 +240,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
     lineHeight: 18,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: theme.spacing.xs,
   },
   progressRow: {
@@ -253,17 +252,17 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 5,
     borderRadius: 3,
-    backgroundColor: theme.colors.line,
+    backgroundColor: theme.colors.border,
     overflow: 'hidden',
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
   },
   percentText: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 11,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
     minWidth: 32,
     textAlign: 'right',
   },
@@ -272,13 +271,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderTopWidth: 1,
-    borderTopColor: theme.colors.line,
+    borderTopColor: theme.colors.border,
     marginTop: theme.spacing.sm,
     paddingTop: theme.spacing.xs,
   },
   daysText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
 });

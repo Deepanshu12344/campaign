@@ -39,7 +39,6 @@ import { SharedHeader } from '../../../components/layout/SharedHeader';
 import {
   Card,
   Button,
-  DemoDataBadge,
   useToast,
 } from '../../../components/ui';
 import { theme } from '../../../theme';
@@ -198,16 +197,16 @@ export default function BackResultScreen() {
             {/* Top Celebration Card */}
             <Card style={styles.heroCard}>
               <View style={styles.successIconWrapper}>
-                <CheckCircle2 size={36} color={theme.colors.primary700} />
+                <CheckCircle2 size={36} color={theme.colors.lime} />
               </View>
               <Text style={styles.heroTitle}>Thank You for Backing!</Text>
               <Text style={styles.heroSubtitle}>
-                Your contribution has been dedicated directly to spreading this message.
+                Your contribution funds digital ad distribution to spread this message. Net funds strictly purchase advertising impressions and are not a charitable donation.
               </Text>
 
               {/* Receipt Reference */}
               <View style={styles.receiptPill}>
-                <Receipt size={14} color={theme.colors.ink600} />
+                <Receipt size={14} color={theme.colors.textSecondary} />
                 <Text style={styles.receiptPillText}>
                   Receipt #{receipt?.receiptNo || contribution?.receiptNo || 'CONFIRMED'}
                 </Text>
@@ -217,7 +216,7 @@ export default function BackResultScreen() {
             {/* Campaign Progress Impact with Animated Bar */}
             <Card style={styles.cardSection}>
               <View style={styles.sectionHeaderRow}>
-                <TrendingUp size={18} color={theme.colors.primary700} />
+                <TrendingUp size={18} color={theme.colors.lime} />
                 <Text style={styles.sectionHeaderTitle}>Updated Campaign Funding</Text>
               </View>
 
@@ -243,9 +242,8 @@ export default function BackResultScreen() {
             {/* Estimated Reach Impact */}
             <Card style={styles.cardSection}>
               <View style={styles.sectionHeaderRow}>
-                <Sparkles size={18} color={theme.colors.primary700} />
+                <Sparkles size={18} color={theme.colors.lime} />
                 <Text style={styles.sectionHeaderTitle}>Funded Audience Impact</Text>
-                <DemoDataBadge size="sm" />
               </View>
 
               <Text style={styles.reachNumber}>
@@ -308,7 +306,7 @@ export default function BackResultScreen() {
             {!isAuthenticated && guestReceiptToken && (
               <Card style={styles.guestCard}>
                 <View style={styles.guestHeaderRow}>
-                  <UserPlus size={20} color={theme.colors.primary700} />
+                  <UserPlus size={20} color={theme.colors.lime} />
                   <Text style={styles.guestTitle}>Save Receipt to an Account</Text>
                 </View>
                 <Text style={styles.guestDesc}>
@@ -330,8 +328,8 @@ export default function BackResultScreen() {
         {currentStatus === 'pending' && (
           <View>
             <Card style={styles.heroCard}>
-              <View style={[styles.successIconWrapper, { backgroundColor: theme.colors.warningBg }]}>
-                <Clock size={36} color={theme.colors.warning} />
+              <View style={[styles.successIconWrapper, { backgroundColor: theme.colors.surfaceRaised }]}>
+                <Clock size={36} color={theme.colors.lime} />
               </View>
               <Text style={styles.heroTitle}>Verification in Progress</Text>
               <Text style={styles.heroSubtitle}>
@@ -341,7 +339,7 @@ export default function BackResultScreen() {
 
             <Card style={styles.cardSection}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm, marginBottom: theme.spacing.sm }}>
-                <ActivityIndicator size="small" color={theme.colors.primary700} />
+                <ActivityIndicator size="small" color={theme.colors.lime} />
                 <Text style={styles.sectionHeaderTitle}>Awaiting Bank Confirmation</Text>
               </View>
               <Text style={styles.cardBodyText}>
@@ -374,8 +372,8 @@ export default function BackResultScreen() {
         {currentStatus === 'failed' && (
           <View>
             <Card style={styles.heroCard}>
-              <View style={[styles.successIconWrapper, { backgroundColor: theme.colors.dangerBg }]}>
-                <XCircle size={36} color={theme.colors.danger} />
+              <View style={[styles.successIconWrapper, { backgroundColor: theme.colors.surfaceRaised, borderColor: theme.colors.line, borderWidth: 1 }]}>
+                <XCircle size={36} color={theme.colors.textPrimary} />
               </View>
               <Text style={styles.heroTitle}>Payment Was Not Processed</Text>
               <Text style={styles.heroSubtitle}>
@@ -415,8 +413,8 @@ export default function BackResultScreen() {
         {currentStatus === 'cancelled' && (
           <View>
             <Card style={styles.heroCard}>
-              <View style={[styles.successIconWrapper, { backgroundColor: theme.colors.bgMuted }]}>
-                <AlertCircle size={36} color={theme.colors.ink500} />
+              <View style={[styles.successIconWrapper, { backgroundColor: theme.colors.surfaceRaised }]}>
+                <AlertCircle size={36} color={theme.colors.textSecondary} />
               </View>
               <Text style={styles.heroTitle}>Contribution Cancelled</Text>
               <Text style={styles.heroSubtitle}>
@@ -465,30 +463,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: theme.radius.card,
     marginBottom: theme.spacing.base,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
+    borderColor: theme.colors.line,
+    borderWidth: 1,
   },
   successIconWrapper: {
     width: 68,
     height: 68,
     borderRadius: 34,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.surfaceRaised,
+    borderColor: theme.colors.line,
+    borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: theme.spacing.md,
-    shadowColor: theme.colors.black,
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
   },
   heroTitle: {
     ...theme.typography.styles.h2,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     textAlign: 'center',
     marginBottom: theme.spacing.xs,
   },
   heroSubtitle: {
     ...theme.typography.styles.body,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     lineHeight: 22,
     marginBottom: theme.spacing.base,
@@ -496,7 +494,7 @@ const styles = StyleSheet.create({
   receiptPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.surfaceRaised,
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.xs,
     borderRadius: theme.radius.pill,
@@ -506,7 +504,7 @@ const styles = StyleSheet.create({
   },
   receiptPillText: {
     ...theme.typography.styles.captionSemiBold,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   cardSection: {
     padding: theme.spacing.base,
@@ -521,7 +519,7 @@ const styles = StyleSheet.create({
   },
   sectionHeaderTitle: {
     ...theme.typography.styles.h3,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     flex: 1,
   },
   progressRow: {
@@ -532,19 +530,19 @@ const styles = StyleSheet.create({
   },
   raisedText: {
     ...theme.typography.styles.smallMedium,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   goalText: {
     ...theme.typography.styles.small,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   percentText: {
     ...theme.typography.styles.smallMedium,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
   },
   progressBarTrack: {
     height: 10,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     borderRadius: theme.radius.full,
     overflow: 'hidden',
     borderWidth: 1,
@@ -552,22 +550,22 @@ const styles = StyleSheet.create({
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
     borderRadius: theme.radius.full,
   },
   progressSubtext: {
     ...theme.typography.styles.small,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: theme.spacing.sm,
   },
   reachNumber: {
     ...theme.typography.styles.display,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
     marginBottom: 4,
   },
   reachSublabel: {
     ...theme.typography.styles.small,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   actionsGroup: {
     marginBottom: theme.spacing.lg,
@@ -581,7 +579,8 @@ const styles = StyleSheet.create({
     padding: theme.spacing.base,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: theme.colors.primary100,
+    borderColor: theme.colors.line,
+    backgroundColor: theme.colors.surfaceRaised,
     marginBottom: theme.spacing.base,
   },
   guestHeaderRow: {
@@ -592,16 +591,16 @@ const styles = StyleSheet.create({
   },
   guestTitle: {
     ...theme.typography.styles.smallMedium,
-    color: theme.colors.primary800,
+    color: theme.colors.textPrimary,
   },
   guestDesc: {
     ...theme.typography.styles.small,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     lineHeight: 20,
   },
   cardBodyText: {
     ...theme.typography.styles.small,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     lineHeight: 20,
   },
 });

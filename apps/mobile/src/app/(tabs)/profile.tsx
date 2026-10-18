@@ -1,35 +1,40 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import {
   StyleSheet,
   View,
   Text,
   ScrollView,
   Pressable,
+  Platform,
 } from 'react-native';
 import { useRouter, Href } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Image } from 'expo-image';
+import * as ImagePicker from 'expo-image-picker';
+import * as Clipboard from 'expo-clipboard';
+import * as Haptics from 'expo-haptics';
+import Svg, { G, Path, Circle } from 'react-native-svg';
 import {
-  Heart,
+  ArrowLeft,
+  Camera,
+  LayoutDashboard,
+  ShieldCheck,
   Bookmark,
   Receipt,
-  Settings,
   Bell,
-  LayoutDashboard,
+  Settings,
   HelpCircle,
+  SlidersHorizontal,
   ChevronRight,
-  Sliders,
-  LogIn,
-  UserPlus,
-  Compass,
-  Sparkles,
-  ShieldCheck,
 } from 'lucide-react-native';
 import { theme } from '../../theme';
-import { SharedHeader } from '../../components/layout/SharedHeader';
-import { Card, Button, Avatar, Sheet } from '../../components/ui';
+import { Avatar } from '../../components/ui/Avatar';
+import { Sheet } from '../../components/ui/Sheet';
+import { Button } from '../../components/ui/Button';
+import { useToast } from '../../components/ui/Toast';
 import { useAuthStore } from '../../store/authStore';
-import { useMyCampaigns } from '../../api/hooks/useCreator';
-import { useMyContributions } from '../../api/hooks/useContributions';
-import { useSavedCampaigns } from '../../api/hooks/useInteractions';
+import { useUpdateProfile } from '../../api';
+import { apiClient } from '../../api/client';
 
 interface HelpTopic {
   id: string;
@@ -44,77 +49,144 @@ const HELP_TOPICS: HelpTopic[] = [
     title: 'How Campaigns Works',
     description: 'Ad distribution, not donations',
     content:
-      'Campaigns is a crowdfunding platform that turns public support directly into paid digital advertising. Every dollar contributed (minus a transparent platform and payment fee) buys ad impressions on social feeds, search engines, and media sites to spread awareness on important causes. Backers do not make tax-deductible charitable donations; they fund targeted ad distribution.',
+      'Campaigns is a crowdfunding platform that turns public support directly into paid digital advertising. Every dollar contributed (minus platform and payment fees) buys ad impressions on social feeds, search engines, and media to spread awareness on important causes. Backers fund targeted ad distribution, not charities or personal causes.',
   },
   {
     id: 'faqs',
     title: 'Frequently Asked Questions',
     description: 'Funding goals, refunds, and delivery',
     content:
-      'Q: Can I back a campaign without an account?\nA: Yes! Guest checkout is fully supported. You receive a cryptographic guest receipt token stored safely on your device.\n\nQ: What happens if a campaign does not reach its goal?\nA: In this prototype demonstration, if a funding deadline expires before the goal is met, pledges are marked for refund.\n\nQ: How is reach estimated?\nA: Estimated reach is modeled based on historical CPM (cost per thousand impressions) benchmarks. Measured reach is only calculated and displayed after ads actually run.',
+      'Q: Can I back a campaign without an account?\nA: Yes. Guest checkout is supported with receipt tokens saved on your device.\n\nQ: What happens if a campaign misses its goal?\nA: If a funding deadline expires before the goal is met, pledges are marked for refund.\n\nQ: How is reach estimated?\nA: Reach is modeled on historical CPM benchmarks. Measured reach is reported after ads run.',
   },
   {
     id: 'guidelines',
     title: 'Community & Advertising Guidelines',
     description: 'Editorial standards and fact-checking',
     content:
-      'All campaigns undergo human and automated editorial review before any ads are delivered. Claims of fact must cite verifiable public sources. Hate speech, misleading medical claims, deceptive financial schemes, and malicious content are strictly prohibited.',
+      'All campaigns undergo review before ads are delivered. Claims of fact must cite verifiable public sources. Hate speech, misleading medical claims, and deceptive financial promotions are strictly prohibited.',
   },
   {
     id: 'terms',
     title: 'Terms of Service',
-    description: 'Rights, responsibilities, and ad contracts',
+    description: 'Rights and advertising rules',
     content:
-      'By creating or backing a campaign, you agree that campaign media assets and ad copy become public creative distributed under digital advertising network policies. Creators retain moral rights to their stories.',
+      'Campaign media assets are distributed under digital ad network policies. Creators retain moral rights to their content.',
   },
   {
     id: 'privacy',
     title: 'Privacy Policy',
     description: 'Private backer names by default',
     content:
-      'Your privacy is protected by design. Backer names and billing details are kept strictly private by default and are never visible to the public or ad viewers. We never sell your personal contact information to third-party data brokers.',
-  },
-  {
-    id: 'about',
-    title: 'About Campaigns',
-    description: 'Empowering civic and social impact',
-    content:
-      'Campaigns was founded to democratize advertising power. We believe that causes with passionate grassroots supporters should have the same high-visibility reach as corporate advertisers.',
-  },
-  {
-    id: 'partners',
-    title: 'Advertising & Verification Partners',
-    description: 'Ad networks and transparency bodies',
-    content:
-      'Our ad distribution infrastructure connects to major ad networks, programmatic display exchanges, and independent media transparency registries to verify real audience delivery and impression reports.',
-  },
-  {
-    id: 'contact',
-    title: 'Contact Support',
-    description: 'Get help or report a campaign',
-    content:
-      'Have questions, feedback, or need help with a pledge? Reach our community operations team at support@campaigns.demo or through in-app feedback channels.',
+      'Backer names and payment details are private by default. We never sell your personal information.',
   },
 ];
 
-export default function ProfileTabScreen() {
+export default function ProfileScreen() {
   const router = useRouter();
-  const { user, isAuthenticated } = useAuthStore();
+  const insets = useSafeAreaInsets();
+  const toast = useToast();
+  const { user, isAuthenticated, signOut, setUser } = useAuthStore();
+  const updateProfileMutation = useUpdateProfile();
 
-  // Queries for live counts
-  const { data: myCampaigns } = useMyCampaigns();
-  const { data: contributions } = useMyContributions();
-  const { data: savedCampaigns } = useSavedCampaigns();
-
-  const createdCount = myCampaigns?.length ?? 0;
-  const backedCount = contributions?.length ?? 0;
-  const savedCount = savedCampaigns?.length ?? 0;
-
-  // Help Sheet state
   const [showHelpSheet, setShowHelpSheet] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState<HelpTopic | null>(null);
+  const [showPhotoSheet, setShowPhotoSheet] = useState(false);
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
 
-  // Easter egg: 7 taps on version within 3.5 seconds opens demo/control
+  const handle = useMemo(() => {
+    if (!user?.email) return '@user';
+    const slug = user.email.split('@')[0].toLowerCase().replace(/[^a-z0-9_]/g, '');
+    return `@${slug || 'user'}`;
+  }, [user?.email]);
+
+  const initials = useMemo(() => {
+    if (!user?.name) return 'U';
+    return user.name
+      .split(' ')
+      .filter(Boolean)
+      .map((n) => n[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase();
+  }, [user?.name]);
+
+  const handleCopyHandle = async () => {
+    await Clipboard.setStringAsync(handle);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+    toast.success('Copied');
+  };
+
+  const handlePickPhoto = async () => {
+    setShowPhotoSheet(false);
+    try {
+      const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!permission.granted) {
+        toast.error('Photo library permission is required to select an avatar');
+        return;
+      }
+
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['images'],
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.85,
+      });
+
+      if (result.canceled || !result.assets || result.assets.length === 0) {
+        return;
+      }
+
+      const asset = result.assets[0];
+
+      if (asset.fileSize && asset.fileSize > 5 * 1024 * 1024) {
+        toast.error('Image must be under 5MB');
+        return;
+      }
+
+      setIsUploadingPhoto(true);
+
+      const filename = asset.fileName || `avatar-${Date.now()}.jpg`;
+      const mimeType = asset.mimeType || 'image/jpeg';
+
+      const formData = new FormData();
+      formData.append('file', {
+        uri: asset.uri,
+        name: filename,
+        type: mimeType,
+      } as unknown as Blob);
+
+      const res = await apiClient.uploadFile<{ url: string }>('/uploads', formData);
+      const fullUrl = res.url.startsWith('http')
+        ? res.url
+        : `${apiClient.getBaseUrl().replace(/\/api\/v1$/, '')}${res.url}`;
+
+      const updatedUser = await updateProfileMutation.mutateAsync({ avatarUrl: fullUrl });
+      setUser(updatedUser);
+      toast.success('Profile photo updated');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Failed to update profile photo';
+      toast.error(msg);
+    } finally {
+      setIsUploadingPhoto(false);
+    }
+  };
+
+  const handleRemovePhoto = async () => {
+    setShowPhotoSheet(false);
+    try {
+      setIsUploadingPhoto(true);
+      const updatedUser = await updateProfileMutation.mutateAsync({ avatarUrl: null });
+      setUser(updatedUser);
+      toast.success('Profile photo removed');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Failed to remove photo';
+      toast.error(msg);
+    } finally {
+      setIsUploadingPhoto(false);
+    }
+  };
+
+  // Easter egg: 7 taps on version opens demo control panel
   const tapCountRef = useRef(0);
   const lastTapTimeRef = useRef(0);
 
@@ -133,293 +205,288 @@ export default function ProfileTabScreen() {
     }
   };
 
+  const handleSignOut = async () => {
+    await signOut();
+  };
+
   return (
-    <View style={styles.container}>
-      <SharedHeader title="Profile" showBack={false} />
+    <View style={styles.screen}>
+      {/* Top Navigation Row: 44dp surface circle back button with lime arrow */}
+      <View
+        style={[
+          styles.topNavRow,
+          { paddingTop: Math.max(insets.top, Platform.OS === 'android' ? 12 : 8) },
+        ]}
+      >
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Go back"
+          onPress={() => {
+            if (router.canGoBack()) {
+              router.back();
+            } else {
+              router.replace('/(tabs)' as Href);
+            }
+          }}
+          style={styles.backCircleBtn}
+          hitSlop={8}
+        >
+          <ArrowLeft size={20} color={theme.colors.lime} strokeWidth={2.5} />
+        </Pressable>
+      </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         {isAuthenticated && user ? (
-          /* Authenticated Header Card */
-          <Card style={styles.headerCard}>
-            <View style={styles.userInfoRow}>
-              <Avatar
-                name={user.name}
-                imageUrl={user.avatarUrl || undefined}
-                size="lg"
-              />
-              <View style={styles.userTextMeta}>
-                <Text style={styles.userName} numberOfLines={1}>
-                  {user.name}
-                </Text>
-                <Text style={styles.userEmail} numberOfLines={1}>
-                  {user.email}
-                </Text>
-
-                {/* Dynamic Role Chips */}
-                <View style={styles.roleChipsRow}>
-                  {/* Audience chip: always active */}
-                  <View style={styles.roleChip}>
-                    <Compass size={11} color={theme.colors.ink700} />
-                    <Text style={styles.roleChipText}>Audience</Text>
-                  </View>
-
-                  {/* Creator chip: if created any campaigns */}
-                  {createdCount > 0 && (
-                    <View style={[styles.roleChip, styles.creatorChip]}>
-                      <Sparkles size={11} color={theme.colors.primary700} />
-                      <Text style={[styles.roleChipText, styles.creatorChipText]}>Creator</Text>
-                    </View>
-                  )}
-
-                  {/* Backer chip: if backed any campaigns */}
-                  {backedCount > 0 && (
-                    <View style={[styles.roleChip, styles.backerChip]}>
-                      <ShieldCheck size={11} color={theme.colors.emerald700} />
-                      <Text style={[styles.roleChipText, styles.backerChipText]}>Backer</Text>
-                    </View>
-                  )}
-                </View>
+          /* 1. Authenticated Redesigned Top Block */
+          <View style={styles.profileTopBlock}>
+            {/* 144dp Centered Avatar with 40dp Camera Badge */}
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Change profile photo"
+              onPress={() => setShowPhotoSheet(true)}
+              style={styles.avatarContainer}
+            >
+              <View style={styles.avatarCircle}>
+                {user.avatarUrl ? (
+                  <Image
+                    source={{ uri: user.avatarUrl }}
+                    style={styles.avatarImage}
+                    contentFit="cover"
+                    transition={200}
+                  />
+                ) : (
+                  <Text style={styles.avatarInitials}>{initials}</Text>
+                )}
               </View>
+
+              <View style={styles.cameraBadge}>
+                <Camera size={18} color="#163300" strokeWidth={2.2} />
+              </View>
+            </Pressable>
+
+            {/* Name up to 2 lines in uppercase display font */}
+            <View style={styles.nameAndAccountType}>
+              <Text style={styles.userNameDisplay} numberOfLines={2}>
+                {user.name}
+              </Text>
+              <Text style={styles.userAccountType}>Personal account</Text>
             </View>
 
-            {/* Quick Metrics Bar */}
-            <View style={styles.metricsBar}>
-              <Pressable
-                style={styles.metricItem}
-                onPress={() => router.push('/creator/dashboard')}
-              >
-                <Text style={styles.metricValue}>{createdCount}</Text>
-                <Text style={styles.metricLabel}>Created</Text>
-              </Pressable>
-              <View style={styles.metricDivider} />
-              <Pressable
-                style={styles.metricItem}
-                onPress={() => router.push('/profile/backed')}
-              >
-                <Text style={styles.metricValue}>{backedCount}</Text>
-                <Text style={styles.metricLabel}>Backed</Text>
-              </Pressable>
-              <View style={styles.metricDivider} />
-              <Pressable
-                style={styles.metricItem}
-                onPress={() => router.push('/profile/saved')}
-              >
-                <Text style={styles.metricValue}>{savedCount}</Text>
-                <Text style={styles.metricLabel}>Saved</Text>
-              </Pressable>
-            </View>
-          </Card>
+            {/* Dark surface pill with logo mark and @handle */}
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={`Copy handle ${handle}`}
+              onPress={handleCopyHandle}
+              style={({ pressed }) => [styles.handlePill, pressed && { opacity: 0.8 }]}
+            >
+              <LogoMarkVector size={16} />
+              <Text style={styles.handleText}>{handle}</Text>
+            </Pressable>
+          </View>
         ) : (
-          /* Signed-Out Prompt Card */
-          <Card style={styles.guestCard}>
-            <View style={styles.guestIconCircle}>
-              <Compass size={32} color={theme.colors.primary600} />
-            </View>
-            <Text style={styles.guestTitle}>Welcome to Campaigns</Text>
-            <Text style={styles.guestSubtitle}>
-              Browsing causes and backing advertising distribution never require an account. Sign in
-              to create new campaigns, track saved favorites, or manage settings across devices.
-            </Text>
-            <View style={styles.guestButtonsRow}>
+          /* Signed-Out Top Block */
+          <>
+            <Text style={styles.screenTitle}>Profile</Text>
+            <View style={styles.accountCard}>
+              <Avatar name="Guest" size={52} isGuest />
+              <View style={styles.accountInfo}>
+                <Text style={styles.userName}>Welcome to Campaigns</Text>
+                <Text style={styles.userEmail}>Sign in to manage campaigns and settings</Text>
+              </View>
               <Button
-                label="Sign In"
+                title="Sign In"
                 variant="primary"
-                size="md"
-                icon={<LogIn size={16} color={theme.colors.white} />}
+                size="sm"
                 onPress={() => router.push('/auth/sign-in')}
-                style={styles.guestBtn}
-              />
-              <Button
-                label="Sign Up"
-                variant="secondary"
-                size="md"
-                icon={<UserPlus size={16} color={theme.colors.ink800} />}
-                onPress={() => router.push('/auth/sign-up')}
-                style={styles.guestBtn}
+                style={styles.signInButton}
               />
             </View>
-          </Card>
+          </>
         )}
 
-        {/* Section Navigation Menu */}
-        <Card style={styles.menuCard}>
-          <Text style={styles.menuSectionTitle}>Campaign Management</Text>
-
-          <Pressable
-            style={({ pressed }) => [styles.menuRow, pressed && styles.menuRowPressed]}
-            onPress={() => router.push('/creator/dashboard')}
-          >
-            <View style={styles.menuLeft}>
-              <View style={[styles.menuIconCircle, { backgroundColor: theme.colors.primary50 }]}>
-                <LayoutDashboard size={18} color={theme.colors.primary700} />
-              </View>
-              <Text style={styles.menuLabel}>Creator Dashboard</Text>
-            </View>
-            <View style={styles.menuRight}>
-              {createdCount > 0 && (
-                <View style={styles.countBadge}>
-                  <Text style={styles.countBadgeText}>{createdCount}</Text>
-                </View>
-              )}
-              <ChevronRight size={18} color={theme.colors.ink400} />
-            </View>
-          </Pressable>
-
-          <View style={styles.menuDivider} />
-
-          <Pressable
-            style={({ pressed }) => [styles.menuRow, pressed && styles.menuRowPressed]}
-            onPress={() => router.push('/profile/backed')}
-          >
-            <View style={styles.menuLeft}>
-              <View style={[styles.menuIconCircle, { backgroundColor: theme.colors.rose50 }]}>
-                <Heart size={18} color={theme.colors.rose600} />
-              </View>
-              <Text style={styles.menuLabel}>Backed Campaigns</Text>
-            </View>
-            <View style={styles.menuRight}>
-              {backedCount > 0 && (
-                <View style={styles.countBadge}>
-                  <Text style={styles.countBadgeText}>{backedCount}</Text>
-                </View>
-              )}
-              <ChevronRight size={18} color={theme.colors.ink400} />
-            </View>
-          </Pressable>
-
-          <View style={styles.menuDivider} />
-
-          <Pressable
-            style={({ pressed }) => [styles.menuRow, pressed && styles.menuRowPressed]}
-            onPress={() => router.push('/profile/saved')}
-          >
-            <View style={styles.menuLeft}>
-              <View style={[styles.menuIconCircle, { backgroundColor: theme.colors.amber50 }]}>
-                <Bookmark size={18} color={theme.colors.amber600} />
-              </View>
-              <Text style={styles.menuLabel}>Saved Campaigns</Text>
-            </View>
-            <View style={styles.menuRight}>
-              {savedCount > 0 && (
-                <View style={styles.countBadge}>
-                  <Text style={styles.countBadgeText}>{savedCount}</Text>
-                </View>
-              )}
-              <ChevronRight size={18} color={theme.colors.ink400} />
-            </View>
-          </Pressable>
-
-          <View style={styles.menuDivider} />
-
-          <Pressable
-            style={({ pressed }) => [styles.menuRow, pressed && styles.menuRowPressed]}
-            onPress={() => router.push('/profile/payments')}
-          >
-            <View style={styles.menuLeft}>
-              <View style={[styles.menuIconCircle, { backgroundColor: theme.colors.emerald50 }]}>
-                <Receipt size={18} color={theme.colors.emerald700} />
-              </View>
-              <Text style={styles.menuLabel}>Payment History & Receipts</Text>
-            </View>
-            <View style={styles.menuRight}>
-              <ChevronRight size={18} color={theme.colors.ink400} />
-            </View>
-          </Pressable>
-        </Card>
-
-        {/* Preferences & Settings */}
-        <Card style={styles.menuCard}>
-          <Text style={styles.menuSectionTitle}>Preferences & Account</Text>
-
-          <Pressable
-            style={({ pressed }) => [styles.menuRow, pressed && styles.menuRowPressed]}
-            onPress={() => router.push('/profile/notifications-settings')}
-          >
-            <View style={styles.menuLeft}>
-              <View style={[styles.menuIconCircle, { backgroundColor: theme.colors.primary50 }]}>
-                <Bell size={18} color={theme.colors.primary700} />
-              </View>
-              <Text style={styles.menuLabel}>Notification Preferences</Text>
-            </View>
-            <View style={styles.menuRight}>
-              <ChevronRight size={18} color={theme.colors.ink400} />
-            </View>
-          </Pressable>
-
-          <View style={styles.menuDivider} />
-
-          <Pressable
-            style={({ pressed }) => [styles.menuRow, pressed && styles.menuRowPressed]}
-            onPress={() => router.push('/profile/settings')}
-          >
-            <View style={styles.menuLeft}>
-              <View style={[styles.menuIconCircle, { backgroundColor: theme.colors.bgMuted }]}>
-                <Settings size={18} color={theme.colors.ink700} />
-              </View>
-              <Text style={styles.menuLabel}>Account Settings</Text>
-            </View>
-            <View style={styles.menuRight}>
-              <ChevronRight size={18} color={theme.colors.ink400} />
-            </View>
-          </Pressable>
-        </Card>
-
-        {/* Support & Legal (Always accessible, even signed out) */}
-        <Card style={styles.menuCard}>
-          <Text style={styles.menuSectionTitle}>Information & Support</Text>
-
-          <Pressable
-            style={({ pressed }) => [styles.menuRow, pressed && styles.menuRowPressed]}
-            onPress={() => {
-              setSelectedTopic(null);
-              setShowHelpSheet(true);
-            }}
-          >
-            <View style={styles.menuLeft}>
-              <View style={[styles.menuIconCircle, { backgroundColor: theme.colors.primary50 }]}>
-                <HelpCircle size={18} color={theme.colors.primary700} />
-              </View>
-              <View>
-                <Text style={styles.menuLabel}>Help & Support</Text>
-                <Text style={styles.menuSubLabel}>FAQs, Terms, Privacy, Guidelines & About</Text>
-              </View>
-            </View>
-            <View style={styles.menuRight}>
-              <ChevronRight size={18} color={theme.colors.ink400} />
-            </View>
-          </Pressable>
-
-          {/* Admin shortcut if applicable */}
-          {user?.role === 'ADMIN' && (
-            <>
-              <View style={styles.menuDivider} />
+        {/* 2. List Card: "Your campaigns" */}
+        {isAuthenticated && (
+          <View style={styles.sectionWrap}>
+            <Text style={styles.sectionLabel}>Your campaigns</Text>
+            <View style={styles.menuCard}>
               <Pressable
                 style={({ pressed }) => [styles.menuRow, pressed && styles.menuRowPressed]}
-                onPress={() => router.push('/demo/control')}
+                onPress={() => router.push('/creator/dashboard')}
+                accessibilityRole="button"
+                accessibilityLabel="Creator Dashboard"
               >
                 <View style={styles.menuLeft}>
-                  <View style={[styles.menuIconCircle, { backgroundColor: theme.colors.amber50 }]}>
-                    <Sliders size={18} color={theme.colors.amber700} />
+                  <View style={styles.menuIconCircle}>
+                    <LayoutDashboard size={18} color={theme.colors.lime} strokeWidth={2} />
                   </View>
-                  <Text style={styles.menuLabel}>Reviewer Control Panel</Text>
+                  <Text style={styles.menuLabel}>Creator Dashboard</Text>
                 </View>
-                <View style={styles.menuRight}>
-                  <ChevronRight size={18} color={theme.colors.ink400} />
-                </View>
+                <ChevronRight size={18} color={theme.colors.textSecondary} />
               </Pressable>
-            </>
-          )}
-        </Card>
 
-        {/* Version Footer with 7-tap gesture */}
-        <Pressable
-          style={styles.versionContainer}
-          onPress={handleVersionTap}
-          hitSlop={12}
-        >
-          <Text style={styles.versionText}>Campaigns v1.0.0-demo (build 42)</Text>
-          <Text style={styles.versionSubtext}>Public Cause Advertising Network</Text>
-        </Pressable>
+              <View style={styles.menuDivider} />
+
+              <Pressable
+                style={({ pressed }) => [styles.menuRow, pressed && styles.menuRowPressed]}
+                onPress={() => router.push('/profile/backed')}
+                accessibilityRole="button"
+                accessibilityLabel="Backed Campaigns"
+              >
+                <View style={styles.menuLeft}>
+                  <View style={styles.menuIconCircle}>
+                    <ShieldCheck size={18} color={theme.colors.lime} strokeWidth={2} />
+                  </View>
+                  <Text style={styles.menuLabel}>Backed Campaigns</Text>
+                </View>
+                <ChevronRight size={18} color={theme.colors.textSecondary} />
+              </Pressable>
+
+              <View style={styles.menuDivider} />
+
+              <Pressable
+                style={({ pressed }) => [styles.menuRow, pressed && styles.menuRowPressed]}
+                onPress={() => router.push('/profile/saved')}
+                accessibilityRole="button"
+                accessibilityLabel="Saved Campaigns"
+              >
+                <View style={styles.menuLeft}>
+                  <View style={styles.menuIconCircle}>
+                    <Bookmark size={18} color={theme.colors.lime} strokeWidth={2} />
+                  </View>
+                  <Text style={styles.menuLabel}>Saved Campaigns</Text>
+                </View>
+                <ChevronRight size={18} color={theme.colors.textSecondary} />
+              </Pressable>
+
+              <View style={styles.menuDivider} />
+
+              <Pressable
+                style={({ pressed }) => [styles.menuRow, pressed && styles.menuRowPressed]}
+                onPress={() => router.push('/profile/payments')}
+                accessibilityRole="button"
+                accessibilityLabel="Payment history and receipts"
+              >
+                <View style={styles.menuLeft}>
+                  <View style={styles.menuIconCircle}>
+                    <Receipt size={18} color={theme.colors.lime} strokeWidth={2} />
+                  </View>
+                  <Text style={styles.menuLabel}>Payment History & Receipts</Text>
+                </View>
+                <ChevronRight size={18} color={theme.colors.textSecondary} />
+              </Pressable>
+            </View>
+          </View>
+        )}
+
+        {/* 3. List Card: "Settings" */}
+        <View style={styles.sectionWrap}>
+          <Text style={styles.sectionLabel}>Settings</Text>
+          <View style={styles.menuCard}>
+            {isAuthenticated && (
+              <>
+                <Pressable
+                  style={({ pressed }) => [styles.menuRow, pressed && styles.menuRowPressed]}
+                  onPress={() => router.push('/profile/notifications-settings')}
+                  accessibilityRole="button"
+                  accessibilityLabel="Notification Preferences"
+                >
+                  <View style={styles.menuLeft}>
+                    <View style={styles.menuIconCircle}>
+                      <Bell size={18} color={theme.colors.lime} strokeWidth={2} />
+                    </View>
+                    <Text style={styles.menuLabel}>Notifications</Text>
+                  </View>
+                  <ChevronRight size={18} color={theme.colors.textSecondary} />
+                </Pressable>
+
+                <View style={styles.menuDivider} />
+
+                <Pressable
+                  style={({ pressed }) => [styles.menuRow, pressed && styles.menuRowPressed]}
+                  onPress={() => router.push('/profile/settings')}
+                  accessibilityRole="button"
+                  accessibilityLabel="Account Settings"
+                >
+                  <View style={styles.menuLeft}>
+                    <View style={styles.menuIconCircle}>
+                      <Settings size={18} color={theme.colors.lime} strokeWidth={2} />
+                    </View>
+                    <Text style={styles.menuLabel}>Account Settings</Text>
+                  </View>
+                  <ChevronRight size={18} color={theme.colors.textSecondary} />
+                </Pressable>
+
+                <View style={styles.menuDivider} />
+              </>
+            )}
+
+            <Pressable
+              style={({ pressed }) => [styles.menuRow, pressed && styles.menuRowPressed]}
+              onPress={() => {
+                setSelectedTopic(null);
+                setShowHelpSheet(true);
+              }}
+              accessibilityRole="button"
+              accessibilityLabel="Help and support"
+            >
+              <View style={styles.menuLeft}>
+                <View style={styles.menuIconCircle}>
+                  <HelpCircle size={18} color={theme.colors.lime} strokeWidth={2} />
+                </View>
+                <Text style={styles.menuLabel}>Help & Support</Text>
+              </View>
+              <ChevronRight size={18} color={theme.colors.textSecondary} />
+            </Pressable>
+
+            {/* Admin shortcut if applicable */}
+            {user?.role === 'ADMIN' && (
+              <>
+                <View style={styles.menuDivider} />
+                <Pressable
+                  style={({ pressed }) => [styles.menuRow, pressed && styles.menuRowPressed]}
+                  onPress={() => router.push('/demo/control')}
+                  accessibilityRole="button"
+                  accessibilityLabel="Reviewer Control Panel"
+                >
+                  <View style={styles.menuLeft}>
+                    <View style={styles.menuIconCircle}>
+                      <SlidersHorizontal size={18} color={theme.colors.lime} strokeWidth={2} />
+                    </View>
+                    <Text style={styles.menuLabel}>Reviewer Control Panel</Text>
+                  </View>
+                  <ChevronRight size={18} color={theme.colors.textSecondary} />
+                </Pressable>
+              </>
+            )}
+          </View>
+        </View>
+
+        {/* 4. Bottom Area: Quiet text button "Sign out" + app version */}
+        <View style={styles.bottomArea}>
+          {isAuthenticated && (
+            <Pressable
+              onPress={handleSignOut}
+              accessibilityRole="button"
+              accessibilityLabel="Sign out of account"
+              style={({ pressed }) => [styles.signOutPressable, pressed && { opacity: 0.6 }]}
+            >
+              <Text style={styles.signOutText}>Sign out</Text>
+            </Pressable>
+          )}
+
+          <Pressable
+            style={styles.versionWrap}
+            onPress={handleVersionTap}
+            hitSlop={12}
+            accessibilityRole="text"
+            accessibilityLabel="App version"
+          >
+            <Text style={styles.versionText}>Campaigns v1.0.0-demo (build 42)</Text>
+          </Pressable>
+        </View>
       </ScrollView>
 
       {/* Help & Support Sheet */}
@@ -434,349 +501,364 @@ export default function ProfileTabScreen() {
         <ScrollView style={styles.sheetScroll} showsVerticalScrollIndicator={false}>
           {selectedTopic ? (
             <View style={styles.topicDetailBox}>
-              <Text style={styles.topicDetailDescription}>{selectedTopic.description}</Text>
+              <Text style={styles.topicDetailDesc}>{selectedTopic.description}</Text>
               <Text style={styles.topicDetailContent}>{selectedTopic.content}</Text>
-              <View style={styles.topicButtonsRow}>
-                <Button
-                  title="Open Full Page"
-                  variant="primary"
-                  size="sm"
-                  onPress={() => {
-                    setShowHelpSheet(false);
-                    const slugMap: Record<string, string> = {
-                      guidelines: 'community-guidelines',
-                      faq: 'faqs',
-                    };
-                    const target = slugMap[selectedTopic.id] || selectedTopic.id;
-                    router.push(`/info/${target}` as Href);
-                  }}
-                  style={{ flex: 1 }}
-                />
-                <Button
-                  title="Back to topics"
-                  variant="secondary"
-                  size="sm"
-                  onPress={() => setSelectedTopic(null)}
-                  style={{ flex: 1 }}
-                />
-              </View>
+              <Button
+                title="Back to Topics"
+                variant="secondary"
+                size="md"
+                onPress={() => setSelectedTopic(null)}
+                style={{ marginTop: 16 }}
+              />
             </View>
           ) : (
-            <View style={styles.topicsList}>
+            <View style={styles.topicList}>
               {HELP_TOPICS.map((topic) => (
                 <Pressable
                   key={topic.id}
-                  style={({ pressed }) => [styles.topicItem, pressed && styles.topicItemPressed]}
+                  style={({ pressed }) => [styles.topicRow, pressed && { opacity: 0.7 }]}
                   onPress={() => setSelectedTopic(topic)}
                 >
-                  <View style={styles.topicTextContainer}>
-                    <Text style={styles.topicItemTitle}>{topic.title}</Text>
-                    <Text style={styles.topicItemDesc}>{topic.description}</Text>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.topicTitle}>{topic.title}</Text>
+                    <Text style={styles.topicDesc}>{topic.description}</Text>
                   </View>
-                  <ChevronRight size={16} color={theme.colors.ink400} />
+                  <ChevronRight size={16} color={theme.colors.textSecondary} />
                 </Pressable>
               ))}
-
-              <View style={styles.fullHelpCenterBox}>
-                <Button
-                  title="Open Help & Support Center"
-                  variant="secondary"
-                  size="md"
-                  fullWidth
-                  onPress={() => {
-                    setShowHelpSheet(false);
-                    router.push('/info/help' as Href);
-                  }}
-                />
-              </View>
             </View>
           )}
         </ScrollView>
+      </Sheet>
+
+      {/* Photo Picker Sheet */}
+      <Sheet
+        visible={showPhotoSheet}
+        onClose={() => setShowPhotoSheet(false)}
+        title="Profile Photo"
+      >
+        <View style={styles.photoSheetContent}>
+          <Button
+            title={isUploadingPhoto ? 'Uploading...' : 'Choose Photo'}
+            variant="primary"
+            size="lg"
+            fullWidth
+            loading={isUploadingPhoto}
+            onPress={handlePickPhoto}
+          />
+          {Boolean(user?.avatarUrl) && (
+            <Button
+              title="Remove Photo"
+              variant="danger"
+              size="md"
+              fullWidth
+              disabled={isUploadingPhoto}
+              onPress={handleRemovePhoto}
+              style={{ marginTop: 8 }}
+            />
+          )}
+        </View>
       </Sheet>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.bg, // #121511
   },
   scrollContent: {
-    padding: theme.spacing.base,
-    paddingBottom: theme.spacing['4xl'],
-    gap: theme.spacing.base,
+    paddingHorizontal: 16,
+    paddingBottom: 40,
   },
-  headerCard: {
-    padding: theme.spacing.base,
+  screenTitle: {
+    fontFamily: theme.typography.fonts.uiSemiBold,
+    fontSize: 32,
+    lineHeight: 38,
+    color: theme.colors.textPrimary,
+    marginBottom: 20,
   },
-  userInfoRow: {
+
+  // Account Card
+  accountCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.base,
+    backgroundColor: theme.colors.surface, // #2A2D29
+    borderRadius: 24,
+    padding: 20,
+    marginBottom: 24,
+    gap: 16,
   },
-  userTextMeta: {
+  accountInfo: {
     flex: 1,
   },
   userName: {
-    fontFamily: theme.typography.fonts.serifBold,
-    fontSize: theme.typography.styles.h3.fontSize,
-    lineHeight: theme.typography.styles.h3.lineHeight,
-    color: theme.colors.ink900,
+    fontFamily: theme.typography.fonts.uiSemiBold,
+    fontSize: 17,
+    lineHeight: 22,
+    color: theme.colors.textPrimary,
+    marginBottom: 2,
   },
   userEmail: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink500,
-    marginTop: 1,
+    lineHeight: 18,
+    color: theme.colors.textSecondary,
   },
-  roleChipsRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 6,
-    marginTop: theme.spacing.xs,
+  signInButton: {
+    height: 38,
+    paddingHorizontal: 16,
   },
-  roleChip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: theme.colors.bgMuted,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: theme.radius.pill,
-    borderWidth: 1,
-    borderColor: theme.colors.line,
+
+  // Section Wraps (24dp gap)
+  sectionWrap: {
+    marginBottom: 24,
   },
-  roleChipText: {
+  sectionLabel: {
     fontFamily: theme.typography.fonts.uiMedium,
-    fontSize: 11,
-    color: theme.colors.ink700,
+    fontSize: 13,
+    color: theme.colors.textSecondary,
+    marginBottom: 8,
+    paddingHorizontal: 4,
   },
-  creatorChip: {
-    backgroundColor: theme.colors.primary50,
-    borderColor: theme.colors.primary200,
-  },
-  creatorChipText: {
-    color: theme.colors.primary700,
-    fontFamily: theme.typography.fonts.uiSemiBold,
-  },
-  backerChip: {
-    backgroundColor: theme.colors.emerald50,
-    borderColor: theme.colors.emerald200,
-  },
-  backerChipText: {
-    color: theme.colors.emerald700,
-    fontFamily: theme.typography.fonts.uiSemiBold,
-  },
-  metricsBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    marginTop: theme.spacing.base,
-    paddingTop: theme.spacing.base,
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.line,
-  },
-  metricItem: {
-    alignItems: 'center',
-    flex: 1,
-  },
-  metricValue: {
-    fontFamily: theme.typography.fonts.uiBold,
-    fontSize: 18,
-    color: theme.colors.ink900,
-  },
-  metricLabel: {
-    fontFamily: theme.typography.fonts.uiRegular,
-    fontSize: 12,
-    color: theme.colors.ink500,
-    marginTop: 2,
-  },
-  metricDivider: {
-    width: 1,
-    height: 24,
-    backgroundColor: theme.colors.line,
-  },
-  guestCard: {
-    padding: theme.spacing.xl,
-    alignItems: 'center',
-  },
-  guestIconCircle: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: theme.colors.primary50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: theme.spacing.sm,
-  },
-  guestTitle: {
-    fontFamily: theme.typography.fonts.serifBold,
-    fontSize: theme.typography.styles.h3.fontSize,
-    color: theme.colors.ink900,
-    textAlign: 'center',
-    marginBottom: 4,
-  },
-  guestSubtitle: {
-    fontFamily: theme.typography.fonts.uiRegular,
-    fontSize: theme.typography.styles.bodySm.fontSize,
-    color: theme.colors.ink600,
-    textAlign: 'center',
-    lineHeight: 20,
-    marginBottom: theme.spacing.base,
-  },
-  guestButtonsRow: {
-    flexDirection: 'row',
-    gap: theme.spacing.sm,
-    width: '100%',
-  },
-  guestBtn: {
-    flex: 1,
-  },
+
+  // List Cards
   menuCard: {
-    padding: theme.spacing.sm,
-  },
-  menuSectionTitle: {
-    fontFamily: theme.typography.fonts.uiSemiBold,
-    fontSize: 12,
-    color: theme.colors.ink400,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-    paddingHorizontal: theme.spacing.sm,
-    paddingTop: theme.spacing.xs,
-    paddingBottom: theme.spacing.xs,
+    backgroundColor: theme.colors.surface,
+    borderRadius: 24,
+    overflow: 'hidden',
   },
   menuRow: {
+    height: 56,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: theme.spacing.sm,
-    paddingHorizontal: theme.spacing.sm,
-    borderRadius: theme.radius.md,
+    paddingHorizontal: 16,
   },
   menuRowPressed: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   menuLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.sm,
+    gap: 12,
     flex: 1,
   },
   menuIconCircle: {
     width: 36,
     height: 36,
     borderRadius: 18,
+    backgroundColor: theme.colors.inputBg,
     alignItems: 'center',
     justifyContent: 'center',
   },
   menuLabel: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 15,
-    color: theme.colors.ink900,
-  },
-  menuSubLabel: {
-    fontFamily: theme.typography.fonts.uiRegular,
-    fontSize: 12,
-    color: theme.colors.ink500,
-    marginTop: 1,
-  },
-  menuRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  countBadge: {
-    backgroundColor: theme.colors.bgMuted,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: theme.radius.pill,
-    borderWidth: 1,
-    borderColor: theme.colors.line,
-  },
-  countBadgeText: {
-    fontFamily: theme.typography.fonts.uiSemiBold,
-    fontSize: 12,
-    color: theme.colors.ink700,
+    color: theme.colors.textPrimary,
   },
   menuDivider: {
     height: 1,
     backgroundColor: theme.colors.line,
-    marginLeft: 48,
-    marginRight: theme.spacing.sm,
+    marginLeft: 64,
   },
-  versionContainer: {
+
+  // Bottom Area
+  bottomArea: {
     alignItems: 'center',
-    paddingVertical: theme.spacing.base,
+    paddingTop: 8,
+    paddingBottom: 24,
+  },
+  signOutPressable: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginBottom: 12,
+  },
+  signOutText: {
+    fontFamily: theme.typography.fonts.uiMedium,
+    fontSize: 14,
+    color: theme.colors.textSecondary,
+  },
+  versionWrap: {
+    padding: 8,
   },
   versionText: {
-    fontFamily: theme.typography.fonts.uiMedium,
-    fontSize: 12,
-    color: theme.colors.ink400,
-  },
-  versionSubtext: {
     fontFamily: theme.typography.fonts.uiRegular,
-    fontSize: 11,
-    color: theme.colors.ink400,
-    marginTop: 2,
+    fontSize: 12,
+    color: theme.colors.textMuted,
   },
+
+  // Help Sheet
   sheetScroll: {
     maxHeight: 460,
   },
-  topicsList: {
-    gap: 2,
+  topicList: {
+    paddingVertical: 8,
   },
-  topicItem: {
+  topicRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: theme.spacing.sm,
-    paddingHorizontal: theme.spacing.xs,
+    paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.line,
   },
-  topicItemPressed: {
-    backgroundColor: theme.colors.bgMuted,
-  },
-  topicTextContainer: {
-    flex: 1,
-    paddingRight: theme.spacing.sm,
-  },
-  topicItemTitle: {
+  topicTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 15,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
+    marginBottom: 2,
   },
-  topicItemDesc: {
+  topicDesc: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
-    marginTop: 2,
+    color: theme.colors.textSecondary,
   },
   topicDetailBox: {
-    paddingVertical: theme.spacing.sm,
+    paddingVertical: 12,
   },
-  topicDetailDescription: {
+  topicDetailDesc: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 14,
-    color: theme.colors.primary700,
-    marginBottom: theme.spacing.sm,
+    color: theme.colors.lime,
+    marginBottom: 8,
   },
   topicDetailContent: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 22,
-    color: theme.colors.ink800,
+    color: theme.colors.textSecondary,
   },
-  topicButtonsRow: {
+  topNavRow: {
+    paddingHorizontal: 16,
+    paddingBottom: 8,
     flexDirection: 'row',
-    gap: theme.spacing.sm,
-    marginTop: theme.spacing.base,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
   },
-  fullHelpCenterBox: {
-    paddingTop: theme.spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.line,
-    marginTop: theme.spacing.sm,
+  backCircleBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: theme.colors.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.line,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  profileTopBlock: {
+    alignItems: 'center',
+    paddingTop: 12,
+    paddingBottom: 32,
+    paddingHorizontal: 16,
+    gap: 16,
+  },
+  avatarContainer: {
+    position: 'relative',
+    width: 144,
+    height: 144,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarCircle: {
+    width: 144,
+    height: 144,
+    borderRadius: 72,
+    backgroundColor: theme.colors.surfaceRaised,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    borderWidth: 2,
+    borderColor: theme.colors.border,
+  },
+  avatarImage: {
+    width: 144,
+    height: 144,
+    borderRadius: 72,
+  },
+  avatarInitials: {
+    fontFamily: theme.typography.fonts.uiSemiBold,
+    fontSize: 48,
+    color: theme.colors.lime,
+  },
+  cameraBadge: {
+    position: 'absolute',
+    bottom: 2,
+    right: 2,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: theme.colors.lime,
+    borderWidth: 3,
+    borderColor: theme.colors.bg,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  nameAndAccountType: {
+    alignItems: 'center',
+    gap: 6,
+    maxWidth: '90%',
+  },
+  userNameDisplay: {
+    fontFamily: theme.typography.fonts.display,
+    fontSize: 24,
+    lineHeight: 28,
+    color: theme.colors.textPrimary,
+    textAlign: 'center',
+    textTransform: 'uppercase',
+  },
+  userAccountType: {
+    fontFamily: theme.typography.fonts.uiMedium,
+    fontSize: 14,
+    color: theme.colors.textSecondary,
+    textAlign: 'center',
+  },
+  handlePill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: theme.colors.surface,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: theme.radius.pill,
+    borderWidth: 1,
+    borderColor: theme.colors.line,
+  },
+  handleText: {
+    fontFamily: theme.typography.fonts.uiSemiBold,
+    fontSize: 14,
+    color: theme.colors.lime,
+  },
+  photoSheetContent: {
+    paddingVertical: theme.spacing.base,
+    gap: theme.spacing.sm,
   },
 });
+
+function LogoMarkVector({ size = 16 }: { size?: number }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 512 512">
+      <G>
+        <Path
+          d="M 120 220 C 120 208, 128 200, 140 200 L 170 200 L 280 148 C 292 142, 306 151, 306 165 L 306 347 C 306 361, 292 370, 280 364 L 170 312 L 140 312 C 128 312, 120 304, 120 292 Z"
+          fill={theme.colors.lime}
+        />
+        <Circle cx="213" cy="256" r="28" fill={theme.colors.bg} />
+        <Path
+          d="M 352 195 A 90 90 0 0 1 352 317"
+          stroke={theme.colors.lime}
+          strokeWidth="36"
+          strokeLinecap="round"
+          fill="none"
+        />
+        <Path
+          d="M 405 152 A 155 155 0 0 1 405 360"
+          stroke={theme.colors.lime}
+          strokeWidth="36"
+          strokeLinecap="round"
+          fill="none"
+        />
+      </G>
+    </Svg>
+  );
+}

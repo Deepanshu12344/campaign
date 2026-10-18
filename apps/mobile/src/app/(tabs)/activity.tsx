@@ -124,7 +124,7 @@ function FollowedCampaignCard({
           />
         ) : (
           <View style={styles.followedImagePlaceholder}>
-            <TrendingUp size={24} color={theme.colors.ink400} />
+            <TrendingUp size={24} color={theme.colors.textSecondary} />
           </View>
         )}
         <View style={styles.followedStatusBadge}>
@@ -290,12 +290,13 @@ export default function ActivityTabScreen() {
           title="Activity"
           subtitle="Campaign updates & milestones"
           showBack={false}
+          showAvatar={true}
           rightAction={
             <Button
               title=""
               variant="ghost"
               size="sm"
-              iconLeft={<Settings size={20} color={theme.colors.ink700} />}
+              iconLeft={<Settings size={20} color={theme.colors.textSecondary} />}
               onPress={() => router.push('/profile/notifications-settings')}
               accessibilityLabel="Notification Settings"
             />
@@ -307,7 +308,7 @@ export default function ActivityTabScreen() {
         >
           <View style={styles.signedOutCard}>
             <View style={styles.iconCircle}>
-              <Bell size={36} color={theme.colors.primary600} />
+              <Bell size={36} color={theme.colors.lime} />
             </View>
 
             <Text style={styles.signedOutTitle}>Track Campaign Activity</Text>
@@ -317,7 +318,7 @@ export default function ActivityTabScreen() {
             </Text>
 
             <View style={styles.infoBanner}>
-              <Compass size={18} color={theme.colors.primary600} style={styles.bannerIcon} />
+              <Compass size={18} color={theme.colors.lime} style={styles.bannerIcon} />
               <Text style={styles.bannerText}>
                 Browsing, searching, and discovering campaigns never requires an account.
               </Text>
@@ -329,7 +330,7 @@ export default function ActivityTabScreen() {
                 variant="primary"
                 size="lg"
                 fullWidth
-                iconLeft={<LogIn size={18} color={theme.colors.white} />}
+                iconLeft={<LogIn size={18} color={theme.colors.onLime} />}
                 onPress={() => router.push('/auth/sign-in')}
               />
               <Button
@@ -408,6 +409,7 @@ export default function ActivityTabScreen() {
         title="Activity"
         subtitle={unreadCount > 0 ? `${unreadCount} unread update${unreadCount === 1 ? '' : 's'}` : 'All caught up'}
         showBack={false}
+        showAvatar={true}
         rightAction={
           <View style={styles.headerActions}>
             {unreadCount > 0 && (
@@ -415,7 +417,7 @@ export default function ActivityTabScreen() {
                 title="Mark all read"
                 variant="ghost"
                 size="sm"
-                iconLeft={<CheckCheck size={16} color={theme.colors.primary600} />}
+                iconLeft={<CheckCheck size={16} color={theme.colors.lime} />}
                 onPress={handleMarkAllRead}
                 loading={markReadMutation.isPending}
                 accessibilityLabel="Mark all notifications as read"
@@ -425,7 +427,7 @@ export default function ActivityTabScreen() {
               title=""
               variant="ghost"
               size="sm"
-              iconLeft={<Settings size={20} color={theme.colors.ink700} />}
+              iconLeft={<Settings size={20} color={theme.colors.textSecondary} />}
               onPress={() => router.push('/profile/notifications-settings')}
               accessibilityLabel="Notification Preferences"
             />
@@ -457,7 +459,7 @@ export default function ActivityTabScreen() {
             <RefreshControl
               refreshing={isRefetching}
               onRefresh={handleRefresh}
-              tintColor={theme.colors.primary600}
+              tintColor={theme.colors.lime}
             />
           }
         >
@@ -496,7 +498,7 @@ export default function ActivityTabScreen() {
                     title="Discover Campaigns"
                     variant="secondary"
                     size="sm"
-                    iconLeft={<Compass size={16} color={theme.colors.primary600} />}
+                    iconLeft={<Compass size={16} color={theme.colors.lime} />}
                     onPress={() => router.push('/(tabs)/explore')}
                     style={styles.discoverBtn}
                   />
@@ -579,10 +581,10 @@ export default function ActivityTabScreen() {
                               accessibilityLabel="Mark as read"
                               hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                             >
-                              <Check size={16} color={theme.colors.primary600} />
+                              <Check size={16} color={theme.colors.lime} />
                             </Pressable>
                           ) : (
-                            <ChevronRight size={18} color={theme.colors.ink400} />
+                            <ChevronRight size={18} color={theme.colors.textSecondary} />
                           )}
                         </View>
                       </Pressable>
@@ -594,7 +596,7 @@ export default function ActivityTabScreen() {
           ) : (
             <View style={styles.emptyContainer}>
               <View style={styles.emptyIconCircle}>
-                <Bell size={32} color={theme.colors.primary600} />
+                <Bell size={32} color={theme.colors.lime} />
               </View>
               <Text style={styles.emptyTitle}>{emptyProps.title}</Text>
               <Text style={styles.emptyDescription}>{emptyProps.description}</Text>
@@ -602,7 +604,7 @@ export default function ActivityTabScreen() {
                 title="Discover Campaigns"
                 variant="secondary"
                 size="md"
-                iconLeft={<Compass size={18} color={theme.colors.primary600} />}
+                iconLeft={<Compass size={18} color={theme.colors.lime} />}
                 onPress={() => router.push('/(tabs)/explore')}
                 style={styles.emptyActionBtn}
               />
@@ -627,7 +629,7 @@ const styles = StyleSheet.create({
   tabBarWrapper: {
     paddingHorizontal: theme.spacing.base,
     paddingVertical: theme.spacing.sm,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.bg,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.line,
   },
@@ -644,7 +646,7 @@ const styles = StyleSheet.create({
     paddingBottom: theme.spacing.sm,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.line,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.bg,
     marginBottom: theme.spacing.sm,
   },
   sectionHeaderRow: {
@@ -657,14 +659,14 @@ const styles = StyleSheet.create({
   sectionHeading: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: theme.typography.styles.small.fontSize,
-    color: theme.colors.ink900,
+    color: theme.colors.textSecondary,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   sectionCount: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: theme.typography.styles.caption.fontSize,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   carouselContainer: {
     paddingHorizontal: theme.spacing.base,
@@ -675,13 +677,12 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.surfaceRaised,
     overflow: 'hidden',
-    ...theme.shadows.card,
   },
   followedImageWrapper: {
     height: 100,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     position: 'relative',
   },
   followedImage: {
@@ -693,7 +694,7 @@ const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   followedStatusBadge: {
     position: 'absolute',
@@ -707,7 +708,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: theme.spacing.xs,
     minHeight: 36,
   },
@@ -720,18 +721,18 @@ const styles = StyleSheet.create({
   progressBarBg: {
     flex: 1,
     height: 6,
-    backgroundColor: theme.colors.line,
+    backgroundColor: theme.colors.surfaceRaised,
     borderRadius: 3,
     overflow: 'hidden',
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
   },
   followedPercent: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 11,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
     minWidth: 32,
     textAlign: 'right',
   },
@@ -744,27 +745,27 @@ const styles = StyleSheet.create({
   followedDays: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   emptyFollowedCard: {
     marginHorizontal: theme.spacing.base,
     padding: theme.spacing.base,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surface,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.surfaceRaised,
     alignItems: 'center',
   },
   emptyFollowedTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
     marginBottom: 4,
   },
   emptyFollowedDesc: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     marginBottom: theme.spacing.sm,
   },
@@ -784,7 +785,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
     lineHeight: 16,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     textTransform: 'uppercase',
     letterSpacing: 0.8,
   },
@@ -799,13 +800,12 @@ const styles = StyleSheet.create({
     padding: theme.spacing.base,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.surfaceRaised,
     gap: theme.spacing.md,
-    ...theme.shadows.card,
   },
   notificationCardUnread: {
-    borderColor: theme.colors.primary100,
-    backgroundColor: theme.colors.purple50, // Subtle brand sheen for unread
+    borderColor: '#234F02',
+    backgroundColor: theme.colors.tintedPillBg,
   },
   notificationLeft: {
     position: 'relative',
@@ -825,7 +825,7 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
     borderWidth: 2,
     borderColor: theme.colors.surface,
   },
@@ -841,38 +841,38 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
     lineHeight: 14,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   metaDivider: {
     marginHorizontal: 4,
-    color: theme.colors.ink400,
+    color: theme.colors.textSecondary,
     fontSize: 11,
   },
   itemTime: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
     lineHeight: 14,
-    color: theme.colors.ink400,
+    color: theme.colors.textSecondary,
   },
   itemTitle: {
     fontSize: 14,
     lineHeight: 19,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: 4,
   },
   itemTitleUnread: {
     fontFamily: theme.typography.fonts.uiBold,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   itemTitleRead: {
     fontFamily: theme.typography.fonts.uiMedium,
-    color: theme.colors.ink800,
+    color: theme.colors.textSecondary,
   },
   itemBody: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 17,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   notificationRight: {
     paddingTop: 8,
@@ -883,11 +883,11 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: theme.colors.primary100,
+    borderColor: theme.colors.surfaceRaised,
   },
 
   // Empty State
@@ -901,7 +901,7 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: theme.spacing.base,
@@ -910,7 +910,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 18,
     lineHeight: 24,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: theme.spacing.xs,
     textAlign: 'center',
   },
@@ -918,7 +918,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 19,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     maxWidth: 320,
     marginBottom: theme.spacing.lg,
@@ -945,7 +945,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.card,
     backgroundColor: theme.colors.surface,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.surfaceRaised,
     gap: theme.spacing.md,
   },
   skeletonTextWrapper: {
@@ -966,15 +966,14 @@ const styles = StyleSheet.create({
     padding: theme.spacing.xl,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.surfaceRaised,
     alignItems: 'center',
-    ...theme.shadows.card,
   },
   iconCircle: {
     width: 72,
     height: 72,
     borderRadius: 36,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: theme.spacing.lg,
@@ -983,7 +982,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 20,
     lineHeight: 26,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     textAlign: 'center',
     marginBottom: theme.spacing.sm,
   },
@@ -991,18 +990,18 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 20,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     marginBottom: theme.spacing.lg,
   },
   infoBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.md,
     borderRadius: theme.radius.sm,
     borderWidth: 1,
-    borderColor: theme.colors.primary100,
+    borderColor: theme.colors.border,
     marginBottom: theme.spacing.xl,
     gap: theme.spacing.sm,
   },
@@ -1014,7 +1013,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
     lineHeight: 17,
-    color: theme.colors.primary800,
+    color: theme.colors.textSecondary,
   },
   signedOutButtons: {
     width: '100%',

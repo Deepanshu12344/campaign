@@ -65,7 +65,7 @@ export function AuthGateProvider({ children }: { children: React.ReactNode }) {
       >
         <View style={styles.sheetBody}>
           <View style={styles.iconCircle}>
-            <ShieldCheck size={32} color={theme.colors.primary600} />
+            <ShieldCheck size={32} color={theme.colors.lime} />
           </View>
 
           <Text style={styles.sheetTitle}>Account Needed</Text>
@@ -77,7 +77,7 @@ export function AuthGateProvider({ children }: { children: React.ReactNode }) {
               variant="primary"
               size="lg"
               fullWidth
-              iconLeft={<LogIn size={18} color="#FFFFFF" />}
+              iconLeft={<LogIn size={18} color={theme.colors.onLime} />}
               onPress={handleSignIn}
             />
 
@@ -86,7 +86,7 @@ export function AuthGateProvider({ children }: { children: React.ReactNode }) {
               variant="secondary"
               size="lg"
               fullWidth
-              iconLeft={<UserPlus size={18} color={theme.colors.primary600} />}
+              iconLeft={<UserPlus size={18} color={theme.colors.textPrimary} />}
               onPress={handleSignUp}
               style={styles.secondaryButton}
             />
@@ -123,7 +123,9 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.tintedPillBg,
+    borderWidth: 1,
+    borderColor: theme.colors.lime,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: theme.spacing.base,
@@ -132,7 +134,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: theme.typography.styles.h2.fontSize,
     lineHeight: theme.typography.styles.h2.lineHeight,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     textAlign: 'center',
     marginBottom: theme.spacing.xs,
   },
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.body.fontSize,
     lineHeight: theme.typography.styles.body.lineHeight,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     marginBottom: theme.spacing.xl,
     paddingHorizontal: theme.spacing.base,

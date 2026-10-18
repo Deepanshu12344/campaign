@@ -5,11 +5,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft } from 'lucide-react-native';
 import { theme } from '../../theme';
 import { StepIndicator } from '../ui/StepIndicator';
+import { HeaderAvatar } from './HeaderAvatar';
 
 export interface SharedHeaderProps {
   title?: string;
   subtitle?: string;
   showBack?: boolean;
+  showAvatar?: boolean;
+  leftAction?: React.ReactNode;
   onBack?: () => void;
   fallbackRoute?: string;
   rightAction?: React.ReactNode;
@@ -25,6 +28,8 @@ export function SharedHeader({
   title,
   subtitle,
   showBack = true,
+  showAvatar = false,
+  leftAction,
   onBack,
   fallbackRoute = '/(tabs)',
   rightAction,
@@ -54,7 +59,9 @@ export function SharedHeader({
     >
       <View style={styles.headerRow}>
         <View style={styles.leftContainer}>
-          {showBack ? (
+          {leftAction ? (
+            leftAction
+          ) : showBack ? (
             <Pressable
               onPress={handleBack}
               style={({ pressed }) => [
@@ -67,6 +74,8 @@ export function SharedHeader({
             >
               <ArrowLeft size={22} color={theme.colors.ink900} />
             </Pressable>
+          ) : showAvatar ? (
+            <HeaderAvatar />
           ) : (
             <View style={styles.spacer} />
           )}
@@ -158,7 +167,8 @@ const styles = StyleSheet.create({
     marginTop: -2,
   },
   rightContainer: {
-    width: 48,
+    minWidth: 48,
+    flexShrink: 0,
     alignItems: 'flex-end',
     justifyContent: 'center',
   },

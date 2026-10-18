@@ -31,7 +31,6 @@ import { SharedHeader } from '../../../components/layout/SharedHeader';
 import {
   Card,
   Accordion,
-  DemoDataBadge,
   Skeleton,
   ErrorState,
   useToast,
@@ -214,7 +213,7 @@ export default function BackReviewScreen() {
               />
             ) : (
               <View style={[styles.coverThumbnail, styles.coverPlaceholder]}>
-                <TrendingUp size={20} color={theme.colors.ink400} />
+                <TrendingUp size={20} color={theme.colors.textSecondary} />
               </View>
             )}
             <View style={styles.campaignTextCol}>
@@ -229,7 +228,7 @@ export default function BackReviewScreen() {
 
           <View style={styles.reachBanner}>
             <View style={styles.reachIconWrapper}>
-              <Sparkles size={16} color={theme.colors.primary700} />
+              <Sparkles size={16} color={theme.colors.lime} />
             </View>
             <View style={{ flex: 1 }}>
               <Text style={styles.reachBannerTitle}>
@@ -237,7 +236,6 @@ export default function BackReviewScreen() {
               </Text>
               <View style={styles.estimateBadgeRow}>
                 <Text style={styles.estimateBadgeLabel}>Estimate · not a guarantee</Text>
-                <DemoDataBadge size="sm" />
               </View>
             </View>
           </View>
@@ -256,9 +254,9 @@ export default function BackReviewScreen() {
             </View>
             <View style={{ alignItems: 'flex-end' }}>
               <Text style={styles.progressSubLabel}>After Contribution</Text>
-              <Text style={[styles.progressValueText, { color: theme.colors.primary700 }]}>
+              <Text style={[styles.progressValueText, { color: theme.colors.lime }]}>
                 ${(newRaised / 100).toLocaleString()}{' '}
-                <Text style={[styles.progressGoalText, { color: theme.colors.primary700 }]}>
+                <Text style={[styles.progressGoalText, { color: theme.colors.lime }]}>
                   ({newPercent}%)
                 </Text>
               </Text>
@@ -285,11 +283,11 @@ export default function BackReviewScreen() {
 
           <View style={styles.dualBarLegend}>
             <View style={styles.legendItem}>
-              <View style={[styles.legendDot, { backgroundColor: theme.colors.primary700 }]} />
+              <View style={[styles.legendDot, { backgroundColor: theme.colors.surfaceRaised }]} />
               <Text style={styles.legendText}>Current: ${Math.round(currentRaised / 100)}</Text>
             </View>
             <View style={styles.legendItem}>
-              <View style={[styles.legendDot, { backgroundColor: theme.colors.primary600 }]} />
+              <View style={[styles.legendDot, { backgroundColor: theme.colors.lime }]} />
               <Text style={styles.legendText}>Your +${Math.round(amountCents / 100)} ({percentDelta}%)</Text>
             </View>
           </View>
@@ -357,7 +355,7 @@ export default function BackReviewScreen() {
             <Switch
               value={!isAnonymous}
               onValueChange={handleTogglePrivacy}
-              trackColor={{ false: theme.colors.line, true: theme.colors.primary600 }}
+              trackColor={{ false: theme.colors.line, true: theme.colors.lime }}
               thumbColor={Platform.OS === 'android' ? theme.colors.surface : undefined}
             />
           </View>
@@ -370,7 +368,7 @@ export default function BackReviewScreen() {
                 value={localPublicName}
                 onChangeText={handlePublicNameChange}
                 placeholder="e.g. Jane Doe"
-                placeholderTextColor={theme.colors.ink400}
+                placeholderTextColor={theme.colors.textSecondary}
                 maxLength={50}
               />
             </View>
@@ -384,7 +382,7 @@ export default function BackReviewScreen() {
                 value={localEmail}
                 onChangeText={handleEmailChange}
                 placeholder="you@example.com (optional)"
-                placeholderTextColor={theme.colors.ink400}
+                placeholderTextColor={theme.colors.textSecondary}
                 keyboardType="email-address"
                 autoCapitalize="none"
               />
@@ -399,7 +397,7 @@ export default function BackReviewScreen() {
         <View style={styles.accordionWrapper}>
           <Accordion
             title="Refund Policy & Campaign Terms"
-            icon={<FileText size={18} color={theme.colors.ink600} />}
+            icon={<FileText size={18} color={theme.colors.textSecondary} />}
           >
             <Text style={styles.accordionBodyText}>
               • <Text style={{ fontWeight: '600' }}>All-or-Nothing Escrow:</Text> If this campaign does not achieve its funding goal before the deadline, all contributions are fully refunded.
@@ -415,7 +413,7 @@ export default function BackReviewScreen() {
 
         {/* Non-Donation Statement (Prominent Banner) */}
         <View style={styles.nonDonationBanner}>
-          <ShieldAlert size={22} color={theme.colors.primary800} style={styles.bannerIcon} />
+          <ShieldAlert size={22} color={theme.colors.lime} style={styles.bannerIcon} />
           <View style={styles.nonDonationTextCol}>
             <Text style={styles.nonDonationTitle}>Non-Donation Disclosure</Text>
             <Text style={styles.nonDonationBody}>
@@ -448,7 +446,7 @@ export default function BackReviewScreen() {
               hasAcknowledged && styles.checkboxBoxChecked,
             ]}
           >
-            {hasAcknowledged && <Check size={16} color="#FFFFFF" strokeWidth={3} />}
+            {hasAcknowledged && <Check size={16} color={theme.colors.onLime} strokeWidth={3} />}
           </View>
           <Text style={styles.checkboxLabel}>
             I understand that my contribution funds digital ad distribution to amplify this campaign, and is not a tax-deductible charitable donation.
@@ -502,7 +500,7 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: theme.radius.md,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     marginRight: theme.spacing.md,
   },
   coverPlaceholder: {
@@ -516,17 +514,17 @@ const styles = StyleSheet.create({
   },
   campaignTitle: {
     ...theme.typography.styles.h3,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   creatorName: {
     ...theme.typography.styles.small,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   reachBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.tintedPillBg,
     borderRadius: theme.radius.md,
     padding: theme.spacing.md,
     gap: theme.spacing.sm,
@@ -535,13 +533,13 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
   },
   reachBannerTitle: {
     ...theme.typography.styles.smallMedium,
-    color: theme.colors.primary800,
+    color: theme.colors.lime,
     fontWeight: '700',
   },
   estimateBadgeRow: {
@@ -552,7 +550,7 @@ const styles = StyleSheet.create({
   },
   estimateBadgeLabel: {
     ...theme.typography.styles.caption,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   progressCard: {
     padding: theme.spacing.base,
@@ -561,12 +559,12 @@ const styles = StyleSheet.create({
   },
   cardHeaderTitle: {
     ...theme.typography.styles.h3,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: theme.spacing.sm,
   },
   cardSubText: {
     ...theme.typography.styles.small,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginBottom: theme.spacing.md,
   },
   progressNumbersRow: {
@@ -576,20 +574,20 @@ const styles = StyleSheet.create({
   },
   progressSubLabel: {
     ...theme.typography.styles.caption,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginBottom: 2,
   },
   progressValueText: {
     ...theme.typography.styles.h3,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   progressGoalText: {
     ...theme.typography.styles.body,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   dualBarContainer: {
     height: 12,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     borderRadius: theme.radius.full,
     overflow: 'hidden',
     flexDirection: 'row',
@@ -598,11 +596,11 @@ const styles = StyleSheet.create({
   },
   dualBarCurrent: {
     height: '100%',
-    backgroundColor: theme.colors.primary800,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   dualBarDelta: {
     height: '100%',
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
   },
   dualBarLegend: {
     flexDirection: 'row',
@@ -621,7 +619,7 @@ const styles = StyleSheet.create({
   },
   legendText: {
     ...theme.typography.styles.caption,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   breakdownCard: {
     padding: theme.spacing.base,
@@ -636,16 +634,16 @@ const styles = StyleSheet.create({
   },
   breakdownItemTitle: {
     ...theme.typography.styles.bodyMedium,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   breakdownItemDesc: {
     ...theme.typography.styles.caption,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 1,
   },
   breakdownAmount: {
     ...theme.typography.styles.bodyMedium,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     fontFamily: theme.typography.fonts.uiSemiBold,
   },
   divider: {
@@ -660,12 +658,12 @@ const styles = StyleSheet.create({
   },
   totalLabel: {
     ...theme.typography.styles.h3,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     fontFamily: theme.typography.fonts.uiBold,
   },
   totalAmount: {
     ...theme.typography.styles.h2,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
     fontFamily: theme.typography.fonts.uiBold,
   },
   privacyCard: {
@@ -684,11 +682,11 @@ const styles = StyleSheet.create({
   },
   switchTitle: {
     ...theme.typography.styles.smallMedium,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   switchDesc: {
     ...theme.typography.styles.caption,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   nameInputContainer: {
@@ -705,22 +703,22 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     ...theme.typography.styles.captionSemiBold,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     marginBottom: theme.spacing.xs,
   },
   textInput: {
     height: 48,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.inputBorder,
     borderRadius: theme.radius.input,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     paddingHorizontal: theme.spacing.md,
     ...theme.typography.styles.body,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   guestEmailHint: {
     ...theme.typography.styles.caption,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: theme.spacing.xs,
     lineHeight: 18,
   },
@@ -729,14 +727,14 @@ const styles = StyleSheet.create({
   },
   accordionBodyText: {
     ...theme.typography.styles.small,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     lineHeight: 20,
     marginBottom: theme.spacing.sm,
   },
   nonDonationBanner: {
     flexDirection: 'row',
-    backgroundColor: theme.colors.amber50,
-    borderColor: theme.colors.amber200,
+    backgroundColor: theme.colors.surfaceRaised,
+    borderColor: theme.colors.line,
     borderWidth: 1.5,
     borderRadius: theme.radius.md,
     padding: theme.spacing.md,
@@ -751,13 +749,13 @@ const styles = StyleSheet.create({
   },
   nonDonationTitle: {
     ...theme.typography.styles.smallMedium,
-    color: theme.colors.amber800,
+    color: theme.colors.textPrimary,
     fontWeight: '700',
     marginBottom: 4,
   },
   nonDonationBody: {
     ...theme.typography.styles.small,
-    color: theme.colors.amber900,
+    color: theme.colors.textSecondary,
     lineHeight: 20,
   },
   policyLinkRow: {
@@ -768,12 +766,12 @@ const styles = StyleSheet.create({
   },
   policyLinkText: {
     ...theme.typography.styles.captionSemiBold,
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
     textDecorationLine: 'underline',
   },
   policyDivider: {
     ...theme.typography.styles.caption,
-    color: theme.colors.amber600,
+    color: theme.colors.textSecondary,
   },
   checkboxRow: {
     flexDirection: 'row',
@@ -787,19 +785,19 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     borderWidth: 2,
     borderColor: theme.colors.line,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 2,
   },
   checkboxBoxChecked: {
-    backgroundColor: theme.colors.primary600,
-    borderColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
+    borderColor: theme.colors.lime,
   },
   checkboxLabel: {
     flex: 1,
     ...theme.typography.styles.small,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
     lineHeight: 20,
   },
 });

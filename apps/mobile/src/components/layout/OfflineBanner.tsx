@@ -54,7 +54,7 @@ export function OfflineBanner() {
       style={styles.banner}
     >
       <View style={styles.content}>
-        <WifiOff size={16} color="#92400E" style={styles.icon} />
+        <WifiOff size={16} color={theme.colors.textPrimary} style={styles.icon} />
         <Text style={styles.text}>
           You are currently offline. Showing cached information.
         </Text>
@@ -65,9 +65,9 @@ export function OfflineBanner() {
 
 const styles = StyleSheet.create({
   banner: {
-    backgroundColor: '#FEF3C7', // warning background
+    backgroundColor: theme.colors.surfaceRaised,
     borderBottomWidth: 1,
-    borderBottomColor: '#FDE68A',
+    borderBottomColor: theme.colors.border,
     paddingVertical: theme.spacing.xs,
     paddingHorizontal: theme.spacing.base,
     zIndex: 9999,
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: theme.typography.styles.caption.fontSize,
     lineHeight: theme.typography.styles.caption.lineHeight,
-    color: '#92400E',
+    color: theme.colors.textPrimary,
     textAlign: 'center',
   },
 });

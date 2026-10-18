@@ -145,7 +145,7 @@ export function StoryRenderer({
         return (
           <View key={`quote-${index}`} style={[styles.blockWrapper, styles.quoteContainer]}>
             <View style={styles.quoteHeader}>
-              <QuoteIcon size={20} color={theme.colors.primary600} />
+              <QuoteIcon size={20} color={theme.colors.lime} />
             </View>
             <Text style={styles.quoteText}>"{block.text}"</Text>
             {Boolean(block.attribution) && (
@@ -159,7 +159,7 @@ export function StoryRenderer({
         return (
           <View key={`actions-${index}`} style={[styles.blockWrapper, styles.actionsCard]}>
             <View style={styles.actionsHeaderRow}>
-              <Sparkles size={18} color={theme.colors.primary600} />
+              <Sparkles size={18} color={theme.colors.lime} />
               <Text style={styles.actionsTitle}>Suggested Audience Actions</Text>
             </View>
             <View style={styles.actionsList}>
@@ -167,7 +167,7 @@ export function StoryRenderer({
                 <View key={`act-${actIdx}`} style={styles.actionItemRow}>
                   <CheckCircle2
                     size={16}
-                    color={theme.colors.success}
+                    color={theme.colors.lime}
                     style={styles.actionIcon}
                   />
                   <Text style={styles.actionText}>{actionItem}</Text>
@@ -192,7 +192,7 @@ export function StoryRenderer({
         <View style={styles.sourcesSection}>
           <View style={styles.sourcesHeader}>
             <View style={styles.sourcesTitleRow}>
-              <FileCheck2 size={20} color={theme.colors.primary600} />
+              <FileCheck2 size={20} color={theme.colors.lime} />
               <Text style={styles.sourcesTitle}>Verified Sources & Citations</Text>
             </View>
             <Text style={styles.sourcesDisclaimer}>
@@ -231,7 +231,7 @@ export function StoryRenderer({
               style={styles.modalCloseButton}
               hitSlop={16}
             >
-              <X size={24} color="#FFFFFF" />
+              <X size={24} color={theme.colors.textPrimary} />
             </Pressable>
 
             <View style={styles.modalImageContainer}>
@@ -399,7 +399,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 26,
     lineHeight: 34,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginTop: theme.spacing.lg,
     marginBottom: theme.spacing.xs,
   },
@@ -407,7 +407,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 22,
     lineHeight: 28,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginTop: theme.spacing.md,
     marginBottom: theme.spacing.xs,
   },
@@ -415,7 +415,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.serifSemiBold,
     fontSize: 19,
     lineHeight: 25,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginTop: theme.spacing.sm,
     marginBottom: theme.spacing.xs,
   },
@@ -426,19 +426,19 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.serifRegular,
     fontSize: 18,
     lineHeight: 28,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   boldText: {
     fontFamily: theme.typography.fonts.serifBold,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   italicText: {
     fontFamily: theme.typography.fonts.storyItalic,
-    color: theme.colors.ink800,
+    color: theme.colors.textSecondary,
   },
   linkText: {
     fontFamily: theme.typography.fonts.serifSemiBold,
-    color: theme.colors.primary600,
+    color: theme.colors.lime,
     textDecorationLine: 'underline',
   },
   emptyLineSpacer: {
@@ -454,7 +454,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 18,
     lineHeight: 28,
-    color: theme.colors.primary600,
+    color: theme.colors.lime,
     width: 16,
   },
   imageContainer: {
@@ -463,7 +463,7 @@ const styles = StyleSheet.create({
   imagePressable: {
     borderRadius: theme.radius.card,
     overflow: 'hidden',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     ...theme.shadows.card,
   },
   storyImage: {
@@ -479,22 +479,22 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.storyItalic,
     fontSize: theme.typography.styles.small.fontSize,
     lineHeight: theme.typography.styles.small.lineHeight,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   creditText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.caption.fontSize,
     lineHeight: theme.typography.styles.caption.lineHeight,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   statCard: {
     backgroundColor: theme.colors.surface,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     borderLeftWidth: 4,
-    borderLeftColor: theme.colors.primary600,
+    borderLeftColor: theme.colors.lime,
     padding: theme.spacing.lg,
     marginVertical: theme.spacing.sm,
     ...theme.shadows.card,
@@ -503,14 +503,14 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 36,
     lineHeight: 42,
-    color: theme.colors.primary600,
+    color: theme.colors.lime,
     marginBottom: 4,
   },
   statLabel: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: theme.typography.styles.body.fontSize,
     lineHeight: theme.typography.styles.body.lineHeight,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   statSourceRow: {
     flexDirection: 'row',
@@ -518,24 +518,24 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.sm,
     paddingTop: theme.spacing.xs,
     borderTopWidth: 1,
-    borderTopColor: theme.colors.line,
+    borderTopColor: theme.colors.border,
     flexWrap: 'wrap',
   },
   statSourceLabel: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: theme.typography.styles.caption.fontSize,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   statSourceText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.caption.fontSize,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   quoteContainer: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     borderRadius: theme.radius.card,
     borderLeftWidth: 4,
-    borderLeftColor: theme.colors.primary600,
+    borderLeftColor: theme.colors.lime,
     paddingHorizontal: theme.spacing.lg,
     paddingVertical: theme.spacing.md,
     marginVertical: theme.spacing.sm,
@@ -548,12 +548,12 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.storyItalic,
     fontSize: 18,
     lineHeight: 28,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   quoteAttribution: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: theme.typography.styles.small.fontSize,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: theme.spacing.sm,
     textAlign: 'right',
   },
@@ -561,7 +561,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     padding: theme.spacing.lg,
     marginVertical: theme.spacing.sm,
     ...theme.shadows.card,
@@ -573,12 +573,12 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.md,
     paddingBottom: theme.spacing.xs,
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.line,
+    borderBottomColor: theme.colors.border,
   },
   actionsTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: theme.typography.styles.h3.fontSize,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   actionsList: {
     gap: 10,
@@ -595,13 +595,13 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.body.fontSize,
     lineHeight: theme.typography.styles.body.lineHeight,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
     flex: 1,
   },
   // Modal Image Zoom Styles
   modalBackdrop: {
     flex: 1,
-    backgroundColor: 'rgba(15, 23, 42, 0.95)',
+    backgroundColor: 'rgba(18, 21, 17, 0.95)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: theme.spacing.md,
@@ -614,7 +614,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: theme.colors.surfaceRaised,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -636,13 +636,13 @@ const styles = StyleSheet.create({
   modalCaptionText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: theme.typography.styles.small.fontSize,
-    color: '#F8FAFC',
+    color: theme.colors.textPrimary,
     textAlign: 'center',
   },
   modalCreditText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.caption.fontSize,
-    color: '#94A3B8',
+    color: theme.colors.textSecondary,
     marginTop: 4,
     textAlign: 'center',
   },
@@ -650,7 +650,7 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.xl,
     paddingTop: theme.spacing.lg,
     borderTopWidth: 1,
-    borderTopColor: theme.colors.line,
+    borderTopColor: theme.colors.border,
   },
   sourcesHeader: {
     marginBottom: theme.spacing.md,
@@ -664,13 +664,13 @@ const styles = StyleSheet.create({
   sourcesTitle: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   sourcesDisclaimer: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 18,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   sourcesList: {
     gap: 10,

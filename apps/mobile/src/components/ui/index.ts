@@ -20,4 +20,3 @@ export * from './StepIndicator';
 export * from './StickyActionBar';
 export * from './SourceItem';
 export * from './ReachEstimateBadge';
-export * from './DemoDataBadge';

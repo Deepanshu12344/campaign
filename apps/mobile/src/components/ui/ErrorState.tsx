@@ -22,7 +22,7 @@ export function ErrorState({
   return (
     <View style={[styles.container, style]} {...rest}>
       <View style={styles.iconCircle}>
-        <AlertCircle size={36} color={theme.colors.danger} />
+        <AlertCircle size={36} color={theme.colors.textPrimary} />
       </View>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.message}>{message}</Text>
@@ -32,7 +32,7 @@ export function ErrorState({
           size="md"
           title={retryTitle}
           onPress={onRetry}
-          iconLeft={<RefreshCw size={16} color={theme.colors.primary600} />}
+          iconLeft={<RefreshCw size={16} color={theme.colors.textPrimary} />}
           style={styles.retryButton}
         />
       )}
@@ -51,7 +51,9 @@ const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: theme.radius.pill,
-    backgroundColor: theme.colors.dangerBg,
+    backgroundColor: theme.colors.surfaceRaised,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: theme.spacing.base,
@@ -60,7 +62,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: theme.typography.styles.h3.fontSize,
     lineHeight: theme.typography.styles.h3.lineHeight,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     textAlign: 'center',
     marginBottom: theme.spacing.xs,
   },
@@ -68,7 +70,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.small.fontSize,
     lineHeight: theme.typography.styles.small.lineHeight,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     maxWidth: 280,
   },

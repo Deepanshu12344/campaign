@@ -58,10 +58,10 @@ const DURATION_PRESETS = [7, 14, 30, 60] as const;
 const FUNDING_WINDOW_PRESETS = [14, 30, 45, 60] as const;
 
 const CHANNEL_COLORS: Record<string, string> = {
-  'Social feeds': '#2563EB',
-  Search: '#059669',
-  'Display network': '#D97706',
-  Video: '#7C3AED',
+  'Social feeds': theme.colors.lime,
+  Search: theme.colors.textSecondary,
+  'Display network': theme.colors.surfaceRaised,
+  Video: theme.colors.border,
 };
 
 export default function CreateReachScreen() {
@@ -349,7 +349,7 @@ export default function CreateReachScreen() {
       <View style={styles.statusSection}>
         {isComplete ? (
           <View style={styles.readyCard}>
-            <CheckCircle2 size={18} color={theme.colors.success} />
+            <CheckCircle2 size={18} color={theme.colors.lime} />
             <View style={styles.statusCol}>
               <Text style={styles.readyTitle}>Step 4 Ready</Text>
               <Text style={styles.readyBody}>
@@ -360,7 +360,7 @@ export default function CreateReachScreen() {
         ) : (
           <View style={styles.warningsCard}>
             <View style={styles.warningsHeaderRow}>
-              <AlertCircle size={18} color={theme.colors.danger} />
+              <AlertCircle size={18} color={theme.colors.textPrimary} />
               <Text style={styles.warningsTitle}>
                 {errors.length} {errors.length === 1 ? 'item needs attention' : 'items need attention'}
               </Text>
@@ -392,7 +392,7 @@ export default function CreateReachScreen() {
       <Card style={styles.indicativeCard}>
         <View style={styles.indicativeHeaderRow}>
           <View style={styles.indicativeIconBox}>
-            <Sparkles size={16} color={theme.colors.primary600} />
+            <Sparkles size={16} color={theme.colors.lime} />
           </View>
           <View style={styles.indicativeTitleCol}>
             <Text style={styles.indicativeTitle}>Indicative Reach</Text>
@@ -400,7 +400,7 @@ export default function CreateReachScreen() {
               Audience size depends on pricing, targeting, and ad auction performance.
             </Text>
           </View>
-          <InfoTip term="estimatedReach" size={16} color={theme.colors.primary600} />
+          <InfoTip term="estimatedReach" size={16} color={theme.colors.lime} />
         </View>
 
         {indicativeReach ? (
@@ -448,7 +448,7 @@ export default function CreateReachScreen() {
         <Card style={styles.card}>
           <View style={styles.sectionHeaderRow}>
             <View style={styles.sectionIconBadge}>
-              <MapPin size={18} color={theme.colors.primary600} />
+              <MapPin size={18} color={theme.colors.lime} />
             </View>
             <View style={styles.sectionTitleCol}>
               <View style={styles.titleWithRequiredRow}>
@@ -469,7 +469,7 @@ export default function CreateReachScreen() {
             accessibilityLabel="Worldwide targeting (clears all specific locations)"
           >
             <View style={[styles.checkboxCircle, isWorldwideSelected && styles.checkboxCircleActive]}>
-              {isWorldwideSelected && <Check size={12} color="#FFFFFF" strokeWidth={3} />}
+              {isWorldwideSelected && <Check size={12} color={theme.colors.onLime} strokeWidth={3} />}
             </View>
             <View style={styles.worldwideTextCol}>
               <Text style={[styles.worldwideTitle, isWorldwideSelected && styles.worldwideTitleActive]}>
@@ -501,7 +501,7 @@ export default function CreateReachScreen() {
                       accessibilityRole="button"
                       accessibilityLabel={`Remove ${loc}`}
                     >
-                      <X size={14} color={theme.colors.primary700} />
+                      <X size={14} color={theme.colors.onLime} />
                     </Pressable>
                   </View>
                 ))}
@@ -511,18 +511,18 @@ export default function CreateReachScreen() {
 
           {/* Location Search Input */}
           <View style={styles.searchRow}>
-            <Search size={16} color={theme.colors.ink500} style={styles.searchIcon} />
+            <Search size={16} color={theme.colors.textSecondary} style={styles.searchIcon} />
             <TextInput
               style={styles.searchInput}
               placeholder="Search countries, regions, or cities..."
-              placeholderTextColor={theme.colors.ink400}
+              placeholderTextColor={theme.colors.textSecondary}
               value={locationSearch}
               onChangeText={setLocationSearch}
               autoCapitalize="words"
             />
             {locationSearch.length > 0 && (
               <Pressable onPress={() => setLocationSearch('')} hitSlop={8}>
-                <X size={16} color={theme.colors.ink500} />
+                <X size={16} color={theme.colors.textSecondary} />
               </Pressable>
             )}
           </View>
@@ -544,7 +544,7 @@ export default function CreateReachScreen() {
                     <Text style={[styles.locationChipText, isSelected && styles.locationChipTextActive]}>
                       {loc.name}
                     </Text>
-                    {isSelected && <Check size={12} color="#FFFFFF" strokeWidth={3} />}
+                    {isSelected && <Check size={12} color={theme.colors.onLime} strokeWidth={3} />}
                   </Pressable>
                 );
               })}
@@ -556,7 +556,7 @@ export default function CreateReachScreen() {
       <Card style={styles.card}>
         <View style={styles.sectionHeaderRow}>
           <View style={styles.sectionIconBadge}>
-            <Users size={18} color={theme.colors.primary600} />
+            <Users size={18} color={theme.colors.lime} />
           </View>
           <View style={styles.sectionTitleCol}>
             <View style={styles.titleWithRequiredRow}>
@@ -625,7 +625,7 @@ export default function CreateReachScreen() {
                       >
                         {interest}
                       </Text>
-                      {isSelected && <Check size={12} color="#FFFFFF" strokeWidth={3} />}
+                      {isSelected && <Check size={12} color={theme.colors.onLime} strokeWidth={3} />}
                     </Pressable>
                   );
                 })}
@@ -644,7 +644,7 @@ export default function CreateReachScreen() {
         <Card style={styles.card}>
           <View style={styles.sectionHeaderRow}>
             <View style={styles.sectionIconBadge}>
-              <Share2 size={18} color={theme.colors.primary600} />
+              <Share2 size={18} color={theme.colors.lime} />
             </View>
             <View style={styles.sectionTitleCol}>
               <View style={styles.titleWithRequiredRow}>
@@ -684,7 +684,7 @@ export default function CreateReachScreen() {
                           isComingSoon && styles.channelCheckboxDisabled,
                         ]}
                       >
-                        {isSelected && <Check size={12} color="#FFFFFF" strokeWidth={3} />}
+                        {isSelected && <Check size={12} color={theme.colors.onLime} strokeWidth={3} />}
                       </View>
                       <Text
                         style={[
@@ -725,7 +725,7 @@ export default function CreateReachScreen() {
 
                   {isComingSoon && ch.disabledReason && (
                     <View style={styles.disabledReasonBox}>
-                      <Info size={13} color={theme.colors.ink600} />
+                      <Info size={13} color={theme.colors.textSecondary} />
                       <Text style={styles.disabledReasonText}>{ch.disabledReason}</Text>
                     </View>
                   )}
@@ -745,7 +745,7 @@ export default function CreateReachScreen() {
         <Card style={styles.card}>
           <View style={styles.sectionHeaderRow}>
             <View style={styles.sectionIconBadge}>
-              <Sliders size={18} color={theme.colors.primary600} />
+              <Sliders size={18} color={theme.colors.lime} />
             </View>
             <View style={styles.sectionTitleCol}>
               <View style={styles.titleWithRequiredRow}>
@@ -794,7 +794,7 @@ export default function CreateReachScreen() {
             {(reach.channels || []).map((ch) => {
               const pct = (reach.budgetAllocation || {})[ch] || 0;
               if (pct <= 0) return null;
-              const barColor = CHANNEL_COLORS[ch] || theme.colors.primary600;
+              const barColor = CHANNEL_COLORS[ch] || theme.colors.lime;
               return (
                 <View
                   key={`bar-${ch}`}
@@ -814,7 +814,7 @@ export default function CreateReachScreen() {
           <View style={styles.stepperRowsContainer}>
             {(reach.channels || []).map((ch) => {
               const pct = (reach.budgetAllocation || {})[ch] || 0;
-              const dotColor = CHANNEL_COLORS[ch] || theme.colors.primary600;
+              const dotColor = CHANNEL_COLORS[ch] || theme.colors.lime;
               const isSingleChannel = (reach.channels || []).length <= 1;
 
               return (
@@ -837,7 +837,7 @@ export default function CreateReachScreen() {
                     >
                       <Minus
                         size={14}
-                        color={isSingleChannel || pct <= 0 ? theme.colors.ink400 : theme.colors.ink700}
+                        color={isSingleChannel || pct <= 0 ? theme.colors.textMuted : theme.colors.textPrimary}
                       />
                     </Pressable>
 
@@ -857,7 +857,7 @@ export default function CreateReachScreen() {
                     >
                       <Plus
                         size={14}
-                        color={isSingleChannel || pct >= 100 ? theme.colors.ink400 : theme.colors.ink700}
+                        color={isSingleChannel || pct >= 100 ? theme.colors.textMuted : theme.colors.textPrimary}
                       />
                     </Pressable>
                   </View>
@@ -877,7 +877,7 @@ export default function CreateReachScreen() {
         <Card style={styles.card}>
           <View style={styles.sectionHeaderRow}>
             <View style={styles.sectionIconBadge}>
-              <Clock size={18} color={theme.colors.primary600} />
+              <Clock size={18} color={theme.colors.lime} />
             </View>
             <View style={styles.sectionTitleCol}>
               <View style={styles.titleWithRequiredRow}>
@@ -997,9 +997,9 @@ export default function CreateReachScreen() {
 
       <Card style={styles.card}>
         <View style={styles.reviewHeaderRow}>
-          <ShieldCheck size={20} color={theme.colors.primary600} />
+          <ShieldCheck size={20} color={theme.colors.lime} />
           <Text style={styles.reviewMainTitle}>Reviewer Calibrated Delivery</Text>
-          <InfoTip term="reviewProcess" size={16} color={theme.colors.primary600} />
+          <InfoTip term="reviewProcess" size={16} color={theme.colors.lime} />
         </View>
 
         <View style={styles.reviewGrid}>
@@ -1038,7 +1038,7 @@ export default function CreateReachScreen() {
 
         {/* Permanent Note */}
         <View style={styles.permanentNoteBox}>
-          <Info size={16} color={theme.colors.ink600} />
+          <Info size={16} color={theme.colors.textSecondary} />
           <Text style={styles.permanentNoteText}>
             Reach depends on ad inventory, prices, targeting and performance. We never guarantee an audience size.
           </Text>
@@ -1051,7 +1051,7 @@ export default function CreateReachScreen() {
       <Card style={styles.card}>
         <View style={styles.sectionHeaderRow}>
           <View style={styles.sectionIconBadge}>
-            <Eye size={18} color={theme.colors.primary600} />
+            <Eye size={18} color={theme.colors.lime} />
           </View>
           <View style={styles.sectionTitleCol}>
             <Text style={styles.sectionHeading}>Audience Preview</Text>
@@ -1102,7 +1102,7 @@ export default function CreateReachScreen() {
                   <Image source={{ uri: primaryAdImage }} style={styles.feedMediaImg} contentFit="cover" transition={200} />
                 ) : (
                   <View style={styles.feedPlaceholderFrame}>
-                    <Camera size={24} color={theme.colors.ink400} />
+                    <Camera size={24} color={theme.colors.textSecondary} />
                     <Text style={styles.feedPlaceholderText}>Primary ad image from Step 3</Text>
                   </View>
                 )}
@@ -1132,7 +1132,7 @@ export default function CreateReachScreen() {
                 <Image source={{ uri: primaryAdImage }} style={styles.storyBgImg} contentFit="cover" transition={200} />
               ) : (
                 <View style={[styles.storyBgImg, styles.feedPlaceholderFrame]}>
-                  <Camera size={24} color={theme.colors.ink400} />
+                  <Camera size={24} color={theme.colors.textSecondary} />
                 </View>
               )}
               <View style={styles.storyTopOverlay}>
@@ -1173,7 +1173,7 @@ export default function CreateReachScreen() {
                     <Image source={{ uri: primaryAdImage }} style={styles.bannerImg} contentFit="cover" transition={200} />
                   ) : (
                     <View style={[styles.bannerImg, styles.feedPlaceholderFrame]}>
-                      <Camera size={16} color={theme.colors.ink400} />
+                      <Camera size={16} color={theme.colors.textSecondary} />
                     </View>
                   )}
                 </View>
@@ -1214,13 +1214,13 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 22,
     lineHeight: 28,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   stepSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 20,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: 4,
   },
   statusSection: {
@@ -1230,10 +1230,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 12,
-    backgroundColor: theme.colors.successBg,
+    backgroundColor: theme.colors.tintedPillBg,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: '#BBF7D0',
+    borderColor: theme.colors.lime,
     padding: theme.spacing.md,
   },
   statusCol: {
@@ -1242,20 +1242,20 @@ const styles = StyleSheet.create({
   readyTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.success,
+    color: theme.colors.lime,
   },
   readyBody: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 18,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   warningsCard: {
-    backgroundColor: theme.colors.dangerBg,
+    backgroundColor: theme.colors.surface,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: theme.colors.textPrimary,
     padding: theme.spacing.md,
     gap: 8,
   },
@@ -1267,7 +1267,7 @@ const styles = StyleSheet.create({
   warningsTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.danger,
+    color: theme.colors.textPrimary,
   },
   warningsList: {
     gap: 6,
@@ -1279,7 +1279,7 @@ const styles = StyleSheet.create({
   },
   warningBullet: {
     fontSize: 12,
-    color: theme.colors.danger,
+    color: theme.colors.textPrimary,
     lineHeight: 18,
   },
   warningText: {
@@ -1287,7 +1287,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 18,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   indicativeCard: {
     padding: theme.spacing.md,
@@ -1302,7 +1302,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: theme.radius.sm,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.tintedPillBg,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1312,12 +1312,12 @@ const styles = StyleSheet.create({
   indicativeTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   indicativeSubtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 1,
   },
   indicativeResultBox: {
@@ -1330,7 +1330,7 @@ const styles = StyleSheet.create({
   indicativeGoalNote: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   indicativePendingBox: {
     marginTop: theme.spacing.sm,
@@ -1341,12 +1341,12 @@ const styles = StyleSheet.create({
   indicativePendingText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   indicativePendingSubtext: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   groupHeaderRow: {
@@ -1356,7 +1356,7 @@ const styles = StyleSheet.create({
   },
   groupBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: theme.colors.primary100,
+    backgroundColor: theme.colors.tintedPillBg,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: theme.radius.xs,
@@ -1365,18 +1365,18 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 11,
     letterSpacing: 0.5,
-    color: theme.colors.primary800,
+    color: theme.colors.lime,
   },
   groupBadgeReview: {
-    backgroundColor: theme.colors.slate200,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   groupBadgeTextReview: {
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   groupHeaderDescription: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   card: {
     padding: theme.spacing.lg,
@@ -1391,7 +1391,7 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: theme.radius.sm,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.tintedPillBg,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1407,15 +1407,15 @@ const styles = StyleSheet.create({
   sectionHeading: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 15,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   requiredStar: {
-    color: theme.colors.danger,
+    color: theme.colors.textPrimary,
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 14,
   },
   optionalBadge: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: theme.radius.xs,
@@ -1423,43 +1423,43 @@ const styles = StyleSheet.create({
   optionalBadgeText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 10,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   sectionHelper: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 17,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   worldwideBtn: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 12,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     borderRadius: theme.radius.sm,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     padding: theme.spacing.md,
     marginBottom: theme.spacing.md,
   },
   worldwideBtnActive: {
-    backgroundColor: theme.colors.primary50,
-    borderColor: theme.colors.primary600,
+    backgroundColor: theme.colors.tintedPillBg,
+    borderColor: theme.colors.lime,
   },
   checkboxCircle: {
     width: 20,
     height: 20,
     borderRadius: theme.radius.pill,
     borderWidth: 1.5,
-    borderColor: theme.colors.ink400,
+    borderColor: theme.colors.border,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 1,
   },
   checkboxCircleActive: {
-    backgroundColor: theme.colors.primary600,
-    borderColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
+    borderColor: theme.colors.lime,
   },
   worldwideTextCol: {
     flex: 1,
@@ -1467,16 +1467,16 @@ const styles = StyleSheet.create({
   worldwideTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   worldwideTitleActive: {
-    color: theme.colors.primary800,
+    color: theme.colors.lime,
   },
   worldwideDesc: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 16,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   selectedLocationsSection: {
@@ -1485,14 +1485,14 @@ const styles = StyleSheet.create({
   selectedLocationsLabel: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     marginBottom: 6,
   },
   noLocationsNotice: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     fontStyle: 'italic',
-    color: theme.colors.ink400,
+    color: theme.colors.textMuted,
   },
   chipsContainer: {
     flexDirection: 'row',
@@ -1503,8 +1503,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: theme.colors.primary50,
-    borderColor: theme.colors.primary100,
+    backgroundColor: theme.colors.lime,
+    borderColor: theme.colors.lime,
     borderWidth: 1,
     borderRadius: theme.radius.pill,
     paddingVertical: 5,
@@ -1513,14 +1513,14 @@ const styles = StyleSheet.create({
   locationChipSelectedText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.primary800,
+    color: theme.colors.onLime,
   },
   searchRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     borderRadius: theme.radius.input,
     paddingHorizontal: 12,
     height: 40,
@@ -1533,7 +1533,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     padding: 0,
   },
   curatedList: {
@@ -1545,24 +1545,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.surfaceRaised,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     borderRadius: theme.radius.pill,
     paddingVertical: 6,
     paddingHorizontal: 11,
   },
   locationChipActive: {
-    backgroundColor: theme.colors.primary600,
-    borderColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
+    borderColor: theme.colors.lime,
   },
   locationChipText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.ink700,
+    color: theme.colors.textPrimary,
   },
   locationChipTextActive: {
-    color: '#FFFFFF',
+    color: theme.colors.onLime,
   },
   subSectionBox: {
     marginTop: theme.spacing.sm,
@@ -1570,13 +1570,13 @@ const styles = StyleSheet.create({
   subSectionLabel: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
     marginBottom: 6,
   },
   subSectionHelper: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginBottom: 8,
   },
   ageChipsRow: {
@@ -1588,22 +1588,22 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
     paddingHorizontal: 12,
     borderRadius: theme.radius.sm,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   ageChipSelected: {
-    backgroundColor: theme.colors.primary50,
-    borderColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
+    borderColor: theme.colors.lime,
   },
   ageChipText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   ageChipTextSelected: {
     fontFamily: theme.typography.fonts.uiSemiBold,
-    color: theme.colors.primary700,
+    color: theme.colors.onLime,
   },
   interestsHeaderRow: {
     flexDirection: 'row',
@@ -1614,7 +1614,7 @@ const styles = StyleSheet.create({
   interestsCount: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: theme.colors.primary600,
+    color: theme.colors.lime,
   },
   themeGroupBlock: {
     marginTop: 8,
@@ -1622,7 +1622,7 @@ const styles = StyleSheet.create({
   themeGroupName: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginBottom: 6,
   },
   themeInterestsGrid: {
@@ -1634,45 +1634,45 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     borderRadius: theme.radius.pill,
     paddingVertical: 5,
     paddingHorizontal: 10,
   },
   interestChipSelected: {
-    backgroundColor: theme.colors.primary600,
-    borderColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
+    borderColor: theme.colors.lime,
   },
   interestChipText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink800,
+    color: theme.colors.textSecondary,
   },
   interestChipTextSelected: {
     fontFamily: theme.typography.fonts.uiMedium,
-    color: '#FFFFFF',
+    color: theme.colors.onLime,
   },
   channelCardsList: {
     gap: 10,
   },
   channelCard: {
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.inputBg,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     borderRadius: theme.radius.card,
     padding: theme.spacing.md,
     gap: 6,
   },
   channelCardSelected: {
-    backgroundColor: theme.colors.primary50,
-    borderColor: theme.colors.primary600,
+    backgroundColor: theme.colors.tintedPillBg,
+    borderColor: theme.colors.lime,
   },
   channelCardDisabled: {
-    backgroundColor: theme.colors.bgMuted,
-    borderColor: theme.colors.line,
-    opacity: 0.8,
+    backgroundColor: theme.colors.bg,
+    borderColor: theme.colors.border,
+    opacity: 0.6,
   },
   channelCardTopRow: {
     flexDirection: 'row',
@@ -1689,28 +1689,28 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 4,
     borderWidth: 1.5,
-    borderColor: theme.colors.ink400,
+    borderColor: theme.colors.border,
     alignItems: 'center',
     justifyContent: 'center',
   },
   channelCheckboxSelected: {
-    backgroundColor: theme.colors.primary600,
-    borderColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
+    borderColor: theme.colors.lime,
   },
   channelCheckboxDisabled: {
-    borderColor: theme.colors.ink400,
-    backgroundColor: theme.colors.slate200,
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   channelCardName: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   channelCardNameSelected: {
-    color: theme.colors.primary800,
+    color: theme.colors.lime,
   },
   channelCardNameDisabled: {
-    color: theme.colors.ink500,
+    color: theme.colors.textMuted,
   },
   channelStatusPill: {
     paddingHorizontal: 8,
@@ -1718,10 +1718,10 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.pill,
   },
   channelPillAvailable: {
-    backgroundColor: theme.colors.successBg,
+    backgroundColor: theme.colors.tintedPillBg,
   },
   channelPillComingSoon: {
-    backgroundColor: theme.colors.slate200,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   channelStatusPillText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
@@ -1729,25 +1729,25 @@ const styles = StyleSheet.create({
     letterSpacing: 0.3,
   },
   channelPillTextAvailable: {
-    color: theme.colors.success,
+    color: theme.colors.lime,
   },
   channelPillTextComingSoon: {
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   channelCardDescription: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 17,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   channelCardDescDisabled: {
-    color: theme.colors.ink400,
+    color: theme.colors.textMuted,
   },
   disabledReasonBox: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 6,
-    backgroundColor: theme.colors.slate100,
+    backgroundColor: theme.colors.surfaceRaised,
     borderRadius: theme.radius.xs,
     padding: 8,
     marginTop: 4,
@@ -1757,7 +1757,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
     lineHeight: 15,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   allocationStatusBar: {
     flexDirection: 'row',
@@ -1773,7 +1773,7 @@ const styles = StyleSheet.create({
   allocationTotalLabel: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   totalBadge: {
     paddingHorizontal: 8,
@@ -1781,20 +1781,22 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.xs,
   },
   totalBadgeSuccess: {
-    backgroundColor: theme.colors.successBg,
+    backgroundColor: theme.colors.tintedPillBg,
   },
   totalBadgeError: {
-    backgroundColor: theme.colors.dangerBg,
+    backgroundColor: theme.colors.surfaceRaised,
+    borderWidth: 1,
+    borderColor: theme.colors.textPrimary,
   },
   totalBadgeText: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 12,
   },
   totalBadgeTextSuccess: {
-    color: theme.colors.success,
+    color: theme.colors.lime,
   },
   totalBadgeTextError: {
-    color: theme.colors.danger,
+    color: theme.colors.textPrimary,
   },
   resetAllocationBtn: {
     paddingVertical: 4,
@@ -1803,14 +1805,14 @@ const styles = StyleSheet.create({
   resetAllocationBtnText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.primary600,
+    color: theme.colors.lime,
   },
   multiSegmentBar: {
     height: 10,
     flexDirection: 'row',
     borderRadius: theme.radius.pill,
     overflow: 'hidden',
-    backgroundColor: theme.colors.slate200,
+    backgroundColor: theme.colors.surfaceRaised,
     marginBottom: theme.spacing.md,
   },
   segmentSlice: {
@@ -1823,8 +1825,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     borderRadius: theme.radius.sm,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
     paddingVertical: 8,
     paddingHorizontal: 12,
   },
@@ -1841,7 +1845,7 @@ const styles = StyleSheet.create({
   stepperChannelName: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   stepperControls: {
     flexDirection: 'row',
@@ -1852,9 +1856,9 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: theme.radius.sm,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.surfaceRaised,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1868,7 +1872,7 @@ const styles = StyleSheet.create({
   percentageDisplayText: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 13,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   durationTitleRow: {
     flexDirection: 'row',
@@ -1878,7 +1882,7 @@ const styles = StyleSheet.create({
   durationCurrentBadge: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: theme.colors.primary600,
+    color: theme.colors.lime,
   },
   segmentedPresetsRow: {
     flexDirection: 'row',
@@ -1891,34 +1895,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: theme.radius.sm,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   presetChipSelected: {
-    backgroundColor: theme.colors.primary50,
-    borderColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
+    borderColor: theme.colors.lime,
   },
   presetChipText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   presetChipTextSelected: {
     fontFamily: theme.typography.fonts.uiBold,
-    color: theme.colors.primary700,
+    color: theme.colors.onLime,
   },
   customDurationInputBox: {
     marginTop: 10,
     padding: 10,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     borderRadius: theme.radius.sm,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
     gap: 6,
   },
   customDurationLabel: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 11,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   customInputRow: {
     flexDirection: 'row',
@@ -1926,22 +1932,22 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   customDurationInput: {
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.surfaceRaised,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     borderRadius: theme.radius.xs,
     paddingHorizontal: 12,
     paddingVertical: 6,
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 14,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     width: 60,
     textAlign: 'center',
   },
   customDurationUnit: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   reviewHeaderRow: {
     flexDirection: 'row',
@@ -1953,35 +1959,39 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 15,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   reviewGrid: {
     gap: 8,
     marginBottom: theme.spacing.md,
   },
   reviewFeatureCard: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     borderRadius: theme.radius.sm,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
     padding: 10,
     gap: 2,
   },
   reviewFeatureTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   reviewFeatureDesc: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
     lineHeight: 16,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   permanentNoteBox: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 8,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.tintedPillBg,
     borderRadius: theme.radius.sm,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
     padding: theme.spacing.md,
   },
   permanentNoteText: {
@@ -1989,21 +1999,21 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
     lineHeight: 17,
-    color: theme.colors.primary800,
+    color: theme.colors.lime,
   },
   narrativeSummaryBox: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     borderRadius: theme.radius.card,
     padding: theme.spacing.md,
     borderLeftWidth: 3,
-    borderLeftColor: theme.colors.primary600,
+    borderLeftColor: theme.colors.lime,
     marginBottom: theme.spacing.md,
   },
   narrativeSummaryText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
     lineHeight: 20,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
   },
   placementPreviewWrapper: {
     gap: 8,
@@ -2014,14 +2024,14 @@ const styles = StyleSheet.create({
   previewDisclaimerText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     marginBottom: 4,
   },
   feedPreviewCard: {
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.inputBg,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     borderRadius: theme.radius.card,
     overflow: 'hidden',
   },
@@ -2037,17 +2047,17 @@ const styles = StyleSheet.create({
   feedCreatorName: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   feedSponsoredLabel: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 10,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   feedMediaFrame: {
     width: '100%',
     aspectRatio: 1,
-    backgroundColor: theme.colors.slate100,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   feedMediaImg: {
     width: '100%',
@@ -2063,7 +2073,7 @@ const styles = StyleSheet.create({
   feedPlaceholderText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink400,
+    color: theme.colors.textSecondary,
   },
   feedContentBox: {
     flexDirection: 'row',
@@ -2079,24 +2089,24 @@ const styles = StyleSheet.create({
   feedHeadlineText: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 12,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   feedDescText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
     lineHeight: 15,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   feedCtaBtn: {
-    backgroundColor: theme.colors.primary600,
-    borderRadius: theme.radius.sm,
+    backgroundColor: theme.colors.lime,
+    borderRadius: theme.radius.pill,
     paddingVertical: 6,
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
   },
   feedCtaBtnText: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 11,
-    color: '#FFFFFF',
+    color: theme.colors.onLime,
   },
   storyPreviewFrame: {
     width: '100%',
@@ -2104,7 +2114,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.card,
     overflow: 'hidden',
     position: 'relative',
-    backgroundColor: '#000000',
+    backgroundColor: theme.colors.bg,
   },
   storyBgImg: {
     ...StyleSheet.absoluteFill,
@@ -2120,7 +2130,7 @@ const styles = StyleSheet.create({
   },
   storyBar: {
     height: 2,
-    backgroundColor: 'rgba(255,255,255,0.7)',
+    backgroundColor: 'rgba(242,245,238,0.7)',
     borderRadius: 1,
   },
   storyAuthorRow: {
@@ -2131,7 +2141,7 @@ const styles = StyleSheet.create({
   storyAuthorName: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
-    color: '#FFFFFF',
+    color: theme.colors.textPrimary,
   },
   storyBottomOverlay: {
     position: 'absolute',
@@ -2139,23 +2149,23 @@ const styles = StyleSheet.create({
     left: 12,
     right: 12,
     gap: 6,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: 'rgba(18,21,17,0.8)',
     borderRadius: theme.radius.sm,
     padding: 10,
   },
   storyHeadline: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 13,
-    color: '#FFFFFF',
+    color: theme.colors.textPrimary,
   },
   storyDesc: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: 'rgba(255,255,255,0.9)',
+    color: theme.colors.textSecondary,
     lineHeight: 15,
   },
   storyCtaPill: {
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
     borderRadius: theme.radius.pill,
     alignItems: 'center',
     paddingVertical: 6,
@@ -2164,12 +2174,12 @@ const styles = StyleSheet.create({
   storyCtaText: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 11,
-    color: '#FFFFFF',
+    color: theme.colors.onLime,
   },
   bannerPreviewCard: {
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.inputBg,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     borderRadius: theme.radius.card,
     padding: 10,
     gap: 6,
@@ -2179,7 +2189,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 6,
     right: 6,
-    backgroundColor: theme.colors.slate200,
+    backgroundColor: theme.colors.surfaceRaised,
     paddingHorizontal: 4,
     paddingVertical: 1,
     borderRadius: 2,
@@ -2187,7 +2197,7 @@ const styles = StyleSheet.create({
   bannerAdPillText: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 9,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   bannerRow: {
     flexDirection: 'row',
@@ -2199,7 +2209,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: theme.radius.xs,
     overflow: 'hidden',
-    backgroundColor: theme.colors.slate100,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   bannerImg: {
     width: '100%',
@@ -2212,17 +2222,17 @@ const styles = StyleSheet.create({
   bannerHeadline: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 12,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   bannerDesc: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 10,
     lineHeight: 14,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   bannerCtaBox: {
     alignSelf: 'flex-start',
-    backgroundColor: theme.colors.primary600,
+    backgroundColor: theme.colors.lime,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 4,
@@ -2231,6 +2241,6 @@ const styles = StyleSheet.create({
   bannerCtaText: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 10,
-    color: '#FFFFFF',
+    color: theme.colors.onLime,
   },
 });

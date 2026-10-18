@@ -29,7 +29,6 @@ import { useBackingStore } from '../../../store/backingStore';
 import { SharedHeader } from '../../../components/layout/SharedHeader';
 import {
   Card,
-  DemoDataBadge,
   Skeleton,
   ErrorState,
   Button,
@@ -302,11 +301,10 @@ export default function BackPayScreen() {
         >
         {/* Prominent Simulated Checkout Banner */}
         <View style={styles.simulatedBanner}>
-          <ShieldCheck size={22} color={theme.colors.primary700} style={{ marginTop: 2 }} />
+          <ShieldCheck size={22} color={theme.colors.lime} style={{ marginTop: 2 }} />
           <View style={{ flex: 1 }}>
             <View style={styles.bannerTitleRow}>
               <Text style={styles.simulatedBannerTitle}>Simulated Checkout</Text>
-              <DemoDataBadge size="sm" />
             </View>
             <Text style={styles.simulatedBannerBody}>
               No real money is charged. This prototype tests the flow and demonstrates how ad distribution is funded without placing real financial transactions.
@@ -318,7 +316,7 @@ export default function BackPayScreen() {
         {isPendingVerification && (
           <Card style={styles.pendingCard}>
             <View style={styles.pendingHeaderRow}>
-              <ActivityIndicator size="small" color={theme.colors.primary700} />
+              <ActivityIndicator size="small" color={theme.colors.lime} />
               <Text style={styles.pendingTitle}>Bank Verification in Progress</Text>
             </View>
             <Text style={styles.pendingDesc}>
@@ -342,7 +340,7 @@ export default function BackPayScreen() {
         {/* Payment Error Banner */}
         {paymentError && (
           <View style={styles.errorBanner}>
-            <XCircle size={22} color={theme.colors.danger} style={{ marginTop: 2 }} />
+            <XCircle size={22} color={theme.colors.textPrimary} style={{ marginTop: 2 }} />
             <View style={{ flex: 1 }}>
               <Text style={styles.errorBannerTitle}>Payment Failed</Text>
               <Text style={styles.errorBannerBody}>{paymentError.message}</Text>
@@ -386,10 +384,10 @@ export default function BackPayScreen() {
         {/* Payment Form Card */}
         <Card style={styles.formCard}>
           <View style={styles.formHeaderRow}>
-            <CreditCard size={20} color={theme.colors.ink700} />
+            <CreditCard size={20} color={theme.colors.textPrimary} />
             <Text style={styles.formTitle}>Card Details</Text>
             <View style={styles.secureBadge}>
-              <Lock size={12} color={theme.colors.ink500} />
+              <Lock size={12} color={theme.colors.textSecondary} />
               <Text style={styles.secureText}>Simulated</Text>
             </View>
           </View>
@@ -402,7 +400,7 @@ export default function BackPayScreen() {
               value={cardholderName}
               onChangeText={setCardholderName}
               placeholder="e.g. Jane Doe"
-              placeholderTextColor={theme.colors.ink400}
+              placeholderTextColor={theme.colors.textSecondary}
             />
           </View>
 
@@ -414,7 +412,7 @@ export default function BackPayScreen() {
               value={cardNumber}
               onChangeText={handleCardNumberChange}
               placeholder="4242 4242 4242 4242"
-              placeholderTextColor={theme.colors.ink400}
+              placeholderTextColor={theme.colors.textSecondary}
               keyboardType="number-pad"
               maxLength={19}
             />
@@ -429,7 +427,7 @@ export default function BackPayScreen() {
                 value={expiry}
                 onChangeText={handleExpiryChange}
                 placeholder="MM/YY"
-                placeholderTextColor={theme.colors.ink400}
+                placeholderTextColor={theme.colors.textSecondary}
                 keyboardType="number-pad"
                 maxLength={5}
               />
@@ -442,7 +440,7 @@ export default function BackPayScreen() {
                 value={cvc}
                 onChangeText={handleCvcChange}
                 placeholder="123"
-                placeholderTextColor={theme.colors.ink400}
+                placeholderTextColor={theme.colors.textSecondary}
                 keyboardType="number-pad"
                 maxLength={4}
                 secureTextEntry
@@ -453,7 +451,7 @@ export default function BackPayScreen() {
 
         {/* Security and Transparency Footnote */}
         <View style={styles.securityFootnote}>
-          <Lock size={14} color={theme.colors.ink500} />
+          <Lock size={14} color={theme.colors.textSecondary} />
           <Text style={styles.securityFootnoteText}>
             Card details are processed in memory and are never persisted to disk or device storage.
           </Text>
@@ -498,8 +496,8 @@ const styles = StyleSheet.create({
   },
   simulatedBanner: {
     flexDirection: 'row',
-    backgroundColor: theme.colors.primary50,
-    borderColor: theme.colors.primary100,
+    backgroundColor: theme.colors.surfaceRaised,
+    borderColor: theme.colors.line,
     borderWidth: 1.5,
     borderRadius: theme.radius.card,
     padding: theme.spacing.base,
@@ -514,18 +512,18 @@ const styles = StyleSheet.create({
   },
   simulatedBannerTitle: {
     ...theme.typography.styles.smallMedium,
-    color: theme.colors.primary800,
+    color: theme.colors.textPrimary,
     fontWeight: '700',
   },
   simulatedBannerBody: {
     ...theme.typography.styles.small,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     lineHeight: 20,
   },
   pendingCard: {
     padding: theme.spacing.base,
-    backgroundColor: theme.colors.emerald50,
-    borderColor: theme.colors.emerald300,
+    backgroundColor: theme.colors.surfaceRaised,
+    borderColor: theme.colors.line,
     borderWidth: 1.5,
     borderRadius: theme.radius.card,
     marginBottom: theme.spacing.base,
@@ -538,11 +536,11 @@ const styles = StyleSheet.create({
   },
   pendingTitle: {
     ...theme.typography.styles.smallMedium,
-    color: theme.colors.emerald700,
+    color: theme.colors.lime,
   },
   pendingDesc: {
     ...theme.typography.styles.small,
-    color: theme.colors.emerald800,
+    color: theme.colors.textSecondary,
     lineHeight: 20,
     marginBottom: theme.spacing.md,
   },
@@ -552,8 +550,8 @@ const styles = StyleSheet.create({
   },
   errorBanner: {
     flexDirection: 'row',
-    backgroundColor: theme.colors.rose50,
-    borderColor: theme.colors.rose200,
+    backgroundColor: theme.colors.surfaceRaised,
+    borderColor: theme.colors.line,
     borderWidth: 1.5,
     borderRadius: theme.radius.card,
     padding: theme.spacing.base,
@@ -562,18 +560,18 @@ const styles = StyleSheet.create({
   },
   errorBannerTitle: {
     ...theme.typography.styles.smallMedium,
-    color: theme.colors.danger,
+    color: theme.colors.textPrimary,
     marginBottom: 2,
   },
   errorBannerBody: {
     ...theme.typography.styles.small,
-    color: theme.colors.rose800,
+    color: theme.colors.textSecondary,
     lineHeight: 20,
     marginBottom: 6,
   },
   errorBannerHint: {
     ...theme.typography.styles.caption,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     fontStyle: 'italic',
   },
   testCardsSection: {
@@ -581,7 +579,7 @@ const styles = StyleSheet.create({
   },
   testCardsLabel: {
     ...theme.typography.styles.captionSemiBold,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginBottom: theme.spacing.sm,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -597,18 +595,18 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.full,
     borderWidth: 1,
     borderColor: theme.colors.line,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
   },
   testCardChipSelected: {
-    borderColor: theme.colors.primary600,
-    backgroundColor: theme.colors.primary50,
+    borderColor: theme.colors.lime,
+    backgroundColor: theme.colors.tintedPillBg,
   },
   testCardChipText: {
     ...theme.typography.styles.small,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   testCardChipTextSelected: {
-    color: theme.colors.primary700,
+    color: theme.colors.lime,
     fontFamily: theme.typography.fonts.uiBold,
   },
   formCard: {
@@ -624,43 +622,43 @@ const styles = StyleSheet.create({
   },
   formTitle: {
     ...theme.typography.styles.h3,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     flex: 1,
   },
   secureBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     paddingHorizontal: theme.spacing.sm,
     paddingVertical: 4,
     borderRadius: theme.radius.sm,
   },
   secureText: {
     ...theme.typography.styles.caption,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   inputGroup: {
     marginBottom: theme.spacing.md,
   },
   inputLabel: {
     ...theme.typography.styles.captionSemiBold,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     marginBottom: theme.spacing.xs,
   },
   textInput: {
     height: 48,
     borderWidth: 1.5,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.inputBorder,
     borderRadius: theme.radius.input,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.inputBg,
     paddingHorizontal: theme.spacing.md,
     ...theme.typography.styles.body,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   textInputError: {
-    borderColor: theme.colors.danger,
-    backgroundColor: theme.colors.red50,
+    borderColor: theme.colors.textPrimary,
+    backgroundColor: theme.colors.inputBg,
   },
   dualInputsRow: {
     flexDirection: 'row',
@@ -676,7 +674,7 @@ const styles = StyleSheet.create({
   securityFootnoteText: {
     flex: 1,
     ...theme.typography.styles.small,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     lineHeight: 18,
   },
 });

@@ -24,7 +24,7 @@ import {
   Users,
   ShieldCheck,
   CheckCircle2,
-  ChevronUp,
+  ChevronRight,
   PieChart,
   Target,
   FileCheck2,
@@ -42,7 +42,6 @@ import { useRequireAuth } from '../../auth/requireAuth';
 import { StoryRenderer } from '../../components/story/StoryRenderer';
 import {
   Button,
-  CategoryChip,
   StatusPill,
   ProgressBar,
   Accordion,
@@ -51,7 +50,6 @@ import {
   Avatar,
   Sheet,
   Skeleton,
-  DemoDataBadge,
   useToast,
   EmptyState,
 } from '../../components/ui';
@@ -234,7 +232,7 @@ export default function CampaignDetailScreen() {
               style={styles.floatingCircleBtn}
               hitSlop={8}
             >
-              <ChevronLeft size={22} color="#FFFFFF" />
+              <ChevronLeft size={22} color={theme.colors.textPrimary} />
             </Pressable>
 
             <View style={styles.topRightActions}>
@@ -247,8 +245,8 @@ export default function CampaignDetailScreen() {
               >
                 <Bookmark
                   size={20}
-                  color={campaign.isSaved ? theme.colors.amber500 : theme.colors.white}
-                  fill={campaign.isSaved ? theme.colors.amber500 : 'transparent'}
+                  color={campaign.isSaved ? theme.colors.lime : theme.colors.textPrimary}
+                  fill={campaign.isSaved ? theme.colors.lime : 'transparent'}
                 />
               </Pressable>
 
@@ -259,7 +257,7 @@ export default function CampaignDetailScreen() {
                 style={styles.floatingCircleBtn}
                 hitSlop={8}
               >
-                <Share2 size={20} color="#FFFFFF" />
+                <Share2 size={20} color={theme.colors.textPrimary} />
               </Pressable>
             </View>
           </View>
@@ -269,7 +267,7 @@ export default function CampaignDetailScreen() {
             style={styles.scrollView}
             contentContainerStyle={[
               styles.scrollContent,
-              { paddingBottom: 160 + insets.bottom },
+              { paddingBottom: 220 + insets.bottom },
             ]}
             showsVerticalScrollIndicator={false}
           >
@@ -284,7 +282,7 @@ export default function CampaignDetailScreen() {
                 />
               ) : (
                 <View style={styles.heroCoverFallback}>
-                  <Sparkles size={48} color={theme.colors.ink400} />
+                  <Sparkles size={48} color={theme.colors.textSecondary} />
                 </View>
               )}
             </View>
@@ -292,11 +290,10 @@ export default function CampaignDetailScreen() {
             {/* Editorial Metadata & Title Header */}
             <View style={styles.editorialHeader}>
               <View style={styles.statusAndCategoryRow}>
-                <CategoryChip category={campaign.category} />
+                <Text style={styles.categoryLabel}>{campaign.category.toUpperCase()}</Text>
                 {campaign.status !== 'FUNDING' && (
                   <StatusPill status={campaign.status} />
                 )}
-                {campaign.isDemo && <DemoDataBadge />}
               </View>
 
               <Text style={styles.campaignTitle}>{campaign.title}</Text>
@@ -339,7 +336,7 @@ export default function CampaignDetailScreen() {
             <View style={styles.sourcesSection}>
               <View style={styles.sourcesHeader}>
                 <View style={styles.sourcesTitleRow}>
-                  <FileCheck2 size={20} color={theme.colors.primary600} />
+                  <FileCheck2 size={20} color={theme.colors.lime} />
                   <Text style={styles.sourcesTitle}>Verified Sources & Citations</Text>
                 </View>
                 <Text style={styles.sourcesDisclaimer}>
@@ -372,13 +369,13 @@ export default function CampaignDetailScreen() {
               <Accordion
                 title="Use of Funds"
                 defaultOpen={true}
-                icon={<PieChart size={18} color={theme.colors.primary600} />}
+                icon={<PieChart size={18} color={theme.colors.lime} />}
                 style={styles.accordionSpacing}
               >
                 <View style={styles.accordionInner}>
                   {/* Non-donation primary disclaimer */}
                   <View style={styles.nonDonationNoticeBox}>
-                    <ShieldCheck size={18} color={theme.colors.primary600} style={{ marginTop: 2 }} />
+                    <ShieldCheck size={18} color={theme.colors.lime} style={{ marginTop: 2 }} />
                     <Text style={styles.nonDonationNoticeText}>
                       <Text style={styles.boldText}>Your contribution funds the distribution of this message</Text>
                       , not direct charitable support for the cause.
@@ -401,7 +398,7 @@ export default function CampaignDetailScreen() {
                     </View>
                     <View style={styles.fundsGridCard}>
                       <Text style={styles.fundsCardLabel}>Direct Ad Budget (90%)</Text>
-                      <Text style={[styles.fundsCardValue, { color: theme.colors.primary600 }]}>
+                      <Text style={[styles.fundsCardValue, { color: theme.colors.lime }]}>
                         ${Math.round((campaign.fundingGoalCents * 0.9) / 100).toLocaleString()}
                       </Text>
                     </View>
@@ -439,13 +436,13 @@ export default function CampaignDetailScreen() {
 
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm, marginTop: theme.spacing.sm, paddingTop: theme.spacing.xs, borderTopWidth: 1, borderTopColor: theme.colors.line }}>
                       <Pressable onPress={() => router.push('/info/how-it-works' as Href)} hitSlop={6}>
-                        <Text style={{ ...theme.typography.styles.captionSemiBold, color: theme.colors.primary600, textDecorationLine: 'underline' }}>
+                        <Text style={{ ...theme.typography.styles.captionSemiBold, color: theme.colors.lime, textDecorationLine: 'underline' }}>
                           How Funding Works
                         </Text>
                       </Pressable>
-                      <Text style={{ color: theme.colors.ink400 }}>•</Text>
+                      <Text style={{ color: theme.colors.textSecondary }}>•</Text>
                       <Pressable onPress={() => router.push('/info/terms' as Href)} hitSlop={6}>
-                        <Text style={{ ...theme.typography.styles.captionSemiBold, color: theme.colors.primary600, textDecorationLine: 'underline' }}>
+                        <Text style={{ ...theme.typography.styles.captionSemiBold, color: theme.colors.lime, textDecorationLine: 'underline' }}>
                           Distribution Terms
                         </Text>
                       </Pressable>
@@ -458,7 +455,7 @@ export default function CampaignDetailScreen() {
               <Accordion
                 title="Audience & Distribution"
                 defaultOpen={false}
-                icon={<Target size={18} color={theme.colors.primary600} />}
+                icon={<Target size={18} color={theme.colors.lime} />}
                 style={styles.accordionSpacing}
               >
                 <View style={styles.accordionInner}>
@@ -504,7 +501,7 @@ export default function CampaignDetailScreen() {
               <Accordion
                 title="Review & Trust"
                 defaultOpen={false}
-                icon={<FileCheck2 size={18} color={theme.colors.primary600} />}
+                icon={<FileCheck2 size={18} color={theme.colors.lime} />}
                 style={styles.accordionSpacing}
               >
                 <View style={styles.accordionInner}>
@@ -564,9 +561,9 @@ export default function CampaignDetailScreen() {
                     <Pressable
                       onPress={() => router.push('/info/community-guidelines' as Href)}
                       hitSlop={6}
-                      style={{ marginTop: theme.spacing.sm, paddingTop: theme.spacing.xs, borderTopWidth: 1, borderTopColor: 'rgba(0,0,0,0.06)' }}
+                      style={{ marginTop: theme.spacing.sm, paddingTop: theme.spacing.xs, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.06)' }}
                     >
-                      <Text style={{ ...theme.typography.styles.captionSemiBold, color: theme.colors.primary700, textDecorationLine: 'underline' }}>
+                      <Text style={{ ...theme.typography.styles.captionSemiBold, color: theme.colors.lime, textDecorationLine: 'underline' }}>
                         Read Platform Community Guidelines →
                       </Text>
                     </Pressable>
@@ -578,7 +575,7 @@ export default function CampaignDetailScreen() {
               <Accordion
                 title={`Updates (${campaign.updates?.length || 0})`}
                 defaultOpen={false}
-                icon={<Clock size={18} color={theme.colors.primary600} />}
+                icon={<Clock size={18} color={theme.colors.lime} />}
                 style={styles.accordionSpacing}
               >
                 <View style={styles.accordionInner}>
@@ -609,7 +606,7 @@ export default function CampaignDetailScreen() {
               <Accordion
                 title={`Backers (${campaign.backersSummary?.totalCount || 0})`}
                 defaultOpen={false}
-                icon={<Users size={18} color={theme.colors.primary600} />}
+                icon={<Users size={18} color={theme.colors.lime} />}
                 style={styles.accordionSpacing}
               >
                 <View style={styles.accordionInner}>
@@ -658,13 +655,13 @@ export default function CampaignDetailScreen() {
             <View style={styles.feedbackSection}>
               <View style={styles.feedbackCard}>
                 <View style={styles.feedbackHeader}>
-                  <Sparkles size={20} color={theme.colors.primary600} />
+                  <Sparkles size={20} color={theme.colors.lime} />
                   <Text style={styles.feedbackTitle}>Reader Perception</Text>
                 </View>
 
                 {hasSubmittedFeedback ? (
                   <View style={styles.feedbackSuccessBox}>
-                    <CheckCircle2 size={24} color={theme.colors.success} />
+                    <CheckCircle2 size={24} color={theme.colors.lime} />
                     <Text style={styles.feedbackSuccessTitle}>Thank you for your feedback!</Text>
                     <Text style={styles.feedbackSuccessText}>
                       Your response helps evaluate the clarity and impact of community-funded messages.
@@ -805,47 +802,40 @@ export default function CampaignDetailScreen() {
               style={styles.panelProgressBar}
             />
 
-            {/* Bottom Row: Reach Preview + Status-aware Action Button */}
-            <View style={styles.panelActionRow}>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Estimated reach details"
-                onPress={() => {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
-                  setIsDetailSheetVisible(true);
-                }}
-                style={styles.reachPreviewContainer}
-              >
-                <View style={styles.reachTextRow}>
-                  <Text style={styles.reachNumberText}>
-                    ~{campaign.estimatedReachLow.toLocaleString()} - {campaign.estimatedReachHigh.toLocaleString()}
-                  </Text>
-                  <ChevronUp size={14} color={theme.colors.ink500} />
-                </View>
-                <View style={styles.reachBadgeRow}>
-                  <Text style={styles.reachLabelText}>projected reach</Text>
-                  <DemoDataBadge size="sm" />
-                </View>
-              </Pressable>
+            {/* 3. Projected Reach Row with Chevron */}
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Estimated reach details"
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+                setIsDetailSheetVisible(true);
+              }}
+              style={styles.panelReachRow}
+            >
+              <Text style={styles.panelReachText}>
+                Projected reach ~{campaign.estimatedReachLow.toLocaleString()} - {campaign.estimatedReachHigh.toLocaleString()} people (estimate)
+              </Text>
+              <ChevronRight size={16} color={theme.colors.lime} strokeWidth={2} />
+            </Pressable>
 
-              <View style={styles.panelButtonContainer}>
-                {renderStatusActionButton({
-                  campaign,
-                  onBack: () => router.push(`/back/${campaign.id}/amount` as Href),
-                  onReport: () => router.push(`/campaign/${campaign.id}/report` as Href),
-                  onFollow: () => {
-                    followMutation.mutate(!campaign.isFollowing, {
-                      onSuccess: (res) => {
-                        toast.info(res.following ? 'Following campaign progress' : 'Unfollowed campaign');
-                      },
-                      onError: (err) => {
-                        toast.error(err.message || 'Unable to update follow state');
-                      },
-                    });
-                  },
-                  isFollowingPending: followMutation.isPending,
-                })}
-              </View>
+            {/* 4. Full-width Action Button */}
+            <View style={styles.panelButtonContainer}>
+              {renderStatusActionButton({
+                campaign,
+                onBack: () => router.push(`/back/${campaign.id}/amount` as Href),
+                onReport: () => router.push(`/campaign/${campaign.id}/report` as Href),
+                onFollow: () => {
+                  followMutation.mutate(!campaign.isFollowing, {
+                    onSuccess: (res) => {
+                      toast.info(res.following ? 'Following campaign progress' : 'Unfollowed campaign');
+                    },
+                    onError: (err) => {
+                      toast.error(err.message || 'Unable to update follow state');
+                    },
+                  });
+                },
+                isFollowingPending: followMutation.isPending,
+              })}
             </View>
           </View>
 
@@ -879,9 +869,8 @@ export default function CampaignDetailScreen() {
 
               <View style={styles.sheetReachMathCard}>
                 <View style={styles.sheetReachHeader}>
-                  <Target size={18} color={theme.colors.primary600} />
+                  <Target size={18} color={theme.colors.lime} />
                   <Text style={styles.sheetReachTitle}>Demonstration Reach Math</Text>
-                  <DemoDataBadge size="sm" />
                 </View>
 
                 <View style={styles.mathRow}>
@@ -900,7 +889,7 @@ export default function CampaignDetailScreen() {
                 </View>
                 <View style={styles.mathRow}>
                   <Text style={styles.mathLabel}>Projected Unique Reach</Text>
-                  <Text style={[styles.mathValue, { color: theme.colors.primary600, fontFamily: theme.typography.fonts.uiBold }]}>
+                  <Text style={[styles.mathValue, { color: theme.colors.lime, fontFamily: theme.typography.fonts.uiBold }]}>
                     ~{campaign.estimatedReachLow.toLocaleString()} - {campaign.estimatedReachHigh.toLocaleString()} people
                   </Text>
                 </View>
@@ -916,7 +905,7 @@ export default function CampaignDetailScreen() {
                 variant="secondary"
                 size="lg"
                 fullWidth
-                iconLeft={<Share2 size={18} color={theme.colors.primary600} />}
+                iconLeft={<Share2 size={18} color={theme.colors.lime} />}
                 onPress={() => {
                   setIsDetailSheetVisible(false);
                   handleShare();
@@ -956,9 +945,11 @@ function renderStatusActionButton({
         <Button
           title="Back This Campaign"
           variant="primary"
-          size="md"
+          size="lg"
           onPress={onBack}
           fullWidth
+          style={styles.panelFullWidthBtn}
+          numberOfLines={1}
         />
       );
     case 'FUNDING_CLOSED':
@@ -967,9 +958,11 @@ function renderStatusActionButton({
         <Button
           title="Funding closed"
           variant="secondary"
-          size="md"
+          size="lg"
           disabled={true}
           fullWidth
+          style={styles.panelFullWidthBtn}
+          numberOfLines={1}
         />
       );
     case 'PROMOTING':
@@ -977,10 +970,12 @@ function renderStatusActionButton({
         <Button
           title={campaign.isFollowing ? 'Following' : 'Follow progress'}
           variant={campaign.isFollowing ? 'secondary' : 'primary'}
-          size="md"
+          size="lg"
           loading={isFollowingPending}
           onPress={onFollow}
           fullWidth
+          style={styles.panelFullWidthBtn}
+          numberOfLines={1}
         />
       );
     case 'COMPLETED':
@@ -988,9 +983,11 @@ function renderStatusActionButton({
         <Button
           title="View final report"
           variant="primary"
-          size="md"
+          size="lg"
           onPress={onReport}
           fullWidth
+          style={styles.panelFullWidthBtn}
+          numberOfLines={1}
         />
       );
     default:
@@ -998,9 +995,11 @@ function renderStatusActionButton({
         <Button
           title="Inactive"
           variant="secondary"
-          size="md"
+          size="lg"
           disabled={true}
           fullWidth
+          style={styles.panelFullWidthBtn}
+          numberOfLines={1}
         />
       );
   }
@@ -1008,7 +1007,7 @@ function renderStatusActionButton({
 
 function getCreatorTypeIcon(type: CreatorType) {
   const iconSize = 13;
-  const color = theme.colors.ink600;
+  const color = theme.colors.textSecondary;
 
   switch (type) {
     case 'individual':
@@ -1095,7 +1094,7 @@ const styles = StyleSheet.create({
   heroCoverWrapper: {
     width: '100%',
     height: 250,
-    backgroundColor: theme.colors.ink900,
+    backgroundColor: theme.colors.surface,
   },
   heroCoverImage: {
     width: '100%',
@@ -1104,7 +1103,7 @@ const styles = StyleSheet.create({
   heroCoverFallback: {
     width: '100%',
     height: '100%',
-    backgroundColor: theme.colors.slate200,
+    backgroundColor: theme.colors.surfaceRaised,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -1120,18 +1119,24 @@ const styles = StyleSheet.create({
     gap: 8,
     marginBottom: theme.spacing.sm,
   },
+  categoryLabel: {
+    fontFamily: theme.typography.fonts.uiMedium,
+    fontSize: 12,
+    color: theme.colors.textSecondary,
+    letterSpacing: 0.5,
+  },
   campaignTitle: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 27,
     lineHeight: 35,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: theme.spacing.xs,
   },
   campaignSummary: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 16,
     lineHeight: 24,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     marginBottom: theme.spacing.base,
   },
   creatorRow: {
@@ -1146,7 +1151,7 @@ const styles = StyleSheet.create({
   creatorNameText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 15,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   creatorSubRow: {
     flexDirection: 'row',
@@ -1162,17 +1167,17 @@ const styles = StyleSheet.create({
   creatorTypeText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.caption.fontSize,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   metaBullet: {
     marginHorizontal: 6,
-    color: theme.colors.ink400,
+    color: theme.colors.textSecondary,
     fontSize: 12,
   },
   publishDateText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.caption.fontSize,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   editorialDivider: {
     height: 1,
@@ -1197,13 +1202,13 @@ const styles = StyleSheet.create({
   sourcesTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: theme.typography.styles.h3.fontSize,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   sourcesDisclaimer: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.caption.fontSize,
     lineHeight: 18,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   sourcesList: {
     marginTop: theme.spacing.xs,
@@ -1211,7 +1216,7 @@ const styles = StyleSheet.create({
   noSourcesText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: theme.typography.styles.small.fontSize,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     fontStyle: 'italic',
   },
   // Accordions Section
@@ -1230,28 +1235,28 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 8,
-    backgroundColor: theme.colors.primary50,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.md,
     borderRadius: theme.radius.sm,
     borderWidth: 1,
-    borderColor: theme.colors.primary200,
+    borderColor: theme.colors.border,
   },
   nonDonationNoticeText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 19,
-    color: theme.colors.primary800,
+    color: theme.colors.textSecondary,
     flex: 1,
   },
   boldText: {
     fontFamily: theme.typography.fonts.uiBold,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   accordionBodyText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
     lineHeight: 21,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   fundsGrid: {
     flexDirection: 'row',
@@ -1259,34 +1264,34 @@ const styles = StyleSheet.create({
   },
   fundsGridCard: {
     flex: 1,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.md,
     borderRadius: theme.radius.sm,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   fundsCardLabel: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginBottom: 4,
   },
   fundsCardValue: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 18,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   allocationBox: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.md,
     borderRadius: theme.radius.sm,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   allocationTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginBottom: 8,
   },
   channelRow: {
@@ -1297,12 +1302,12 @@ const styles = StyleSheet.create({
   channelName: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   channelPct: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.primary600,
+    color: theme.colors.lime,
   },
   termsBox: {
     borderTopWidth: 1,
@@ -1312,14 +1317,14 @@ const styles = StyleSheet.create({
   termsHeading: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
     marginBottom: 2,
   },
   termsText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 18,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   detailRow: {
     marginBottom: theme.spacing.xs,
@@ -1327,16 +1332,16 @@ const styles = StyleSheet.create({
   detailLabel: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   detailValue: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 14,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   privacyNoteBox: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.sm,
     marginTop: 4,
@@ -1345,7 +1350,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 17,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   reviewStepsList: {
     gap: 10,
@@ -1360,8 +1365,8 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
     borderRadius: 11,
-    backgroundColor: theme.colors.primary50,
-    color: theme.colors.primary600,
+    backgroundColor: theme.colors.tintedPillBg,
+    color: theme.colors.lime,
     textAlign: 'center',
     lineHeight: 22,
     fontFamily: theme.typography.fonts.uiBold,
@@ -1373,18 +1378,18 @@ const styles = StyleSheet.create({
   reviewStepTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   reviewStepDesc: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginTop: 1,
   },
   honestStandardBox: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     borderLeftWidth: 3,
-    borderLeftColor: theme.colors.primary600,
+    borderLeftColor: theme.colors.lime,
     padding: theme.spacing.sm,
     marginTop: theme.spacing.xs,
   },
@@ -1392,12 +1397,12 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 18,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   backersSummaryCount: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 15,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   publicBackersList: {
     marginTop: theme.spacing.sm,
@@ -1415,22 +1420,22 @@ const styles = StyleSheet.create({
   publicBackerName: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   publicBackerDate: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   publicBackerAmount: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.primary600,
+    color: theme.colors.lime,
   },
   allPrivateNotice: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     fontStyle: 'italic',
     marginTop: 6,
   },
@@ -1443,9 +1448,8 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.surfaceRaised,
     padding: theme.spacing.lg,
-    ...theme.shadows.card,
   },
   feedbackHeader: {
     flexDirection: 'row',
@@ -1456,13 +1460,13 @@ const styles = StyleSheet.create({
   feedbackTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: theme.typography.styles.h3.fontSize,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   feedbackIntro: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     lineHeight: 18,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     marginBottom: theme.spacing.md,
   },
   feedbackForm: {
@@ -1474,7 +1478,7 @@ const styles = StyleSheet.create({
   questionText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 14,
-    color: theme.colors.ink800,
+    color: theme.colors.textPrimary,
     marginBottom: 8,
   },
   optionRow: {
@@ -1487,21 +1491,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: theme.radius.sm,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
   },
   optionBtnSelected: {
-    backgroundColor: theme.colors.primary50,
-    borderColor: theme.colors.primary600,
+    backgroundColor: theme.colors.tintedPillBg,
+    borderColor: '#234F02',
   },
   optionBtnText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink700,
+    color: theme.colors.textSecondary,
   },
   optionBtnTextSelected: {
-    color: theme.colors.primary600,
+    color: theme.colors.lime,
     fontFamily: theme.typography.fonts.uiSemiBold,
   },
   feedbackSuccessBox: {
@@ -1512,13 +1516,13 @@ const styles = StyleSheet.create({
   feedbackSuccessTitle: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     marginTop: 4,
   },
   feedbackSuccessText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     paddingHorizontal: theme.spacing.md,
   },
@@ -1530,10 +1534,9 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: theme.colors.surface,
     borderTopWidth: 1,
-    borderTopColor: theme.colors.line,
+    borderTopColor: theme.colors.border,
     paddingTop: theme.spacing.md,
     paddingHorizontal: theme.spacing.lg,
-    ...theme.shadows.elevated,
   },
   panelTopRow: {
     flexDirection: 'row',
@@ -1548,12 +1551,12 @@ const styles = StyleSheet.create({
   panelRaisedText: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 18,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   panelGoalText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   panelMetaCol: {
     flexDirection: 'row',
@@ -1563,48 +1566,36 @@ const styles = StyleSheet.create({
   panelPercentText: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.primary600,
+    color: theme.colors.lime,
   },
   panelDaysText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
   },
   panelProgressBar: {
     marginBottom: theme.spacing.sm,
   },
-  panelActionRow: {
+  panelReachRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.md,
-  },
-  reachPreviewContainer: {
-    flex: 1,
+    justifyContent: 'space-between',
+    marginBottom: theme.spacing.sm,
     paddingVertical: 2,
   },
-  reachTextRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  reachNumberText: {
-    fontFamily: theme.typography.fonts.uiSemiBold,
-    fontSize: 13,
-    color: theme.colors.ink900,
-  },
-  reachBadgeRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    marginTop: 2,
-  },
-  reachLabelText: {
-    fontFamily: theme.typography.fonts.uiRegular,
-    fontSize: 11,
-    color: theme.colors.ink500,
+  panelReachText: {
+    fontFamily: theme.typography.fonts.uiMedium,
+    fontSize: 12,
+    color: theme.colors.textSecondary,
+    flex: 1,
+    marginRight: 6,
   },
   panelButtonContainer: {
-    width: 170,
+    width: '100%',
+  },
+  panelFullWidthBtn: {
+    height: 52,
+    borderRadius: theme.radius.pill,
   },
   // Sheet Styles
   sheetBody: {
@@ -1617,7 +1608,7 @@ const styles = StyleSheet.create({
   },
   sheetStatBox: {
     flex: 1,
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     padding: theme.spacing.sm,
     borderRadius: theme.radius.sm,
     alignItems: 'center',
@@ -1625,19 +1616,19 @@ const styles = StyleSheet.create({
   sheetStatVal: {
     fontFamily: theme.typography.fonts.uiBold,
     fontSize: 16,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   sheetStatLbl: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   sheetReachMathCard: {
-    backgroundColor: theme.colors.bgMuted,
+    backgroundColor: theme.colors.surfaceRaised,
     borderRadius: theme.radius.card,
     borderWidth: 1,
-    borderColor: theme.colors.line,
+    borderColor: theme.colors.border,
     padding: theme.spacing.md,
     gap: 8,
   },
@@ -1650,7 +1641,7 @@ const styles = StyleSheet.create({
   sheetReachTitle: {
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 14,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
     flex: 1,
   },
   mathRow: {
@@ -1661,21 +1652,21 @@ const styles = StyleSheet.create({
   mathLabel: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
-    color: theme.colors.ink600,
+    color: theme.colors.textSecondary,
   },
   mathValue: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: theme.colors.ink900,
+    color: theme.colors.textPrimary,
   },
   sheetDisclaimerText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
     lineHeight: 16,
-    color: theme.colors.ink500,
+    color: theme.colors.textSecondary,
     marginTop: 6,
     borderTopWidth: 1,
-    borderTopColor: theme.colors.line,
+    borderTopColor: theme.colors.border,
     paddingTop: 6,
   },
   // Skeleton Layout

@@ -10,7 +10,7 @@ export function ReviewerBanner() {
       accessibilityRole="text"
       accessibilityLabel="Internal reviewer demo banner"
     >
-      <ShieldAlert size={14} color="#92400E" style={styles.icon} />
+      <ShieldAlert size={14} color={theme.colors.lime} style={styles.icon} />
       <Text style={styles.text}>Internal - reviewer demo</Text>
     </View>
   );
@@ -18,9 +18,9 @@ export function ReviewerBanner() {
 
 const styles = StyleSheet.create({
   banner: {
-    backgroundColor: theme.colors.warningBg,
+    backgroundColor: theme.colors.surfaceRaised,
     borderBottomWidth: 1,
-    borderBottomColor: '#FDE68A',
+    borderBottomColor: theme.colors.border,
     paddingVertical: 6,
     paddingHorizontal: theme.spacing.base,
     flexDirection: 'row',
@@ -35,8 +35,9 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 12,
     lineHeight: 16,
-    color: '#92400E',
+    color: theme.colors.textPrimary,
     letterSpacing: 0.2,
     textTransform: 'uppercase',
   },
 });
+

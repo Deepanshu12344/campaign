@@ -28,7 +28,7 @@ export function ServerWakeUpBanner() {
       pointerEvents="none"
     >
       <View style={styles.card}>
-        <ActivityIndicator size="small" color={theme.colors.amber600 || '#D97706'} style={styles.spinner} />
+        <ActivityIndicator size="small" color={theme.colors.lime} style={styles.spinner} />
         <View style={styles.textContainer}>
           <Text style={styles.title}>Waking up the server...</Text>
           <Text style={styles.subtitle}>Free tier instances take a moment to spin up</Text>
@@ -48,15 +48,15 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEF3C7', // Amber 100
-    borderColor: '#F59E0B',     // Amber 500
+    backgroundColor: theme.colors.surfaceRaised,
+    borderColor: theme.colors.border,
     borderWidth: 1,
     borderRadius: theme.radius.md,
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.sm,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 4,
   },
@@ -69,13 +69,13 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
-    color: '#92400E', // Amber 800
+    color: theme.colors.textPrimary,
     fontWeight: '600',
   },
   subtitle: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 11,
-    color: '#B45309', // Amber 700
+    color: theme.colors.textSecondary,
     marginTop: 1,
   },
 });
