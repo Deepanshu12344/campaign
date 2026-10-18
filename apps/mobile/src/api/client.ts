@@ -2,7 +2,7 @@ import { ApiError, RequestOptions } from './types';
 import { getAccessToken, getRefreshToken, setTokens, clearTokens, getLatestGuestReceiptToken } from './tokens';
 import { AuthResponse } from '@campaigns/shared';
 
-const DEFAULT_BASE_URL = 'http://localhost:4000/api/v1';
+const DEFAULT_BASE_URL = 'https://campaign-admj.onrender.com/api/v1';
 const DEFAULT_TIMEOUT_MS = 60000; // 60 seconds (accommodates free-tier cold starts)
 
 export type ServerWakeUpListener = (isWakingUp: boolean) => void;

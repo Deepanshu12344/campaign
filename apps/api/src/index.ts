@@ -27,8 +27,20 @@ const allowedOrigins = envConfig.ALLOWED_ORIGINS;
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (mobile applications, curl, server-to-server)
+      // Allow requests with no origin (mobile applications, React Native, curl, server-to-server)
       if (!origin) {
+        return callback(null, true);
+      }
+
+      // Always allow localhost, 127.0.0.1, private LAN IPs, and Expo dev servers
+      if (
+        /^https?:\/\/(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+)(:\d+)?$/.test(
+          origin
+        ) ||
+        origin.startsWith('exp://') ||
+        origin.endsWith('.onrender.com') ||
+        origin.endsWith('.vercel.app')
+      ) {
         return callback(null, true);
       }
 
@@ -37,7 +49,7 @@ app.use(
         if (allowedOrigins.includes(origin)) {
           return callback(null, true);
         }
-        return callback(new Error(`Origin ${origin} not allowed by CORS policy`));
+        return callback(null, false);
       }
 
       // In non-production environments with no ALLOWED_ORIGINS set, allow requesting origin
@@ -45,8 +57,7 @@ app.use(
         return callback(null, true);
       }
 
-      // In production without ALLOWED_ORIGINS defined, deny web browser origins for security
-      return callback(new Error('CORS origin denied in production: ALLOWED_ORIGINS not configured'));
+      return callback(null, false);
     },
     credentials: true,
   })
