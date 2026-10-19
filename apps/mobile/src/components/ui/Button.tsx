@@ -122,6 +122,12 @@ export function Button({
 
   const isInteractiveDisabled = disabled || loading;
 
+  const disabledTextStyle = isInteractiveDisabled
+    ? variant === 'primary'
+      ? styles.textDisabledPrimary
+      : styles.textDisabled
+    : null;
+
   const content =
     typeof children === 'string' || (!children && resolvedTitle) ? (
       <Text
@@ -131,7 +137,7 @@ export function Button({
           styles.baseText,
           sizeTextStyle,
           variantTextStyle,
-          isInteractiveDisabled && styles.textDisabled,
+          disabledTextStyle,
           textStyle,
         ]}
       >
@@ -345,7 +351,7 @@ const styles = StyleSheet.create({
   },
   // Disabled state
   buttonDisabled: {
-    opacity: 0.45,
+    opacity: 0.5,
   },
   // Text Styles
   baseText: {
@@ -384,6 +390,10 @@ const styles = StyleSheet.create({
   },
   textDanger: {
     color: theme.colors.textPrimary,
+  },
+  textDisabledPrimary: {
+    color: theme.colors.onLime,
+    fontFamily: theme.typography.fonts.uiBold,
   },
   textDisabled: {
     color: theme.colors.textMuted,

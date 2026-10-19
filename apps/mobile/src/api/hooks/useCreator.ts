@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient, UseQueryResult, UseMutationResult } from '@tanstack/react-query';
 import { apiClient } from '../client';
 import { ApiError } from '../types';
+import { useAuthStore } from '../../store/authStore';
 import {
   CampaignCardDto,
   CampaignDetailDto,
@@ -11,12 +12,14 @@ import {
 } from '@campaigns/shared';
 
 export function useMyCampaigns(status?: string): UseQueryResult<CampaignCardDto[], ApiError> {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   return useQuery<CampaignCardDto[], ApiError>({
     queryKey: ['my-campaigns', status],
     queryFn: async () => {
       const qs = status ? `?status=${encodeURIComponent(status)}` : '';
       return apiClient.get<CampaignCardDto[]>(`/me/campaigns${qs}`);
     },
+    enabled: isAuthenticated,
   });
 }
 
@@ -90,12 +93,13 @@ export function useUploadImage(): UseMutationResult<
 }
 
 export function useCampaignAnalytics(campaignId: string): UseQueryResult<CampaignAnalyticsDto, ApiError> {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   return useQuery<CampaignAnalyticsDto, ApiError>({
     queryKey: ['campaign-analytics', campaignId],
     queryFn: async () => {
       return apiClient.get<CampaignAnalyticsDto>(`/me/campaigns/${campaignId}/analytics`);
     },
-    enabled: !!campaignId,
+    enabled: !!campaignId && isAuthenticated,
   });
 }
 

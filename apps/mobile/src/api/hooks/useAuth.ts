@@ -8,6 +8,7 @@ import {
 import { apiClient } from '../client';
 import { setTokens, clearTokens } from '../tokens';
 import { ApiError } from '../types';
+import { useAuthStore } from '../../store/authStore';
 import {
   AuthResponse,
   SignInInput,
@@ -52,23 +53,21 @@ export function useSignUp(): UseMutationResult<AuthResponse, ApiError, SignUpInp
 }
 
 export function useCurrentUser(): UseQueryResult<UserProfile, ApiError> {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   return useQuery<UserProfile, ApiError>({
     queryKey: ['auth', 'me'],
     queryFn: async () => {
       return apiClient.get<UserProfile>('/me');
     },
+    enabled: isAuthenticated,
     retry: false,
     staleTime: 5 * 60 * 1000,
   });
 }
 
 export function useSignOut() {
-  const queryClient = useQueryClient();
-
   return async () => {
-    await clearTokens();
-    queryClient.removeQueries({ queryKey: ['auth', 'me'] });
-    queryClient.invalidateQueries();
+    await useAuthStore.getState().signOut();
   };
 }
 

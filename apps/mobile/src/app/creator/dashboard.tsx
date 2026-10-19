@@ -18,6 +18,9 @@ import {
   Layers,
   ArrowRight,
   AlertCircle,
+  CheckCircle2,
+  Lock,
+  ExternalLink,
 } from 'lucide-react-native';
 import { theme } from '../../theme';
 import { SharedHeader } from '../../components/layout/SharedHeader';
@@ -29,8 +32,11 @@ import {
   Skeleton,
   EmptyState,
   ErrorState,
+  Sheet,
 } from '../../components/ui';
 import { useMyCampaigns, useCreateDraft } from '../../api/hooks/useCreator';
+import { useAuthStore } from '../../store/authStore';
+import { useRequireAuth } from '../../auth/requireAuth';
 import {
   CREATOR_FILTERS,
   CreatorDashboardFilter,
@@ -59,7 +65,10 @@ function formatReach(low: number, high: number): string {
 
 export default function CreatorDashboardScreen() {
   const router = useRouter();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const { requireAuth } = useRequireAuth();
   const [activeFilter, setActiveFilter] = useState<CreatorDashboardFilter>('Published/Funding');
+  const [reviewModalCampaign, setReviewModalCampaign] = useState<CampaignCardDto | null>(null);
 
   const {
     data: campaigns = [],
@@ -73,6 +82,14 @@ export default function CreatorDashboardScreen() {
   const createDraftMutation = useCreateDraft();
 
   const handleCreateNew = async () => {
+    if (!isAuthenticated) {
+      requireAuth({
+        reason: 'Sign in to create and manage campaigns.',
+        returnTo: '/creator/dashboard',
+        onAuthenticated: () => handleCreateNew(),
+      });
+      return;
+    }
     try {
       const draft = await createDraftMutation.mutateAsync();
       router.push(`/create/${draft.id}/basics`);
@@ -97,6 +114,45 @@ export default function CreatorDashboardScreen() {
       return acc + (c.raisedCents > 0 ? Math.max(1, Math.round(c.raisedCents / 4500)) : 0);
     }, 0);
   }, [campaigns]);
+
+  if (!isAuthenticated) {
+    return (
+      <View style={styles.container}>
+        <SharedHeader
+          title="Creator Dashboard"
+          subtitle="Manage Campaigns Across Lifecycles"
+          fallbackRoute="/(tabs)/profile"
+        />
+        <ScrollView
+          contentContainerStyle={styles.signedOutContainer}
+          showsVerticalScrollIndicator={false}
+        >
+          <Card style={styles.signedOutCard}>
+            <View style={styles.signedOutIconCircle}>
+              <Lock size={36} color={theme.colors.lime} />
+            </View>
+            <Text style={styles.signedOutTitle}>Sign in to Creator Dashboard</Text>
+            <Text style={styles.signedOutDescription}>
+              Sign in to manage your campaigns, review campaign analytics, respond to editorial feedback, and post distribution updates.
+            </Text>
+            <Button
+              title="Sign In"
+              variant="primary"
+              size="lg"
+              fullWidth
+              onPress={() =>
+                requireAuth({
+                  reason: 'Sign in to access your creator dashboard.',
+                  returnTo: '/creator/dashboard',
+                })
+              }
+              style={{ marginTop: theme.spacing.md }}
+            />
+          </Card>
+        </ScrollView>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -268,11 +324,117 @@ export default function CreatorDashboardScreen() {
                 key={campaign.id}
                 campaign={campaign}
                 onPressAction={(route) => router.push(route as Href)}
+                onViewReviewStatus={setReviewModalCampaign}
               />
             ))}
           </View>
         )}
       </ScrollView>
+
+      {/* Review Status Bottom Sheet */}
+      <Sheet
+        visible={!!reviewModalCampaign}
+        onClose={() => setReviewModalCampaign(null)}
+        title="Editorial Review Status"
+      >
+        {reviewModalCampaign && (
+          <View style={styles.reviewSheetContent}>
+            <View style={styles.reviewSheetHeader}>
+              <StatusPill status="SUBMITTED" />
+              <Text style={styles.reviewSheetCampaignTitle} numberOfLines={2}>
+                {reviewModalCampaign.title || 'Untitled Campaign'}
+              </Text>
+            </View>
+
+            <View style={styles.reviewSlaBox}>
+              <View style={styles.reviewSlaRow}>
+                <Clock size={16} color={theme.colors.lime} />
+                <Text style={styles.reviewSlaHeading}>Review Queue Turnaround</Text>
+              </View>
+              <Text style={styles.reviewSlaText}>
+                Human moderators evaluate each submission. Most reviews complete within 24 to 48 hours.
+              </Text>
+            </View>
+
+            <View style={styles.reviewChecklistCard}>
+              <Text style={styles.reviewChecklistHeader}>What Reviewers Check:</Text>
+
+              <View style={styles.sheetCheckItem}>
+                <CheckCircle2 size={16} color={theme.colors.lime} />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.sheetCheckTitle}>Platform Safety & Anti-Scam Integrity</Text>
+                  <Text style={styles.sheetCheckDesc}>
+                    Zero tolerance for harassment, scams, hate speech, or deceitful claims.
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.sheetCheckItem}>
+                <CheckCircle2 size={16} color={theme.colors.lime} />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.sheetCheckTitle}>Verified Citations & Sources</Text>
+                  <Text style={styles.sheetCheckDesc}>
+                    All claims must link to reputable third-party publications or records.
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.sheetCheckItem}>
+                <CheckCircle2 size={16} color={theme.colors.lime} />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.sheetCheckTitle}>16:9 Ad Creative Formatting</Text>
+                  <Text style={styles.sheetCheckDesc}>
+                    Visuals must meet standard ad exchange formatting and copy guidelines.
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.sheetCheckItem}>
+                <CheckCircle2 size={16} color={theme.colors.lime} />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.sheetCheckTitle}>Demonstration CPM & Audience Sanity</Text>
+                  <Text style={styles.sheetCheckDesc}>
+                    Ensuring audience reach calculation conforms to transparent benchmarks.
+                  </Text>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.reviewLockNotice}>
+              <Lock size={14} color={theme.colors.textSecondary} />
+              <Text style={styles.reviewLockText}>
+                Draft is locked while review is in progress. Once approved, the campaign opens for community funding.
+              </Text>
+            </View>
+
+            <View style={styles.reviewSheetActions}>
+              <Button
+                label="Preview Campaign"
+                variant="secondary"
+                size="md"
+                icon={<ExternalLink size={16} color={theme.colors.textPrimary} />}
+                onPress={() => {
+                  const id = reviewModalCampaign.id;
+                  setReviewModalCampaign(null);
+                  router.push(`/campaign/${id}` as Href);
+                }}
+                style={{ flex: 1 }}
+              />
+              <Button
+                label="Creator Hub"
+                variant="primary"
+                size="md"
+                onPress={() => {
+                  const id = reviewModalCampaign.id;
+                  setReviewModalCampaign(null);
+                  router.push(`/creator/${id}` as Href);
+                }}
+                style={{ flex: 1 }}
+              />
+            </View>
+          </View>
+        )}
+      </Sheet>
     </View>
   );
 }
@@ -280,18 +442,58 @@ export default function CreatorDashboardScreen() {
 function CampaignRowCard({
   campaign,
   onPressAction,
+  onViewReviewStatus,
 }: {
   campaign: CampaignCardDto;
   onPressAction: (route: string) => void;
+  onViewReviewStatus: (campaign: CampaignCardDto) => void;
 }) {
   const action = getContextualAction(campaign);
   const percent = Math.min(100, Math.round(campaign.percentFunded || 0));
+
+  const isSubmitted = campaign.status === 'SUBMITTED';
+  const isDraft = campaign.status === 'DRAFT';
+  const isFunding = campaign.status === 'FUNDING';
+  const isPromoting = campaign.status === 'PROMOTING';
+  const isCompleted = campaign.status === 'COMPLETED';
+  const isChangesRequested =
+    campaign.status === 'CHANGES_REQUESTED' || campaign.status === 'REJECTED';
+
+  let secondaryAction: { label: string; route: string } | null = null;
+  if (isSubmitted) {
+    // Primary opens the Review Status sheet; secondary provides direct Hub navigation
+    secondaryAction = { label: 'Hub', route: `/creator/${campaign.id}` };
+  } else if (isDraft) {
+    secondaryAction = { label: 'Preview', route: `/create/${campaign.id}/preview` };
+  } else if (isFunding || isPromoting) {
+    secondaryAction = { label: 'Public page', route: `/campaign/${campaign.id}` };
+  } else if (isChangesRequested) {
+    secondaryAction = { label: 'Edit draft', route: `/create/${campaign.id}/basics` };
+  } else if (isCompleted) {
+    secondaryAction = { label: 'Hub', route: `/creator/${campaign.id}` };
+  }
+
+  const handleCardPress = () => {
+    if (isSubmitted) {
+      onViewReviewStatus(campaign);
+    } else {
+      onPressAction(action.route);
+    }
+  };
+
+  const handlePrimaryActionPress = () => {
+    if (isSubmitted) {
+      onViewReviewStatus(campaign);
+    } else {
+      onPressAction(action.route);
+    }
+  };
 
   return (
     <Card style={styles.campaignCard}>
       <Pressable
         style={styles.cardHeaderRow}
-        onPress={() => onPressAction(action.route)}
+        onPress={handleCardPress}
       >
         {campaign.coverUrl ? (
           <Image source={{ uri: campaign.coverUrl }} style={styles.thumbnail} />
@@ -356,18 +558,20 @@ function CampaignRowCard({
           label={action.label}
           variant={action.variant}
           size="sm"
-          onPress={() => onPressAction(action.route)}
+          onPress={handlePrimaryActionPress}
           style={styles.actionButton}
         />
-        <Pressable
-          style={styles.detailsChevronButton}
-          onPress={() => onPressAction(`/creator/${campaign.id}`)}
-          hitSlop={8}
-          accessibilityLabel="View campaign management"
-        >
-          <Text style={styles.detailsChevronText}>Hub</Text>
-          <ArrowRight size={14} color={theme.colors.lime} />
-        </Pressable>
+        {secondaryAction && (
+          <Pressable
+            style={styles.detailsChevronButton}
+            onPress={() => onPressAction(secondaryAction.route)}
+            hitSlop={8}
+            accessibilityLabel={`Go to ${secondaryAction.label}`}
+          >
+            <Text style={styles.detailsChevronText}>{secondaryAction.label}</Text>
+            <ArrowRight size={14} color={theme.colors.lime} />
+          </Pressable>
+        )}
       </View>
     </Card>
   );
@@ -537,6 +741,8 @@ const styles = StyleSheet.create({
   },
   cardMeta: {
     flex: 1,
+    flexShrink: 1,
+    minWidth: 0,
     justifyContent: 'space-between',
   },
   statusRow: {
@@ -561,6 +767,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: theme.colors.lime,
     marginTop: 2,
+    flexShrink: 1,
   },
   progressSection: {
     backgroundColor: theme.colors.inputBg,
@@ -640,5 +847,127 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
     color: theme.colors.lime,
+  },
+  // Review Status Sheet Styles
+  reviewSheetContent: {
+    gap: theme.spacing.md,
+    paddingVertical: theme.spacing.xs,
+  },
+  reviewSheetHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  reviewSheetCampaignTitle: {
+    fontFamily: theme.typography.fonts.uiBold,
+    fontSize: 16,
+    color: theme.colors.textPrimary,
+    flex: 1,
+  },
+  reviewSlaBox: {
+    backgroundColor: theme.colors.inputBg,
+    padding: theme.spacing.sm,
+    borderRadius: theme.radius.sm,
+    borderLeftWidth: 3,
+    borderLeftColor: theme.colors.lime,
+    gap: 4,
+  },
+  reviewSlaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  reviewSlaHeading: {
+    fontFamily: theme.typography.fonts.uiSemiBold,
+    fontSize: 13,
+    color: theme.colors.lime,
+  },
+  reviewSlaText: {
+    fontFamily: theme.typography.fonts.uiRegular,
+    fontSize: 12,
+    lineHeight: 17,
+    color: theme.colors.textSecondary,
+  },
+  reviewChecklistCard: {
+    backgroundColor: theme.colors.surfaceRaised,
+    borderRadius: theme.radius.md,
+    padding: theme.spacing.sm,
+    gap: 10,
+  },
+  reviewChecklistHeader: {
+    fontFamily: theme.typography.fonts.uiSemiBold,
+    fontSize: 13,
+    color: theme.colors.textPrimary,
+  },
+  sheetCheckItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+  },
+  sheetCheckTitle: {
+    fontFamily: theme.typography.fonts.uiSemiBold,
+    fontSize: 12,
+    color: theme.colors.textPrimary,
+  },
+  sheetCheckDesc: {
+    fontFamily: theme.typography.fonts.uiRegular,
+    fontSize: 11,
+    lineHeight: 15,
+    color: theme.colors.textSecondary,
+    marginTop: 1,
+  },
+  reviewLockNotice: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 2,
+  },
+  reviewLockText: {
+    fontFamily: theme.typography.fonts.uiRegular,
+    fontSize: 11,
+    lineHeight: 15,
+    color: theme.colors.textSecondary,
+    flex: 1,
+  },
+  reviewSheetActions: {
+    flexDirection: 'row',
+    gap: theme.spacing.sm,
+    marginTop: theme.spacing.xs,
+  },
+  signedOutContainer: {
+    padding: theme.spacing.base,
+    justifyContent: 'center',
+    paddingTop: theme.spacing.xl,
+  },
+  signedOutCard: {
+    alignItems: 'center',
+    padding: theme.spacing.xl,
+    gap: theme.spacing.sm,
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.surfaceRaised,
+    borderRadius: theme.radius.card,
+  },
+  signedOutIconCircle: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: theme.colors.tintedPillBg,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: theme.spacing.sm,
+  },
+  signedOutTitle: {
+    fontFamily: theme.typography.fonts.uiBold,
+    fontSize: 18,
+    color: theme.colors.textPrimary,
+    textAlign: 'center',
+  },
+  signedOutDescription: {
+    fontFamily: theme.typography.fonts.uiRegular,
+    fontSize: 14,
+    lineHeight: 20,
+    color: theme.colors.textSecondary,
+    textAlign: 'center',
+    marginBottom: theme.spacing.xs,
   },
 });

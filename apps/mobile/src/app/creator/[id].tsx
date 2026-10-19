@@ -39,6 +39,8 @@ import {
 } from '../../components/ui';
 import { useCampaign } from '../../api/hooks/useCampaigns';
 import { useCampaignAnalytics, usePostUpdate } from '../../api/hooks/useCreator';
+import { useAuthStore } from '../../store/authStore';
+import { useRequireAuth } from '../../auth/requireAuth';
 import {
   LIFECYCLE_TIMELINE_STAGES,
   getLifecycleStageIndex,
@@ -64,6 +66,8 @@ function formatReach(low: number, high: number): string {
 export default function CreatorCampaignManageScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const { requireAuth } = useRequireAuth();
 
   const campaignId = Array.isArray(id) ? id[0] : id || '';
 
@@ -129,6 +133,38 @@ export default function CreatorCampaignManageScreen() {
       setUpdateError(msg);
     }
   };
+
+  if (!isAuthenticated) {
+    return (
+      <View style={styles.container}>
+        <SharedHeader title="Campaign Hub" fallbackRoute="/creator/dashboard" />
+        <ScrollView contentContainerStyle={styles.signedOutContainer} showsVerticalScrollIndicator={false}>
+          <Card style={styles.signedOutCard}>
+            <View style={styles.signedOutIconCircle}>
+              <Lock size={36} color={theme.colors.lime} />
+            </View>
+            <Text style={styles.signedOutTitle}>Sign in to Access Creator Hub</Text>
+            <Text style={styles.signedOutDescription}>
+              You must be signed in as the campaign creator to access this dashboard.
+            </Text>
+            <Button
+              title="Sign In"
+              variant="primary"
+              size="lg"
+              fullWidth
+              onPress={() =>
+                requireAuth({
+                  reason: 'Sign in to access your campaign creator hub.',
+                  returnTo: `/creator/${campaignId}`,
+                })
+              }
+              style={{ marginTop: theme.spacing.md }}
+            />
+          </Card>
+        </ScrollView>
+      </View>
+    );
+  }
 
   if (isCampaignLoading) {
     return (
@@ -295,6 +331,53 @@ export default function CreatorCampaignManageScreen() {
             )}
           </View>
         </Card>
+
+        {/* Review Status Card (for SUBMITTED) */}
+        {campaign.status === 'SUBMITTED' && (
+          <Card style={styles.reviewInProgressCard}>
+            <View style={styles.reviewInProgressHeader}>
+              <Clock size={20} color={theme.colors.lime} />
+              <Text style={styles.reviewInProgressTitle}>Editorial Review In Progress</Text>
+            </View>
+
+            <Text style={styles.reviewInProgressDesc}>
+              Your campaign has been submitted and is currently in the editorial moderation queue.
+              Our team verifies citations, ensures advertising compliance, and checks reach parameters.
+            </Text>
+
+            <View style={styles.reviewSlaBox}>
+              <Text style={styles.reviewSlaLabel}>Estimated Review Turnaround</Text>
+              <Text style={styles.reviewSlaValue}>Within 24–48 hours</Text>
+            </View>
+
+            <View style={styles.reviewChecklist}>
+              <Text style={styles.reviewChecklistTitle}>Editorial Verification Checklist:</Text>
+              <View style={styles.reviewCheckItem}>
+                <CheckCircle2 size={14} color={theme.colors.lime} />
+                <Text style={styles.reviewCheckText}>Platform safety & anti-scam integrity verification</Text>
+              </View>
+              <View style={styles.reviewCheckItem}>
+                <CheckCircle2 size={14} color={theme.colors.lime} />
+                <Text style={styles.reviewCheckText}>Independent citations & external source verification</Text>
+              </View>
+              <View style={styles.reviewCheckItem}>
+                <CheckCircle2 size={14} color={theme.colors.lime} />
+                <Text style={styles.reviewCheckText}>Ad creative 16:9 aspect ratio & copy guidelines</Text>
+              </View>
+              <View style={styles.reviewCheckItem}>
+                <CheckCircle2 size={14} color={theme.colors.lime} />
+                <Text style={styles.reviewCheckText}>Benchmark CPM and audience reach sanity check</Text>
+              </View>
+            </View>
+
+            <View style={styles.reviewNotice}>
+              <Lock size={14} color={theme.colors.textSecondary} />
+              <Text style={styles.reviewNoticeText}>
+                Draft editing is locked while review is active. Once approved, the campaign will open for funding.
+              </Text>
+            </View>
+          </Card>
+        )}
 
         {/* Moderation Feedback Card (for CHANGES_REQUESTED or REJECTED) */}
         {(campaign.status === 'CHANGES_REQUESTED' || campaign.status === 'REJECTED') && (
@@ -734,6 +817,84 @@ const styles = StyleSheet.create({
   topBtn: {
     flex: 1,
   },
+  reviewInProgressCard: {
+    padding: theme.spacing.base,
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.surfaceRaised,
+    borderWidth: 1,
+    gap: theme.spacing.sm,
+  },
+  reviewInProgressHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  reviewInProgressTitle: {
+    fontFamily: theme.typography.fonts.uiBold,
+    fontSize: 16,
+    color: theme.colors.textPrimary,
+  },
+  reviewInProgressDesc: {
+    fontFamily: theme.typography.fonts.uiRegular,
+    fontSize: 13,
+    lineHeight: 19,
+    color: theme.colors.textSecondary,
+  },
+  reviewSlaBox: {
+    backgroundColor: theme.colors.inputBg,
+    padding: theme.spacing.sm,
+    borderRadius: theme.radius.sm,
+    borderLeftWidth: 3,
+    borderLeftColor: theme.colors.lime,
+    gap: 2,
+  },
+  reviewSlaLabel: {
+    fontFamily: theme.typography.fonts.uiRegular,
+    fontSize: 11,
+    color: theme.colors.textSecondary,
+  },
+  reviewSlaValue: {
+    fontFamily: theme.typography.fonts.uiBold,
+    fontSize: 13,
+    color: theme.colors.lime,
+  },
+  reviewChecklist: {
+    backgroundColor: theme.colors.surfaceRaised,
+    padding: theme.spacing.sm,
+    borderRadius: theme.radius.md,
+    gap: 6,
+  },
+  reviewChecklistTitle: {
+    fontFamily: theme.typography.fonts.uiSemiBold,
+    fontSize: 13,
+    color: theme.colors.textPrimary,
+    marginBottom: 2,
+  },
+  reviewCheckItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 6,
+  },
+  reviewCheckText: {
+    flex: 1,
+    fontFamily: theme.typography.fonts.uiRegular,
+    fontSize: 12,
+    lineHeight: 17,
+    color: theme.colors.textSecondary,
+  },
+  reviewNotice: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingTop: 4,
+  },
+  reviewNoticeText: {
+    flex: 1,
+    fontFamily: theme.typography.fonts.uiRegular,
+    fontSize: 12,
+    lineHeight: 16,
+    color: theme.colors.textSecondary,
+  },
   feedbackCard: {
     padding: theme.spacing.base,
     backgroundColor: theme.colors.surface,
@@ -1031,6 +1192,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: theme.colors.lime,
     marginTop: theme.spacing.xs,
+    flexShrink: 1,
   },
   measuredReachCard: {
     borderLeftWidth: 4,
@@ -1041,6 +1203,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: theme.colors.lime,
     marginTop: theme.spacing.xs,
+    flexShrink: 1,
   },
   reachDisclaimer: {
     fontFamily: theme.typography.fonts.uiRegular,
@@ -1164,5 +1327,41 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
     color: theme.colors.lime,
+  },
+  signedOutContainer: {
+    padding: theme.spacing.base,
+    justifyContent: 'center',
+    paddingTop: theme.spacing.xl,
+  },
+  signedOutCard: {
+    alignItems: 'center',
+    padding: theme.spacing.xl,
+    gap: theme.spacing.sm,
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.surfaceRaised,
+    borderRadius: theme.radius.card,
+  },
+  signedOutIconCircle: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: theme.colors.tintedPillBg,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: theme.spacing.sm,
+  },
+  signedOutTitle: {
+    fontFamily: theme.typography.fonts.uiBold,
+    fontSize: 18,
+    color: theme.colors.textPrimary,
+    textAlign: 'center',
+  },
+  signedOutDescription: {
+    fontFamily: theme.typography.fonts.uiRegular,
+    fontSize: 14,
+    lineHeight: 20,
+    color: theme.colors.textSecondary,
+    textAlign: 'center',
+    marginBottom: theme.spacing.xs,
   },
 });

@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient, UseQueryResult, UseMutationResul
 import { apiClient } from '../client';
 import { ApiError } from '../types';
 import { Notification, NotificationPrefs } from '@campaigns/shared';
+import { useAuthStore } from '../../store/authStore';
 
 export interface GroupedNotificationsResponse {
   unreadCount: number;
@@ -12,12 +13,14 @@ export interface GroupedNotificationsResponse {
 }
 
 export function useNotifications(): UseQueryResult<GroupedNotificationsResponse, ApiError> {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   return useQuery<GroupedNotificationsResponse, ApiError>({
     queryKey: ['notifications'],
     queryFn: async () => {
       return apiClient.get<GroupedNotificationsResponse>('/me/notifications');
     },
-    refetchInterval: 15000, // poll for updates every 15s when active
+    enabled: isAuthenticated,
+    refetchInterval: isAuthenticated ? 15000 : false, // poll for updates every 15s only when authenticated
   });
 }
 

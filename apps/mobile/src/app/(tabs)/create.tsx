@@ -50,10 +50,12 @@ export default function CreateTabScreen() {
     refetch: refetchDrafts,
   } = useMyCampaigns(undefined);
 
-  // Filter for drafts and changes requested
-  const drafts = (myCampaigns || []).filter(
-    (c) => c.status === 'DRAFT' || c.status === 'CHANGES_REQUESTED'
-  );
+  // Filter for drafts and changes requested - strictly authenticated
+  const drafts = isAuthenticated
+    ? (myCampaigns || []).filter(
+        (c) => c.status === 'DRAFT' || c.status === 'CHANGES_REQUESTED'
+      )
+    : [];
 
   // Delete draft confirmation modal state
   const [draftToDelete, setDraftToDelete] = useState<CampaignCardDto | null>(null);
@@ -98,6 +100,16 @@ export default function CreateTabScreen() {
 
   const handleResumeDraft = (draftId: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+    if (!isAuthenticated) {
+      requireAuth({
+        reason: 'Sign in to resume your campaign draft.',
+        returnTo: `/create/${draftId}/basics`,
+        onAuthenticated: () => {
+          router.push(`/create/${draftId}/basics` as Href);
+        },
+      });
+      return;
+    }
     router.push(`/create/${draftId}/basics` as Href);
   };
 
@@ -183,14 +195,35 @@ export default function CreateTabScreen() {
               <FileEdit size={16} color={theme.colors.textSecondary} />
               <Text style={styles.draftsSectionTitle}>Resume a Saved Draft</Text>
             </View>
-            {drafts.length > 0 && (
+            {isAuthenticated && drafts.length > 0 && (
               <View style={styles.draftCountPill}>
                 <Text style={styles.draftCountText}>{drafts.length}</Text>
               </View>
             )}
           </View>
 
-          {isLoadingDrafts ? (
+          {!isAuthenticated ? (
+            <Card style={styles.signInPromptCard}>
+              <View style={styles.signInPromptContent}>
+                <Text style={styles.signInPromptTitle}>Sign in to view saved drafts</Text>
+                <Text style={styles.signInPromptText}>
+                  Your drafts and in-progress campaigns are synced securely to your account.
+                </Text>
+                <Button
+                  title="Sign In to Resume"
+                  variant="secondary"
+                  size="sm"
+                  onPress={() => {
+                    requireAuth({
+                      reason: 'Sign in to access your saved drafts.',
+                      returnTo: '/(tabs)/create',
+                    });
+                  }}
+                  style={styles.signInPromptButton}
+                />
+              </View>
+            </Card>
+          ) : isLoadingDrafts ? (
             <View style={styles.loadingDraftsBox}>
               <Skeleton height={90} width="100%" borderRadius={theme.radius.card} style={{ marginBottom: 10 }} />
               <Skeleton height={90} width="100%" borderRadius={theme.radius.card} />
@@ -469,6 +502,31 @@ const styles = StyleSheet.create({
   },
   deleteModalActions: {
     gap: theme.spacing.sm,
+    marginTop: theme.spacing.xs,
+  },
+  signInPromptCard: {
+    padding: theme.spacing.base,
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.surfaceRaised,
+    borderRadius: theme.radius.card,
+  },
+  signInPromptContent: {
+    gap: 4,
+  },
+  signInPromptTitle: {
+    fontFamily: theme.typography.fonts.uiSemiBold,
+    fontSize: 15,
+    color: theme.colors.textPrimary,
+  },
+  signInPromptText: {
+    fontFamily: theme.typography.fonts.uiRegular,
+    fontSize: 13,
+    lineHeight: 18,
+    color: theme.colors.textSecondary,
+    marginBottom: 4,
+  },
+  signInPromptButton: {
+    alignSelf: 'flex-start',
     marginTop: theme.spacing.xs,
   },
 });

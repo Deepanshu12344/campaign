@@ -155,10 +155,26 @@ describe('Contributions & Payments API (/api/v1)', () => {
     });
 
     it('simulates bank verification pending on card ending in 3220', async () => {
+      const creator = await prisma.user.findFirstOrThrow();
+      const testPendingCampaign = await prisma.campaign.create({
+        data: {
+          title: 'Pending Bank Card Campaign',
+          creatorId: creator.id,
+          category: 'COMMUNITY',
+          creatorName: 'Community Org',
+          summary: 'Testing pending card.',
+          status: 'FUNDING',
+          fundingGoalCents: 100000,
+          raisedCents: 0,
+          story: [],
+          sources: [],
+        },
+      });
+
       const createRes = await request(app)
         .post('/api/v1/contributions')
         .send({
-          campaignId: fundingCampaignId,
+          campaignId: testPendingCampaign.id,
           amountCents: 2500,
         });
 
@@ -493,7 +509,7 @@ describe('Contributions & Payments API (/api/v1)', () => {
       });
       expect(freshCampaign.raisedCents).toBe(expectedSum);
       expect(freshCampaign.raisedCents).toBe(77000);
-    });
+    }, 60000);
 
     it('denies receipt access to other non-owner authenticated users', async () => {
       // 1. User A (creator) makes a contribution

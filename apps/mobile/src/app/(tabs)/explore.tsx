@@ -19,7 +19,6 @@ import {
   Search,
   X,
   SlidersHorizontal,
-  ArrowUpDown,
   Check,
   Clock,
   Trash2,
@@ -32,7 +31,6 @@ import {
   CATEGORIES,
   Category,
   CampaignCardDto,
-  CampaignSort,
   CampaignStatus,
   CreatorType,
   ProgressRange,
@@ -55,13 +53,6 @@ import { useExploreStore, ExploreFilters } from '../../store/exploreStore';
 const RECENT_SEARCHES_STORAGE_KEY = '@campaigns:recent_searches';
 const MAX_RECENT_SEARCHES = 6;
 
-const SORT_OPTIONS: { id: CampaignSort; label: string; description: string }[] = [
-  { id: 'trending', label: 'Trending', description: 'High momentum and recent backer activity' },
-  { id: 'newest', label: 'Newest', description: 'Most recently published campaigns' },
-  { id: 'most_funded', label: 'Most funded', description: 'Highest total contribution amount' },
-  { id: 'ending_soon', label: 'Ending soon', description: 'Campaigns closest to funding close date' },
-  { id: 'closest_to_goal', label: 'Closest to goal', description: 'Campaigns nearest to 100% funding goal' },
-];
 
 const STATUS_OPTIONS: { id: CampaignStatus; label: string }[] = [
   { id: 'FUNDING', label: 'Funding' },
@@ -118,7 +109,6 @@ export default function ExploreScreen() {
   const [isDebouncing, setIsDebouncing] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
-  const [isSortSheetOpen, setIsSortSheetOpen] = useState(false);
   const [isFilterSheetOpen, setIsFilterSheetOpen] = useState(false);
   const [draftFilters, setDraftFilters] = useState<ExploreFilters>({ ...filters });
 
@@ -282,14 +272,6 @@ export default function ExploreScreen() {
     setSearchQuery('');
   }, [setSearchQuery]);
 
-  const handleSelectSort = useCallback(
-    (newSort: CampaignSort) => {
-      Haptics.selectionAsync().catch(() => {});
-      setSort(newSort);
-      setIsSortSheetOpen(false);
-    },
-    [setSort]
-  );
 
   const handleApplyFilters = useCallback(() => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
@@ -374,21 +356,6 @@ export default function ExploreScreen() {
           </Text>
 
           <View style={styles.controlsButtonsRow}>
-            {/* Sort Control */}
-            <Pressable
-              onPress={() => setIsSortSheetOpen(true)}
-              accessibilityRole="button"
-              accessibilityLabel={`Sort: currently ${SORT_OPTIONS.find((s) => s.id === sort)?.label}`}
-              style={({ pressed }) => [
-                styles.controlBtn,
-                pressed && { opacity: 0.8 },
-              ]}
-            >
-              <ArrowUpDown size={14} color={theme.colors.textSecondary} />
-              <Text style={styles.controlBtnText}>
-                {SORT_OPTIONS.find((s) => s.id === sort)?.label}
-              </Text>
-            </Pressable>
 
             {/* Filter Control */}
             <Pressable
@@ -755,41 +722,6 @@ export default function ExploreScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.flatListContent}
       />
-
-      {/* 4. Sort Bottom Sheet */}
-      <Sheet visible={isSortSheetOpen} onClose={() => setIsSortSheetOpen(false)} title="Sort Campaigns">
-        <View style={styles.sheetBody}>
-          {SORT_OPTIONS.map((opt) => {
-            const isSelected = sort === opt.id;
-            return (
-              <Pressable
-                key={opt.id}
-                onPress={() => handleSelectSort(opt.id)}
-                accessibilityRole="button"
-                accessibilityLabel={`Sort by ${opt.label}`}
-                style={({ pressed }) => [
-                  styles.sheetOptionRow,
-                  isSelected && styles.sheetOptionRowSelected,
-                  pressed && { opacity: 0.8 },
-                ]}
-              >
-                <View style={styles.sheetOptionTextWrap}>
-                  <Text style={[styles.sheetOptionTitle, isSelected && styles.sheetOptionTitleSelected]}>
-                    {opt.label}
-                  </Text>
-                  <Text style={styles.sheetOptionDescription}>{opt.description}</Text>
-                </View>
-
-                {isSelected && (
-                  <View style={styles.sheetOptionCheckWrap}>
-                    <Check size={18} color={theme.colors.lime} />
-                  </View>
-                )}
-              </Pressable>
-            );
-          })}
-        </View>
-      </Sheet>
 
       {/* 5. Filter Bottom Sheet */}
       <Sheet visible={isFilterSheetOpen} onClose={() => setIsFilterSheetOpen(false)} title="Filter Campaigns">
@@ -1234,38 +1166,6 @@ const styles = StyleSheet.create({
   // Bottom Sheets Body
   sheetBody: {
     paddingVertical: theme.spacing.xs,
-  },
-  sheetOptionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: theme.spacing.md,
-    paddingHorizontal: theme.spacing.base,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.line,
-  },
-  sheetOptionRowSelected: {
-    backgroundColor: theme.colors.surfaceRaised,
-  },
-  sheetOptionTextWrap: {
-    flex: 1,
-  },
-  sheetOptionTitle: {
-    fontFamily: theme.typography.fonts.uiSemiBold,
-    fontSize: 15,
-    color: theme.colors.textPrimary,
-  },
-  sheetOptionTitleSelected: {
-    color: theme.colors.lime,
-  },
-  sheetOptionDescription: {
-    fontFamily: theme.typography.fonts.uiRegular,
-    fontSize: 12,
-    color: theme.colors.textSecondary,
-    marginTop: 2,
-  },
-  sheetOptionCheckWrap: {
-    marginLeft: theme.spacing.sm,
   },
 
   // Filter Sheet

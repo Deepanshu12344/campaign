@@ -60,12 +60,27 @@ export class JobsService {
 
     try {
       const fifteenSecondsAgo = new Date(Date.now() - 15 * 1000);
-      const pendingContributions = await prisma.contribution.findMany({
+      const pendingEvents = await prisma.campaignEvent.findMany({
         where: {
-          status: 'PENDING',
+          type: 'PAYMENT_VERIFICATION_PENDING',
           createdAt: { lte: fifteenSecondsAgo },
         },
         take: 20,
+      });
+
+      const pendingContributionIds = pendingEvents
+        .map((e) => (e.payload as { contributionId?: string })?.contributionId)
+        .filter((id): id is string => Boolean(id));
+
+      if (pendingContributionIds.length === 0) {
+        return 0;
+      }
+
+      const pendingContributions = await prisma.contribution.findMany({
+        where: {
+          id: { in: pendingContributionIds },
+          status: 'PENDING',
+        },
       });
 
       if (pendingContributions.length === 0) {

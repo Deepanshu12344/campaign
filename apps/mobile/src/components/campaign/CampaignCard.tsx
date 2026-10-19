@@ -177,7 +177,7 @@ export function CampaignCard({
         {/* 4. Reach Estimate: Small grey line with info icon */}
         <View style={styles.reachLine}>
           <Info size={13} color={theme.colors.textSecondary} strokeWidth={2} />
-          <Text style={styles.reachText}>
+          <Text style={styles.reachText} numberOfLines={1} ellipsizeMode="tail">
             Est. reach at goal: {reach.estimatedReachLow.toLocaleString()}-{reach.estimatedReachHigh.toLocaleString()} people
           </Text>
         </View>
@@ -342,12 +342,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     marginBottom: 16,
+    overflow: 'hidden',
   },
   reachText: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 12,
     lineHeight: 16,
     color: theme.colors.textSecondary,
+    flex: 1,
+    flexShrink: 1,
+    minWidth: 0,
   },
   imageStatusPillWrap: {
     position: 'absolute',

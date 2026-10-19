@@ -19,16 +19,7 @@ import { AuthGateProvider } from '../auth/requireAuth';
 import { GlobalErrorBoundary } from '../components/layout/GlobalErrorBoundary';
 import { OfflineBanner } from '../components/layout/OfflineBanner';
 import { ServerWakeUpBanner } from '../components/layout/ServerWakeUpBanner';
-
-// Singleton QueryClient
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      staleTime: 60 * 1000,
-    },
-  },
-});
+import { queryClient } from '../api';
 
 // Hold splash screen visible while loading custom fonts and hydrating state
 SplashScreen.preventAutoHideAsync().catch(() => {

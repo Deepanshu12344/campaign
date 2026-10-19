@@ -204,12 +204,31 @@ export default function CreateBasicsScreen() {
     setCoverUploadError(null);
 
     try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsEditing: true,
-        aspect: [16, 9],
-        quality: 0.85,
-      });
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          const msg = 'Photo library permission is required to select a cover image.';
+          setCoverUploadError(msg);
+          toast.error(msg);
+          return;
+        }
+      }
+
+      let result: ImagePicker.ImagePickerResult;
+      try {
+        result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ['images'],
+          allowsEditing: true,
+          aspect: [16, 9],
+          quality: 0.85,
+        });
+      } catch {
+        result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ['images'],
+          allowsEditing: false,
+          quality: 0.85,
+        });
+      }
 
       if (result.canceled || !result.assets || result.assets.length === 0) {
         return;
@@ -493,9 +512,9 @@ export default function CreateBasicsScreen() {
           <View style={styles.headerRow}>
             <View style={styles.headerTextCol}>
               <Text style={styles.stepTitle}>Step 1: Campaign Basics</Text>
-              <Text style={styles.stepSubtitle}>
+              {/* <Text style={styles.stepSubtitle}>
                 Introduce your message with a compelling headline, category, and creator profile.
-              </Text>
+              </Text> */}
             </View>
 
             <Button
@@ -609,9 +628,9 @@ export default function CreateBasicsScreen() {
                 </View>
               </View>
 
-              <Text style={styles.helpFootnote}>
+              {/* <Text style={styles.helpFootnote}>
                 Note: These prompts are guidance only to help draft your story. They are not required form fields.
-              </Text>
+              </Text> */}
             </View>
           )}
         </Card>
@@ -699,13 +718,13 @@ export default function CreateBasicsScreen() {
               <ChevronDown size={18} color={theme.colors.textSecondary} />
             </Pressable>
 
-            {inlineErrors.category ? (
+            {/* {inlineErrors.category ? (
               <Text style={styles.inlineErrorText}>{inlineErrors.category}</Text>
             ) : (
               <Text style={styles.fieldHelperText}>
                 Categories help relevant audiences find and support your message distribution.
               </Text>
-            )}
+            )} */}
           </View>
 
           {/* Field 3: Creator / Organization Name & Creator Type */}
@@ -734,7 +753,7 @@ export default function CreateBasicsScreen() {
               maxLength={80}
               showCounter
               error={inlineErrors.creatorName}
-              helper="The individual, collective, or organization taking responsibility for the message."
+              // helper="The individual, collective, or organization taking responsibility for the message."
               style={styles.fieldSpacing}
             />
           </View>
@@ -839,7 +858,7 @@ export default function CreateBasicsScreen() {
           <View style={styles.coverSection}>
             <View style={styles.fieldLabelRow}>
               <Text style={styles.fieldLabel}>Cover Image (Optional)</Text>
-              <Text style={styles.optionalNotice}>16:9 aspect ratio</Text>
+              {/* <Text style={styles.optionalNotice}>16:9 aspect ratio</Text> */}
             </View>
 
             {draft.coverUrl ? (

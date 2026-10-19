@@ -648,11 +648,13 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 22,
     color: theme.colors.lime,
+    flexShrink: 1,
   },
   subMeasuredValue: {
     fontFamily: theme.typography.fonts.serifBold,
     fontSize: 22,
     color: theme.colors.lime,
+    flexShrink: 1,
   },
   subReachDescription: {
     fontFamily: theme.typography.fonts.uiRegular,

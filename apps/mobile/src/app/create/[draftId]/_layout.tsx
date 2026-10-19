@@ -23,6 +23,7 @@ import {
 } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 import { useDraftStore, SyncStatus } from '../../../store/draftStore';
+import { useAuthStore } from '../../../store/authStore';
 import { useCampaign } from '../../../api';
 import { StepIndicator, Button, useToast, Sheet } from '../../../components/ui';
 import { theme } from '../../../theme';
@@ -53,11 +54,20 @@ export default function CreationLayout() {
   // Fetch from server to seed or update
   const { data: serverDraft } = useCampaign(draftId as string);
 
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isHydrated = useAuthStore((s) => s.isHydrated);
+
   useEffect(() => {
-    if (draftId) {
+    if (isHydrated && !isAuthenticated) {
+      router.replace('/(tabs)/create' as Href);
+    }
+  }, [isHydrated, isAuthenticated, router]);
+
+  useEffect(() => {
+    if (draftId && isAuthenticated) {
       setActiveDraft(draftId, serverDraft);
     }
-  }, [draftId, serverDraft, setActiveDraft]);
+  }, [draftId, serverDraft, setActiveDraft, isAuthenticated]);
 
   // Determine current route mode & step
   const isPreview = pathname.endsWith('/preview');
@@ -77,15 +87,6 @@ export default function CreationLayout() {
       }
     }
   }, [serverDraft?.status, isSubmitted, draftId, router]);
-
-  // Mode label
-  const modeLabel = isSubmitting
-    ? 'SUBMITTING'
-    : isSubmitted
-      ? 'SUBMITTED'
-      : isPreview
-        ? 'PREVIEWING'
-        : 'EDITING';
 
   // Navigate between steps
   const handleStepPress = (targetStepNumber: number) => {
@@ -155,25 +156,8 @@ export default function CreationLayout() {
             <ChevronLeft size={22} color={theme.colors.textPrimary} />
           </Pressable>
 
-          {/* Mode Pill & Save Indicator */}
+          {/* Save Indicator */}
           <View style={styles.headerCenterInfo}>
-            <View
-              style={[
-                styles.modePill,
-                isSubmitting && styles.modePillSubmitting,
-                isPreview && !isSubmitting && styles.modePillPreview,
-                isSubmitted && !isSubmitting && styles.modePillSubmitted,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.modePillText,
-                  (isSubmitting || isPreview || isSubmitted) && styles.modePillTextLight,
-                ]}
-              >
-                {modeLabel}
-              </Text>
-            </View>
             <View style={styles.syncIndicatorRow}>
               {renderSyncIndicator(syncStatus)}
             </View>
@@ -286,7 +270,12 @@ function renderSyncIndicator(status: SyncStatus) {
       );
     case 'idle':
     default:
-      return null;
+      return (
+        <View style={styles.syncRow}>
+          <CheckCircle2 size={12} color={theme.colors.textSecondary} />
+          <Text style={[styles.syncText, { color: theme.colors.textSecondary }]}>Auto-save active</Text>
+        </View>
+      );
   }
 }
 
@@ -319,34 +308,10 @@ const styles = StyleSheet.create({
   },
   headerCenterInfo: {
     alignItems: 'center',
-    gap: 2,
-  },
-  modePill: {
-    backgroundColor: theme.colors.surfaceRaised,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: theme.radius.pill,
-  },
-  modePillPreview: {
-    backgroundColor: theme.colors.surfaceRaised,
-  },
-  modePillSubmitting: {
-    backgroundColor: theme.colors.surfaceRaised,
-  },
-  modePillSubmitted: {
-    backgroundColor: theme.colors.surfaceRaised,
-  },
-  modePillText: {
-    fontFamily: theme.typography.fonts.uiBold,
-    fontSize: 10,
-    letterSpacing: 0.5,
-    color: theme.colors.textSecondary,
-  },
-  modePillTextLight: {
-    color: theme.colors.lime,
+    justifyContent: 'center',
   },
   syncIndicatorRow: {
-    minHeight: 16,
+    minHeight: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },

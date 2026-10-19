@@ -200,7 +200,7 @@ export default function CreatePreviewScreen() {
         <View style={styles.fundingCardWrapper}>
           <Card style={styles.fundingCard}>
             <View style={styles.fundingCardHeader}>
-              <View>
+              <View style={{ flexShrink: 1, minWidth: 140 }}>
                 <Text style={styles.fundingRaisedText}>
                   $0{' '}
                   <Text style={styles.fundingGoalText}>
@@ -548,6 +548,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+    flexWrap: 'wrap',
     gap: 8,
   },
   fundingRaisedText: {

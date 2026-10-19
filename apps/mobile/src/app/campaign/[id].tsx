@@ -887,9 +887,9 @@ export default function CampaignDetailScreen() {
                   <Text style={styles.mathLabel}>Avg. Ad Frequency</Text>
                   <Text style={styles.mathValue}>{estimateConfig?.avgFrequency ?? 2.2}x</Text>
                 </View>
-                <View style={styles.mathRow}>
-                  <Text style={styles.mathLabel}>Projected Unique Reach</Text>
-                  <Text style={[styles.mathValue, { color: theme.colors.lime, fontFamily: theme.typography.fonts.uiBold }]}>
+                <View style={styles.mathHighlightRow}>
+                  <Text style={styles.mathHighlightLabel}>Projected Unique Reach</Text>
+                  <Text style={styles.mathHighlightValue}>
                     ~{campaign.estimatedReachLow.toLocaleString()} - {campaign.estimatedReachHigh.toLocaleString()} people
                   </Text>
                 </View>
@@ -1583,13 +1583,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: theme.spacing.sm,
-    paddingVertical: 2,
+    paddingVertical: 4,
+    gap: 6,
   },
   panelReachText: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 12,
     color: theme.colors.textSecondary,
     flex: 1,
+    flexShrink: 1,
     marginRight: 6,
   },
   panelButtonContainer: {
@@ -1649,17 +1651,46 @@ const styles = StyleSheet.create({
   mathRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 2,
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 6,
+    paddingVertical: 3,
   },
   mathLabel: {
     fontFamily: theme.typography.fonts.uiRegular,
     fontSize: 13,
     color: theme.colors.textSecondary,
+    flexShrink: 0,
   },
   mathValue: {
     fontFamily: theme.typography.fonts.uiMedium,
     fontSize: 13,
     color: theme.colors.textPrimary,
+    textAlign: 'right',
+    flexShrink: 1,
+  },
+  mathHighlightRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
+    flexWrap: 'wrap',
+    gap: 6,
+    paddingTop: 6,
+    paddingBottom: 2,
+    marginTop: 2,
+  },
+  mathHighlightLabel: {
+    fontFamily: theme.typography.fonts.uiSemiBold,
+    fontSize: 13,
+    color: theme.colors.textPrimary,
+    flexShrink: 0,
+  },
+  mathHighlightValue: {
+    fontFamily: theme.typography.fonts.uiBold,
+    fontSize: 13,
+    color: theme.colors.lime,
+    textAlign: 'right',
+    flexShrink: 1,
   },
   sheetDisclaimerText: {
     fontFamily: theme.typography.fonts.uiRegular,

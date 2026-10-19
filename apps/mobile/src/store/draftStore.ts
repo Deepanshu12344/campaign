@@ -59,6 +59,7 @@ export interface DraftStoreState {
   syncOfflineDrafts: () => Promise<void>;
   removeDraft: (draftId: string) => void;
   resetDirtyState: (draftId: string) => void;
+  clearAllDrafts: () => Promise<void>;
 
   stepContinueHandler: (() => Promise<boolean>) | null;
   setStepContinueHandler: (handler: (() => Promise<boolean>) | null) => void;
@@ -475,6 +476,34 @@ export const useDraftStore = create<DraftStoreState>((set, get) => ({
       dirtyFields: { ...state.dirtyFields, [draftId]: {} },
       syncStatus: { ...state.syncStatus, [draftId]: 'saved' },
     }));
+  },
+
+  clearAllDrafts: async () => {
+    // Clear all scheduled debounce timers
+    Object.keys(debounceTimers).forEach((id) => {
+      if (debounceTimers[id]) {
+        clearTimeout(debounceTimers[id]!);
+        debounceTimers[id] = null;
+      }
+    });
+
+    set({
+      drafts: {},
+      dirtyFields: {},
+      syncedState: {},
+      activeDraftId: null,
+      syncStatus: {},
+      lastSavedAt: {},
+      lastError: {},
+      stepContinueHandler: null,
+      isSubmitting: false,
+    });
+
+    try {
+      await AsyncStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // Ignore storage cleanup error
+    }
   },
 }));
 

@@ -12,3 +12,4 @@ export * from './hooks/useActivity';
 export * from './hooks/useReports';
 export * from './hooks/useAdmin';
 export * from './hooks/useAi';
+export * from './queryClient';

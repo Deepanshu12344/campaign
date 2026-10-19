@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient, UseQueryResult, UseMutationResul
 import { apiClient } from '../client';
 import { ApiError } from '../types';
 import { recordGuestReceiptToken, getGuestTokenForContribution } from '../tokens';
+import { useAuthStore } from '../../store/authStore';
 import {
   Contribution,
   ContributionReceiptDto,
@@ -144,11 +145,13 @@ export type MyContributionItem = Contribution & {
 };
 
 export function useMyContributions(): UseQueryResult<MyContributionItem[], ApiError> {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   return useQuery<MyContributionItem[], ApiError>({
     queryKey: ['my-contributions'],
     queryFn: async () => {
       return apiClient.get<MyContributionItem[]>('/me/contributions');
     },
+    enabled: isAuthenticated,
   });
 }
 

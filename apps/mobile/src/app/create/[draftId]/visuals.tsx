@@ -9,6 +9,7 @@ import {
   Modal,
   findNodeHandle,
   UIManager,
+  Platform,
 } from 'react-native';
 import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter, Href } from 'expo-router';
@@ -273,12 +274,32 @@ export default function CreateVisualsScreen() {
     setCoverUploadError(null);
 
     try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsEditing: true,
-        aspect: [16, 9],
-        quality: 0.85,
-      });
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          const msg = 'Photo library permission is required to choose a cover image.';
+          setCoverUploadError(msg);
+          toast.error(msg);
+          return;
+        }
+      }
+
+      let result: ImagePicker.ImagePickerResult;
+      try {
+        result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ['images'],
+          allowsEditing: true,
+          aspect: [16, 9],
+          quality: 0.85,
+        });
+      } catch {
+        // Fallback without crop editor if device OEM lacks crop activity
+        result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ['images'],
+          allowsEditing: false,
+          quality: 0.85,
+        });
+      }
 
       if (result.canceled || !result.assets || result.assets.length === 0) {
         return;
@@ -365,6 +386,16 @@ export default function CreateVisualsScreen() {
     setAdUploadError(null);
 
     try {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          const msg = 'Photo library permission is required to select ad images.';
+          setAdUploadError(msg);
+          toast.error(msg);
+          return;
+        }
+      }
+
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ['images'],
         allowsEditing: false,

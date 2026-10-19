@@ -14,6 +14,7 @@ import {
   ChevronRight,
 } from 'lucide-react-native';
 import { useMyContributions } from '../../api';
+import { useAuthStore } from '../../store/authStore';
 import { SharedHeader } from '../../components/layout/SharedHeader';
 import {
   Card,
@@ -27,6 +28,7 @@ import { theme } from '../../theme';
 
 export default function BackedCampaignsScreen() {
   const router = useRouter();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const {
     data: contributions,
     isLoading,
@@ -186,14 +188,21 @@ export default function BackedCampaignsScreen() {
           </View>
         )}
 
-        {!isLoading && !hasBacked && (
+        {!isAuthenticated ? (
+          <EmptyState
+            title="Sign in to View Backed Campaigns"
+            description="Sign in to view campaigns you've backed, track ad distribution reach, and download your accounting receipts."
+            actionTitle="Sign In"
+            onAction={() => router.push('/auth/sign-in' as Href)}
+          />
+        ) : !isLoading && !hasBacked ? (
           <EmptyState
             title="No Backed Campaigns"
             description="You haven't backed any campaigns yet. Backing funds digital advertising distribution to bring vital stories and causes to wider audiences."
             actionTitle="Explore Campaigns"
             onAction={() => router.push('/(tabs)/explore' as Href)}
           />
-        )}
+        ) : null}
       </ScrollView>
     </View>
   );

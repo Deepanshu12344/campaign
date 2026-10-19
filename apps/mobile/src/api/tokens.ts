@@ -86,22 +86,32 @@ let memoryGuestTokens: string[] = [];
 let memoryGuestTokenMap: Record<string, string> = {};
 
 export async function getGuestReceiptTokens(): Promise<string[]> {
-  if (Platform.OS === 'web') {
-    if (typeof localStorage !== 'undefined') {
-      const raw = localStorage.getItem(GUEST_RECEIPT_TOKENS_KEY);
-      return raw ? JSON.parse(raw) : [];
-    }
-    return memoryGuestTokens;
-  }
   try {
-    const raw = await SecureStore.getItemAsync(GUEST_RECEIPT_TOKENS_KEY);
-    return raw ? JSON.parse(raw) : [];
+    let raw: string | null = null;
+    if (Platform.OS === 'web') {
+      if (typeof localStorage !== 'undefined') {
+        raw = localStorage.getItem(GUEST_RECEIPT_TOKENS_KEY);
+      }
+    } else {
+      raw = await SecureStore.getItemAsync(GUEST_RECEIPT_TOKENS_KEY);
+    }
+    if (!raw) return memoryGuestTokens;
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) return parsed.filter((t): t is string => typeof t === 'string');
+      if (typeof parsed === 'string' && parsed.trim()) return [parsed.trim()];
+      return memoryGuestTokens;
+    } catch {
+      // If raw was saved as a single raw string rather than JSON
+      return typeof raw === 'string' && raw.trim() ? [raw.trim()] : memoryGuestTokens;
+    }
   } catch {
     return memoryGuestTokens;
   }
 }
 
 export async function addGuestReceiptToken(token: string): Promise<void> {
+  if (!token || typeof token !== 'string') return;
   const current = await getGuestReceiptTokens();
   if (!current.includes(token)) {
     const updated = [token, ...current];
@@ -122,16 +132,25 @@ export async function addGuestReceiptToken(token: string): Promise<void> {
 }
 
 export async function getGuestTokenMap(): Promise<Record<string, string>> {
-  if (Platform.OS === 'web') {
-    if (typeof localStorage !== 'undefined') {
-      const raw = localStorage.getItem(GUEST_TOKEN_MAP_KEY);
-      return raw ? JSON.parse(raw) : {};
-    }
-    return memoryGuestTokenMap;
-  }
   try {
-    const raw = await SecureStore.getItemAsync(GUEST_TOKEN_MAP_KEY);
-    return raw ? JSON.parse(raw) : {};
+    let raw: string | null = null;
+    if (Platform.OS === 'web') {
+      if (typeof localStorage !== 'undefined') {
+        raw = localStorage.getItem(GUEST_TOKEN_MAP_KEY);
+      }
+    } else {
+      raw = await SecureStore.getItemAsync(GUEST_TOKEN_MAP_KEY);
+    }
+    if (!raw) return memoryGuestTokenMap;
+    try {
+      const parsed = JSON.parse(raw);
+      if (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
+        return parsed as Record<string, string>;
+      }
+      return memoryGuestTokenMap;
+    } catch {
+      return memoryGuestTokenMap;
+    }
   } catch {
     return memoryGuestTokenMap;
   }

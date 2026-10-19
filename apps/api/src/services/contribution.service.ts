@@ -403,10 +403,21 @@ export class ContributionService {
         return this.formatContribution(current);
       }
 
-      // 1. Mark contribution SUCCEEDED
-      const updatedContribution = await tx.contribution.update({
-        where: { id: contributionId },
+      // 1. Mark contribution SUCCEEDED atomically (prevents concurrent race double-settlement)
+      const updateResult = await tx.contribution.updateMany({
+        where: {
+          id: contributionId,
+          status: { not: 'SUCCEEDED' },
+        },
         data: { status: 'SUCCEEDED' },
+      });
+
+      if (updateResult.count === 0) {
+        return this.formatContribution(current);
+      }
+
+      const updatedContribution = await tx.contribution.findUniqueOrThrow({
+        where: { id: contributionId },
       });
 
       // 2. Increment campaign raisedCents
@@ -527,6 +538,9 @@ export class ContributionService {
       }
 
       return this.formatContribution(updatedContribution);
+    }, {
+      maxWait: 15000,
+      timeout: 30000,
     });
   }
 

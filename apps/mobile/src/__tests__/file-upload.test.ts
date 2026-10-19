@@ -65,4 +65,31 @@ describe('fileUpload utility', () => {
     expect(res.url).toBe('/uploads/mock.jpg');
     expect(res.fullUrl).toBe('http://localhost:4000/uploads/mock.jpg');
   });
+
+  it('creates standard React Native { uri, name, type } file part on native platforms', async () => {
+    const { Platform } = await import('react-native');
+    const originalOS = Platform.OS;
+    const appendSpy = vi.spyOn(FormData.prototype, 'append');
+    try {
+      Platform.OS = 'android';
+
+      await createUploadFormData({
+        uri: 'content://com.android.providers.media.documents/document/image%3A12345',
+        fileName: 'gallery_photo',
+        mimeType: 'image/jpeg',
+      });
+
+      expect(appendSpy).toHaveBeenCalledWith(
+        'file',
+        expect.objectContaining({
+          uri: 'content://com.android.providers.media.documents/document/image%3A12345',
+          name: 'gallery_photo.jpg',
+          type: 'image/jpeg',
+        })
+      );
+    } finally {
+      appendSpy.mockRestore();
+      Platform.OS = originalOS;
+    }
+  });
 });

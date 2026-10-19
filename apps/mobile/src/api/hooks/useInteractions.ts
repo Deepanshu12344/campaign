@@ -7,6 +7,7 @@ import {
 } from '@tanstack/react-query';
 import { apiClient } from '../client';
 import { ApiError } from '../types';
+import { useAuthStore } from '../../store/authStore';
 import { FeedbackInput, CampaignDetailDto, CampaignCardDto } from '@campaigns/shared';
 
 export function useSaveCampaign(
@@ -33,11 +34,13 @@ export function useSaveCampaign(
 }
 
 export function useSavedCampaigns(): UseQueryResult<CampaignCardDto[], ApiError> {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   return useQuery<CampaignCardDto[], ApiError>({
     queryKey: ['campaigns', 'saved'],
     queryFn: async () => {
       return apiClient.get<CampaignCardDto[]>('/campaigns/saved');
     },
+    enabled: isAuthenticated,
     staleTime: 30 * 1000,
   });
 }
@@ -66,11 +69,13 @@ export function useFollowCampaign(
 }
 
 export function useFollowedCampaigns(): UseQueryResult<CampaignCardDto[], ApiError> {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   return useQuery<CampaignCardDto[], ApiError>({
     queryKey: ['campaigns', 'following'],
     queryFn: async () => {
       return apiClient.get<CampaignCardDto[]>('/campaigns/following');
     },
+    enabled: isAuthenticated,
     staleTime: 30 * 1000,
   });
 }

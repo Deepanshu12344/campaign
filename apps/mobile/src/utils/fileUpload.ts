@@ -21,13 +21,26 @@ export async function createUploadFormData(
   fieldName = 'file'
 ): Promise<FormData> {
   const formData = new FormData();
-  const filename =
+  let filename =
     asset.fileName ||
     asset.name ||
     asset.uri.split('/').pop() ||
     'upload.jpg';
 
-  const ext = filename.split('.').pop()?.toLowerCase();
+  if (filename.includes('?')) {
+    filename = filename.split('?')[0];
+  }
+
+  let ext = filename.split('.').pop()?.toLowerCase();
+  if (!ext || ext === filename.toLowerCase()) {
+    ext = asset.mimeType?.includes('png')
+      ? 'png'
+      : asset.mimeType?.includes('webp')
+        ? 'webp'
+        : 'jpg';
+    filename = `${filename}.${ext}`;
+  }
+
   const mimeType =
     asset.mimeType ||
     (ext === 'png' ? 'image/png' : ext === 'webp' ? 'image/webp' : 'image/jpeg');
@@ -45,7 +58,6 @@ export async function createUploadFormData(
       formData.append(fieldName, blob, filename);
       return formData;
     } catch {
-      // Fallback
       formData.append(fieldName, {
         uri: asset.uri,
         name: filename,
@@ -55,31 +67,17 @@ export async function createUploadFormData(
     }
   }
 
-  // Native (Android & iOS): Expo SDK 52+ WinterCG File
-  try {
-    // Dynamic require so web bundlers don't attempt to bundle native ExpoFileSystem
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { File: ExpoFile } = require('expo-file-system');
-    const expoFile = new ExpoFile(asset.uri);
-    formData.append(fieldName, expoFile as unknown as Blob);
-    return formData;
-  } catch {
-    // Fallback 1: Fetch local blob if runtime supports it
-    try {
-      const res = await fetch(asset.uri);
-      const blob = await res.blob();
-      formData.append(fieldName, blob, filename);
-      return formData;
-    } catch {
-      // Fallback 2: React Native legacy FormData representation
-      formData.append(fieldName, {
-        uri: asset.uri,
-        name: filename,
-        type: mimeType,
-      } as unknown as Blob);
-      return formData;
-    }
-  }
+  // Native (Android & iOS): React Native standard multipart file representation
+  // React Native's native NetworkingModule (Android) and RCTNetworking (iOS)
+  // require an object with { uri, name, type } to stream the file via
+  // ContentResolver (content://) or local filesystem (file://).
+  formData.append(fieldName, {
+    uri: asset.uri,
+    name: filename,
+    type: mimeType,
+  } as unknown as Blob);
+
+  return formData;
 }
 
 /**

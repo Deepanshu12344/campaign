@@ -64,6 +64,7 @@ export function ReachEstimateBadge({
 const styles = StyleSheet.create({
   container: {
     alignItems: 'flex-start',
+    maxWidth: '100%',
   },
   badge: {
     flexDirection: 'row',
@@ -72,6 +73,8 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.full,
     borderWidth: 1,
     borderColor: theme.colors.lime,
+    maxWidth: '100%',
+    flexShrink: 1,
   },
   badgeMd: {
     paddingVertical: theme.spacing.xxs,
@@ -83,10 +86,12 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: theme.spacing.xxs,
+    flexShrink: 0,
   },
   text: {
     fontFamily: theme.typography.fonts.uiMedium,
     color: theme.colors.lime,
+    flexShrink: 1,
   },
   textMd: {
     fontSize: theme.typography.styles.caption.fontSize,
@@ -98,6 +103,7 @@ const styles = StyleSheet.create({
   },
   infoTipWrap: {
     marginLeft: theme.spacing.xxs,
+    flexShrink: 0,
   },
   subtitle: {
     fontFamily: theme.typography.fonts.uiRegular,

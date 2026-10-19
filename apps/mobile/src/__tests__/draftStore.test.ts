@@ -203,4 +203,30 @@ describe('Draft Engine Store (useDraftStore)', () => {
       expect(active?.creatorType).toBe('business');
     });
   });
+
+  describe('Session Isolation & clearAllDrafts', () => {
+    it('wipes in-memory draft state, active draft, dirty fields, and deletes from AsyncStorage', async () => {
+      const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
+      const store = useDraftStore.getState();
+
+      store.setActiveDraft('draft-secret-1', {
+        id: 'draft-secret-1',
+        title: 'Secret Campaign Plan',
+      });
+      store.updateDraftField('title', 'Secret Campaign Modified');
+
+      expect(useDraftStore.getState().getActiveDraft()?.title).toBe('Secret Campaign Modified');
+      expect(Object.keys(useDraftStore.getState().drafts).length).toBe(1);
+
+      await store.clearAllDrafts();
+
+      const stateAfter = useDraftStore.getState();
+      expect(stateAfter.activeDraftId).toBeNull();
+      expect(stateAfter.getActiveDraft()).toBeNull();
+      expect(Object.keys(stateAfter.drafts).length).toBe(0);
+      expect(Object.keys(stateAfter.dirtyFields).length).toBe(0);
+      expect(Object.keys(stateAfter.syncedState).length).toBe(0);
+      expect(AsyncStorage.removeItem).toHaveBeenCalledWith('@campaigns_draft_store_v1');
+    });
+  });
 });

@@ -992,6 +992,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
+    flexShrink: 1,
   },
   sectionHeading: {
     fontFamily: theme.typography.fonts.uiSemiBold,
@@ -1061,6 +1062,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fonts.uiSemiBold,
     fontSize: 13,
     color: theme.colors.textPrimary,
+    flexShrink: 1,
   },
   estimateDisclaimer: {
     fontFamily: theme.typography.fonts.uiRegular,
