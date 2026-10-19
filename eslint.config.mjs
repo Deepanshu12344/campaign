@@ -10,6 +10,7 @@ export default [
       '**/dist/**',
       '**/build/**',
       '**/.expo/**',
+      'scripts/**',
       'apps/mobile/scripts/**',
       '**/coverage/**',
     ],

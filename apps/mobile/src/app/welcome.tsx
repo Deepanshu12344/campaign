@@ -115,20 +115,13 @@ export default function WelcomeScreen() {
             style={styles.guestButton}
           />
 
-          {/* Secondary Tour & Gallery Links for reviewers */}
+          {/* Secondary Tour Link */}
           <View style={styles.tourLinksRow}>
             <Button
               title="Tour Onboarding"
               variant="ghost"
               size="sm"
               onPress={() => router.push('/onboarding')}
-            />
-            <Text style={styles.bulletSeparator}>·</Text>
-            <Button
-              title="Component Gallery"
-              variant="ghost"
-              size="sm"
-              onPress={() => router.push('/dev/components')}
             />
           </View>
 

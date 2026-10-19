@@ -219,7 +219,7 @@ describe('Auth & Session Logout Isolation (No Data Leaks)', () => {
       // Simulated unauthenticated state:
       const isAuthenticated = false;
       const drafts = isAuthenticated
-        ? (mockStaleCampaigns as any[]).filter(
+        ? (mockStaleCampaigns as { status: string }[]).filter(
             (c) => c.status === 'DRAFT' || c.status === 'CHANGES_REQUESTED'
           )
         : [];
@@ -246,7 +246,7 @@ describe('Auth & Session Logout Isolation (No Data Leaks)', () => {
 
       const isAuthenticated = true;
       const drafts = isAuthenticated
-        ? (mockCampaigns as any[]).filter(
+        ? (mockCampaigns as { status: string; title: string }[]).filter(
             (c) => c.status === 'DRAFT' || c.status === 'CHANGES_REQUESTED'
           )
         : [];

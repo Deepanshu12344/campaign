@@ -9,17 +9,24 @@
     "userInterfaceStyle": "dark",
     "ios": {
       "supportsTablet": true,
-      "userInterfaceStyle": "dark"
+      "userInterfaceStyle": "dark",
+      "bundleIdentifier": "com.deepanshu.campaigns"
     },
     "android": {
+      "package": "com.deepanshu.campaigns",
+      "versionCode": 1,
       "userInterfaceStyle": "dark",
-      "navigationBarColor": "#1F221E",
       "adaptiveIcon": {
         "backgroundColor": "#9FE870",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_EXTERNAL_STORAGE"
+      ],
       "predictiveBackGestureEnabled": false
     },
     "web": {
@@ -32,10 +39,18 @@
         {
           "backgroundColor": "#9FE870",
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 100
+          "imageWidth": 160
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-speech-recognition",
+        {
+          "microphonePermission": "Allow Campaigns to access the microphone for voice campaign notes.",
+          "speechRecognitionPermission": "Allow Campaigns to use speech recognition to convert voice notes into campaign drafts.",
+          "androidSpeechServicePackages": ["com.google.android.googlequicksearchbox"]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

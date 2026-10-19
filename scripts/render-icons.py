@@ -1,102 +1,94 @@
 import math
 from PIL import Image, ImageDraw
 
-def draw_mark(draw, scale, color=(22, 51, 0, 255), inner_cut_color=(159, 232, 112, 255), offset_x=0, offset_y=0):
-    # Base coordinates in 512x512 space
-    # Megaphone body
+LIME_BG = (159, 232, 112, 255)      # #9FE870
+DARK_GREEN = (22, 51, 0, 255)       # #163300
+TRANSPARENT = (0, 0, 0, 0)
+WHITE = (255, 255, 255, 255)
+BLACK = (0, 0, 0, 255)
+
+def render_raw_mark(mark_color=DARK_GREEN, inner_cut_color=LIME_BG):
+    ss = 4
+    canvas_w = 1200 * ss
+    canvas_h = 1200 * ss
+    img = Image.new("RGBA", (canvas_w, canvas_h), TRANSPARENT)
+    draw = ImageDraw.Draw(img)
+
+    # Base coords in 512-coordinate space
     body_pts = [
         (120, 220), (140, 200), (170, 200),
         (280, 148), (306, 165), (306, 347),
         (280, 364), (170, 312), (140, 312),
         (120, 292)
     ]
-    scaled_body = [((x + offset_x) * scale, (y + offset_y) * scale) for x, y in body_pts]
-    draw.polygon(scaled_body, fill=color)
-
-    # Rounded end cap on the left
-    left_x = (120 + offset_x) * scale
+    draw.polygon([(x * ss, y * ss) for x, y in body_pts], fill=mark_color)
     draw.rounded_rectangle(
-        [(115 + offset_x) * scale, (200 + offset_y) * scale, (155 + offset_x) * scale, (312 + offset_y) * scale],
-        radius=14 * scale,
-        fill=color
+        [115 * ss, 200 * ss, 155 * ss, 312 * ss],
+        radius=14 * ss,
+        fill=mark_color
     )
 
     # Sound circle cut
-    circle_r = 26 * scale
-    circle_cx = (215 + offset_x) * scale
-    circle_cy = (256 + offset_y) * scale
-    draw.ellipse(
-        [circle_cx - circle_r, circle_cy - circle_r, circle_cx + circle_r, circle_cy + circle_r],
-        fill=inner_cut_color
-    )
+    circle_r = 26 * ss
+    cx, cy = 215 * ss, 256 * ss
+    draw.ellipse([cx - circle_r, cy - circle_r, cx + circle_r, cy + circle_r], fill=inner_cut_color)
 
     # Arc 1 (inner arc)
-    arc1_bbox = [
-        (352 - 90 + offset_x) * scale, (256 - 90 + offset_y) * scale,
-        (352 + 90 + offset_x) * scale, (256 + 90 + offset_y) * scale
-    ]
-    draw.arc(arc1_bbox, start=315, end=45, fill=color, width=int(36 * scale))
+    arc1 = [(352 - 90) * ss, (256 - 90) * ss, (352 + 90) * ss, (256 + 90) * ss]
+    draw.arc(arc1, start=315, end=45, fill=mark_color, width=int(36 * ss))
 
     # Arc 2 (outer arc)
-    arc2_bbox = [
-        (405 - 155 + offset_x) * scale, (256 - 155 + offset_y) * scale,
-        (405 + 155 + offset_x) * scale, (256 + 155 + offset_y) * scale
-    ]
-    draw.arc(arc2_bbox, start=315, end=45, fill=color, width=int(36 * scale))
+    arc2 = [(405 - 155) * ss, (256 - 155) * ss, (405 + 155) * ss, (256 + 155) * ss]
+    draw.arc(arc2, start=315, end=45, fill=mark_color, width=int(36 * ss))
 
-def make_splash_icon():
-    # 512x512 transparent PNG with centered mark
-    ss = 4
-    img = Image.new("RGBA", (512 * ss, 512 * ss), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(img)
-    draw_mark(draw, ss, color=(22, 51, 0, 255), inner_cut_color=(159, 232, 112, 255), offset_x=0, offset_y=0)
-    out = img.resize((512, 512), Image.Resampling.LANCZOS)
-    out.save("apps/mobile/assets/images/splash-icon.png")
-    print("Created splash-icon.png")
+    bbox = img.getbbox()
+    return img.crop(bbox)
 
-def make_adaptive_foreground():
-    # 512x512 transparent PNG, mark scaled down to safe zone (~66% = 340px)
-    ss = 4
-    canvas_size = 512
-    img = Image.new("RGBA", (canvas_size * ss, canvas_size * ss), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(img)
-    # Center and scale down
-    # Original mark is ~350 wide (115 to 450) and ~250 tall (140 to 370), center at ~(280, 256)
-    mark_img = Image.new("RGBA", (512 * ss, 512 * ss), (0, 0, 0, 0))
-    mark_draw = ImageDraw.Draw(mark_img)
-    draw_mark(mark_draw, ss, color=(22, 51, 0, 255), inner_cut_color=(159, 232, 112, 255))
-    mark_resized = mark_img.resize((320, 320), Image.Resampling.LANCZOS)
-    
-    final_img = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
-    final_img.paste(mark_resized, (96, 96), mark_resized)
-    final_img.save("apps/mobile/assets/images/android-icon-foreground.png")
-    print("Created android-icon-foreground.png")
+def make_centered_image(target_w, target_h, mark_w, bg_color=TRANSPARENT, mark_color=DARK_GREEN, inner_cut_color=LIME_BG):
+    mark = render_raw_mark(mark_color=mark_color, inner_cut_color=inner_cut_color)
+    bw, bh = mark.size
+    aspect = bh / bw
+    mark_h = int(mark_w * aspect)
 
-def make_app_icon():
-    # 1024x1024 solid lime #9FE870 background with mark centered
-    ss = 2
-    size = 1024
-    img = Image.new("RGBA", (size * ss, size * ss), (159, 232, 112, 255))
-    draw = ImageDraw.Draw(img)
-    
-    # Mark in 1024 space (scaled by 2 * ss)
-    # Target mark width ~640px centered in 1024
-    mark_scale = (640 / 512) * ss
-    offset_x = (1024 / (mark_scale / ss) - 512) / 2
-    offset_y = (1024 / (mark_scale / ss) - 512) / 2
-    draw_mark(draw, mark_scale, color=(22, 51, 0, 255), inner_cut_color=(159, 232, 112, 255), offset_x=offset_x, offset_y=offset_y)
-    
-    out = img.resize((size, size), Image.Resampling.LANCZOS)
-    out.save("apps/mobile/assets/images/icon.png")
-    print("Created icon.png")
+    scaled_mark = mark.resize((mark_w, mark_h), Image.Resampling.LANCZOS)
+    img = Image.new("RGBA", (target_w, target_h), bg_color)
+    pos_x = (target_w - mark_w) // 2
+    pos_y = (target_h - mark_h) // 2
+    img.paste(scaled_mark, (pos_x, pos_y), scaled_mark)
+    return img
 
-def make_favicon():
-    img = Image.open("apps/mobile/assets/images/icon.png")
-    fav = img.resize((48, 48), Image.Resampling.LANCZOS)
+def generate_all():
+    # 1. 1024x1024 app store icon with lime background
+    icon_1024 = make_centered_image(1024, 1024, 560, bg_color=LIME_BG, mark_color=DARK_GREEN, inner_cut_color=LIME_BG)
+    icon_1024.save("apps/mobile/assets/images/icon.png")
+    print("Saved apps/mobile/assets/images/icon.png (1024x1024)")
+
+    # 2. 512x512 splash screen logo icon (centered, transparent)
+    splash = make_centered_image(512, 512, 340, bg_color=TRANSPARENT, mark_color=DARK_GREEN, inner_cut_color=LIME_BG)
+    splash.save("apps/mobile/assets/images/splash-icon.png")
+    print("Saved apps/mobile/assets/images/splash-icon.png (512x512)")
+
+    # 3. 512x512 adaptive icon foreground (mark scaled inside 338px safe zone circle)
+    # Width 270px -> radius sqrt((135)^2 + (66)^2) = 150px < 169px safe zone radius
+    adaptive_fg = make_centered_image(512, 512, 270, bg_color=TRANSPARENT, mark_color=DARK_GREEN, inner_cut_color=LIME_BG)
+    adaptive_fg.save("apps/mobile/assets/images/android-icon-foreground.png")
+    print("Saved apps/mobile/assets/images/android-icon-foreground.png (512x512)")
+
+    # 4. 512x512 adaptive icon background (solid #9FE870 lime)
+    adaptive_bg = Image.new("RGBA", (512, 512), LIME_BG)
+    adaptive_bg.save("apps/mobile/assets/images/android-icon-background.png")
+    print("Saved apps/mobile/assets/images/android-icon-background.png (512x512)")
+
+    # 5. 512x512 adaptive icon monochrome (for Android 13+ themed icons)
+    # In monochrome, mask color is pure white or black with transparent cut
+    adaptive_mono = make_centered_image(512, 512, 270, bg_color=TRANSPARENT, mark_color=WHITE, inner_cut_color=TRANSPARENT)
+    adaptive_mono.save("apps/mobile/assets/images/android-icon-monochrome.png")
+    print("Saved apps/mobile/assets/images/android-icon-monochrome.png (512x512)")
+
+    # 6. 48x48 favicon
+    fav = icon_1024.resize((48, 48), Image.Resampling.LANCZOS)
     fav.save("apps/mobile/assets/images/favicon.png")
-    print("Created favicon.png")
+    print("Saved apps/mobile/assets/images/favicon.png (48x48)")
 
-make_splash_icon()
-make_adaptive_foreground()
-make_app_icon()
-make_favicon()
+if __name__ == "__main__":
+    generate_all()

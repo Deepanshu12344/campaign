@@ -54,7 +54,7 @@ describe('Step Completeness Model (getStepErrors)', () => {
         title: 'Save the Rainforest',
         category: 'Environment',
         creatorName: 'Rainforest Alliance',
-        creatorType: 'NONPROFIT' as any,
+        creatorType: 'NONPROFIT' as unknown as DraftUpdateInput['creatorType'],
         summary: 'Protecting tropical forests through community action.',
       };
       const errors = getStepErrors(uppercaseBasics, 'basics');
@@ -67,7 +67,7 @@ describe('Step Completeness Model (getStepErrors)', () => {
         title: 'Save the Rainforest',
         category: 'Environment',
         creatorName: 'Rainforest Alliance',
-        creatorType: 'alien_organization' as any,
+        creatorType: 'alien_organization' as unknown as DraftUpdateInput['creatorType'],
         summary: 'Protecting tropical forests through community action.',
       };
       const errors = getStepErrors(invalidBasics, 'basics');

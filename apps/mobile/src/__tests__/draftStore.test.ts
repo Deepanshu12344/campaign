@@ -155,7 +155,7 @@ describe('Draft Engine Store (useDraftStore)', () => {
       const store = useDraftStore.getState();
       store.setActiveDraft('draft-201', { id: 'draft-201' });
 
-      store.updateDraftField('creatorType', 'INDIVIDUAL' as any);
+      store.updateDraftField('creatorType', 'INDIVIDUAL' as unknown as 'individual');
 
       const active = useDraftStore.getState().getActiveDraft();
       expect(active?.creatorType).toBe('individual');
@@ -166,7 +166,7 @@ describe('Draft Engine Store (useDraftStore)', () => {
       store.setActiveDraft('draft-202', { id: 'draft-202' });
 
       store.updateDraftFields({
-        creatorType: 'NONPROFIT' as any,
+        creatorType: 'NONPROFIT' as unknown as 'nonprofit',
       });
 
       const active = useDraftStore.getState().getActiveDraft();
@@ -177,7 +177,7 @@ describe('Draft Engine Store (useDraftStore)', () => {
       const store = useDraftStore.getState();
       store.setActiveDraft('draft-203', {
         id: 'draft-203',
-        creatorType: 'COMMUNITY' as any,
+        creatorType: 'COMMUNITY' as unknown as 'community',
       });
 
       const active = useDraftStore.getState().getActiveDraft();
