@@ -336,6 +336,35 @@ export default function CreatorDashboardScreen() {
         visible={!!reviewModalCampaign}
         onClose={() => setReviewModalCampaign(null)}
         title="Editorial Review Status"
+        footer={
+          reviewModalCampaign ? (
+            <View style={styles.reviewSheetActions}>
+              <Button
+                label="Preview Campaign"
+                variant="secondary"
+                size="md"
+                icon={<ExternalLink size={16} color={theme.colors.textPrimary} />}
+                onPress={() => {
+                  const id = reviewModalCampaign.id;
+                  setReviewModalCampaign(null);
+                  router.push(`/campaign/${id}` as Href);
+                }}
+                style={{ flex: 1 }}
+              />
+              <Button
+                label="Creator Hub"
+                variant="primary"
+                size="md"
+                onPress={() => {
+                  const id = reviewModalCampaign.id;
+                  setReviewModalCampaign(null);
+                  router.push(`/creator/${id}` as Href);
+                }}
+                style={{ flex: 1 }}
+              />
+            </View>
+          ) : null
+        }
       >
         {reviewModalCampaign && (
           <View style={styles.reviewSheetContent}>
@@ -405,32 +434,6 @@ export default function CreatorDashboardScreen() {
               <Text style={styles.reviewLockText}>
                 Draft is locked while review is in progress. Once approved, the campaign opens for community funding.
               </Text>
-            </View>
-
-            <View style={styles.reviewSheetActions}>
-              <Button
-                label="Preview Campaign"
-                variant="secondary"
-                size="md"
-                icon={<ExternalLink size={16} color={theme.colors.textPrimary} />}
-                onPress={() => {
-                  const id = reviewModalCampaign.id;
-                  setReviewModalCampaign(null);
-                  router.push(`/campaign/${id}` as Href);
-                }}
-                style={{ flex: 1 }}
-              />
-              <Button
-                label="Creator Hub"
-                variant="primary"
-                size="md"
-                onPress={() => {
-                  const id = reviewModalCampaign.id;
-                  setReviewModalCampaign(null);
-                  router.push(`/creator/${id}` as Href);
-                }}
-                style={{ flex: 1 }}
-              />
             </View>
           </View>
         )}

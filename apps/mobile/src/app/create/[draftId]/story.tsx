@@ -1079,8 +1079,72 @@ export default function CreateStoryScreen() {
         visible={isAiSheetOpen}
         onClose={() => setIsAiSheetOpen(false)}
         title={targetImproveBlockId ? 'AI Paragraph Polish' : 'AI Story Draft'}
+        footer={
+          !aiMutation.isPending && aiResponse ? (
+            aiResponse.mode === 'improve_paragraph' ? (
+              <View style={styles.aiFooterRow}>
+                <Button
+                  variant="ghost"
+                  size="md"
+                  onPress={() => setIsAiSheetOpen(false)}
+                  style={styles.flex1}
+                >
+                  Discard
+                </Button>
+                <Button
+                  variant="primary"
+                  size="md"
+                  onPress={handleAcceptImprovedParagraph}
+                  iconLeft={<Check size={14} color={theme.colors.onLime} />}
+                  style={styles.flex1}
+                >
+                  Accept Polish
+                </Button>
+              </View>
+            ) : overwriteConfirmField ? (
+              <View style={styles.aiFooterRow}>
+                <Button
+                  variant="ghost"
+                  size="md"
+                  onPress={() => setOverwriteConfirmField(null)}
+                  style={styles.flex1}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="danger"
+                  size="md"
+                  onPress={applyAiFullStory}
+                  style={styles.flex1}
+                >
+                  Replace Content
+                </Button>
+              </View>
+            ) : (
+              <View style={styles.aiFooterRow}>
+                <Button
+                  variant="secondary"
+                  size="md"
+                  onPress={() => setIsAiSheetOpen(false)}
+                  style={styles.flex1}
+                >
+                  Discard Draft
+                </Button>
+                <Button
+                  variant="primary"
+                  size="md"
+                  onPress={handleAcceptAiFullStory}
+                  iconLeft={<Check size={16} color={theme.colors.onLime} />}
+                  style={styles.flex1}
+                >
+                  Accept Story Draft
+                </Button>
+              </View>
+            )
+          ) : null
+        }
       >
-        <ScrollView style={styles.aiSheetScroll} showsVerticalScrollIndicator={false}>
+        <View style={styles.aiSheetContainer}>
           {aiMutation.isPending ? (
             <View style={styles.aiLoadingContainer}>
               <ActivityIndicator size="large" color={theme.colors.lime} />
@@ -1103,24 +1167,6 @@ export default function CreateStoryScreen() {
                 <View style={styles.aiImproveCard}>
                   <Text style={styles.aiSectionLabel}>Improved Version:</Text>
                   <Text style={styles.aiSuggestedParagraph}>{aiResponse.improvedParagraph}</Text>
-
-                  <View style={styles.aiImproveActions}>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onPress={() => setIsAiSheetOpen(false)}
-                    >
-                      Discard
-                    </Button>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onPress={handleAcceptImprovedParagraph}
-                      iconLeft={<Check size={14} color={theme.colors.onLime} />}
-                    >
-                      Accept Polish
-                    </Button>
-                  </View>
                 </View>
               ) : (
                 /* Full Story Review */
@@ -1180,58 +1226,20 @@ export default function CreateStoryScreen() {
                     </Card>
                   )}
 
-                  {/* Overwrite Confirmation Modal if needed */}
+                  {/* Overwrite Confirmation Notice if needed */}
                   {overwriteConfirmField && (
                     <View style={styles.overwriteBox}>
                       <Text style={styles.overwriteTitle}>Overwrite existing content?</Text>
                       <Text style={styles.overwriteDesc}>
-                        Applying this AI draft will replace your current story blocks.
+                        Applying this AI draft will replace your current story blocks. Confirm using the buttons below.
                       </Text>
-                      <View style={styles.overwriteActions}>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onPress={() => setOverwriteConfirmField(null)}
-                        >
-                          Cancel
-                        </Button>
-                        <Button
-                          variant="danger"
-                          size="sm"
-                          onPress={applyAiFullStory}
-                        >
-                          Replace Content
-                        </Button>
-                      </View>
-                    </View>
-                  )}
-
-                  {!overwriteConfirmField && (
-                    <View style={styles.aiSheetBottomActions}>
-                      <Button
-                        variant="secondary"
-                        size="md"
-                        onPress={() => setIsAiSheetOpen(false)}
-                        style={styles.flex1}
-                      >
-                        Keep My Content
-                      </Button>
-                      <Button
-                        variant="primary"
-                        size="md"
-                        onPress={handleAcceptAiFullStory}
-                        iconLeft={<Check size={16} color={theme.colors.onLime} />}
-                        style={styles.flex1}
-                      >
-                        Accept Story Draft
-                      </Button>
                     </View>
                   )}
                 </View>
               )}
             </View>
           ) : null}
-        </ScrollView>
+        </View>
       </Sheet>
     </KeyboardAvoidingView>
   );
@@ -2599,9 +2607,14 @@ const styles = StyleSheet.create({
     gap: 8,
     marginTop: 6,
   },
-  aiSheetScroll: {
-    maxHeight: 520,
+  aiSheetContainer: {
     paddingHorizontal: 4,
+  },
+  aiFooterRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    width: '100%',
   },
   aiLoadingContainer: {
     alignItems: 'center',

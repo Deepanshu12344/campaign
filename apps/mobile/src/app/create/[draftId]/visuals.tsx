@@ -1259,7 +1259,7 @@ export default function CreateVisualsScreen() {
         onClose={() => setIsAiSheetOpen(false)}
         title="AI Ad Copy Suggestions"
       >
-        <ScrollView style={styles.aiSheetScroll} showsVerticalScrollIndicator={false}>
+        <View style={styles.aiSheetContainer}>
           {aiAdCopyMutation.isPending ? (
             <View style={styles.aiLoadingBox}>
               <ActivityIndicator size="large" color={theme.colors.lime} />
@@ -1334,7 +1334,7 @@ export default function CreateVisualsScreen() {
               )}
             </View>
           ) : null}
-        </ScrollView>
+        </View>
       </Sheet>
 
       {/* AI DEMO IMAGE GALLERY MODAL */}
@@ -2158,8 +2158,8 @@ const styles = StyleSheet.create({
     marginTop: 6,
     textAlign: 'center',
   },
-  aiSheetScroll: {
-    padding: theme.spacing.base,
+  aiSheetContainer: {
+    paddingHorizontal: theme.spacing.xs,
   },
   aiLoadingBox: {
     alignItems: 'center',

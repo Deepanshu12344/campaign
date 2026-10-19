@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
 } from 'react-native';
+import { StyleProp, ViewStyle, DimensionValue } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { X } from 'lucide-react-native';
 import { theme } from '../../theme';
@@ -17,10 +18,20 @@ export interface SheetProps {
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
-  maxHeight?: number | string;
+  maxHeight?: DimensionValue;
+  footer?: React.ReactNode;
+  contentContainerStyle?: StyleProp<ViewStyle>;
 }
 
-export function Sheet({ visible, onClose, title, children }: SheetProps) {
+export function Sheet({
+  visible,
+  onClose,
+  title,
+  children,
+  maxHeight,
+  footer,
+  contentContainerStyle,
+}: SheetProps) {
   const insets = useSafeAreaInsets();
 
   return (
@@ -37,7 +48,10 @@ export function Sheet({ visible, onClose, title, children }: SheetProps) {
             <View
               style={[
                 styles.sheetContent,
-                { paddingBottom: Math.max(insets.bottom, theme.spacing.base) + theme.spacing.sm },
+                maxHeight !== undefined ? { maxHeight } : null,
+                !footer && {
+                  paddingBottom: Math.max(insets.bottom, theme.spacing.base) + theme.spacing.sm,
+                },
               ]}
             >
               {/* Drag Handle */}
@@ -64,12 +78,36 @@ export function Sheet({ visible, onClose, title, children }: SheetProps) {
               {/* Scrollable Children */}
               <ScrollView
                 style={styles.body}
-                contentContainerStyle={styles.bodyContent}
+                contentContainerStyle={[
+                  styles.bodyContent,
+                  {
+                    paddingBottom: footer
+                      ? theme.spacing.lg
+                      : Math.max(insets.bottom, 24) + 32,
+                  },
+                  contentContainerStyle,
+                ]}
                 showsVerticalScrollIndicator={false}
                 bounces={false}
+                nestedScrollEnabled={true}
+                keyboardShouldPersistTaps="handled"
               >
                 {children}
               </ScrollView>
+
+              {/* Optional Fixed Bottom Footer */}
+              {footer && (
+                <View
+                  style={[
+                    styles.footer,
+                    {
+                      paddingBottom: Math.max(insets.bottom, theme.spacing.base),
+                    },
+                  ]}
+                >
+                  {footer}
+                </View>
+              )}
             </View>
           </TouchableWithoutFeedback>
         </View>
@@ -88,7 +126,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     borderTopLeftRadius: theme.radius.sheet,
     borderTopRightRadius: theme.radius.sheet,
-    maxHeight: '85%',
+    maxHeight: '90%',
     ...theme.shadows.elevated,
   },
   handleContainer: {
@@ -121,9 +159,17 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.pill,
   },
   body: {
-    maxHeight: 480,
+    flexShrink: 1,
   },
   bodyContent: {
-    padding: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.lg,
+    paddingTop: theme.spacing.md,
+  },
+  footer: {
+    paddingHorizontal: theme.spacing.lg,
+    paddingTop: theme.spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.line,
+    backgroundColor: theme.colors.surface,
   },
 });

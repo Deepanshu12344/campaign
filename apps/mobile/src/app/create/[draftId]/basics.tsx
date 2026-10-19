@@ -964,52 +964,50 @@ export default function CreateBasicsScreen() {
         onClose={() => setCategorySheetVisible(false)}
         title="Select Cause Category"
       >
-        <ScrollView style={styles.sheetScroll} showsVerticalScrollIndicator={false}>
-          <View style={styles.categoryList}>
-            {CATEGORIES.map((cat) => {
-              const meta = CATEGORY_META[cat];
-              const Icon = meta.icon;
-              const isSelected = draft.category === cat;
+        <View style={styles.categoryList}>
+          {CATEGORIES.map((cat) => {
+            const meta = CATEGORY_META[cat];
+            const Icon = meta.icon;
+            const isSelected = draft.category === cat;
 
-              return (
-                <Pressable
-                  key={cat}
-                  accessibilityRole="button"
-                  accessibilityLabel={`Select ${cat}`}
-                  onPress={() => handleCategorySelect(cat)}
-                  style={[styles.categoryOption, isSelected && styles.categoryOptionSelected]}
-                >
-                  <View style={styles.categoryOptionLeft}>
-                    <View
+            return (
+              <Pressable
+                key={cat}
+                accessibilityRole="button"
+                accessibilityLabel={`Select ${cat}`}
+                onPress={() => handleCategorySelect(cat)}
+                style={[styles.categoryOption, isSelected && styles.categoryOptionSelected]}
+              >
+                <View style={styles.categoryOptionLeft}>
+                  <View
+                    style={[
+                      styles.categoryOptionIconCircle,
+                      isSelected && styles.categoryOptionIconCircleSelected,
+                    ]}
+                  >
+                    <Icon
+                      size={18}
+                      color={isSelected ? theme.colors.onLime : theme.colors.textSecondary}
+                    />
+                  </View>
+                  <View style={styles.categoryOptionMeta}>
+                    <Text
                       style={[
-                        styles.categoryOptionIconCircle,
-                        isSelected && styles.categoryOptionIconCircleSelected,
+                        styles.categoryOptionTitle,
+                        isSelected && styles.categoryOptionTitleSelected,
                       ]}
                     >
-                      <Icon
-                        size={18}
-                        color={isSelected ? theme.colors.onLime : theme.colors.textSecondary}
-                      />
-                    </View>
-                    <View style={styles.categoryOptionMeta}>
-                      <Text
-                        style={[
-                          styles.categoryOptionTitle,
-                          isSelected && styles.categoryOptionTitleSelected,
-                        ]}
-                      >
-                        {cat}
-                      </Text>
-                      <Text style={styles.categoryOptionDesc}>{meta.description}</Text>
-                    </View>
+                      {cat}
+                    </Text>
+                    <Text style={styles.categoryOptionDesc}>{meta.description}</Text>
                   </View>
+                </View>
 
-                  {isSelected && <Check size={18} color={theme.colors.lime} />}
-                </Pressable>
-              );
-            })}
-          </View>
-        </ScrollView>
+                {isSelected && <Check size={18} color={theme.colors.lime} />}
+              </Pressable>
+            );
+          })}
+        </View>
       </Sheet>
 
       {/* AI Suggestions Review Sheet */}
@@ -1017,8 +1015,27 @@ export default function CreateBasicsScreen() {
         visible={aiSheetVisible}
         onClose={() => setAiSheetVisible(false)}
         title="AI Draft Suggestions"
+        footer={
+          <View style={styles.sheetFooterActions}>
+            <Button
+              title="Accept All Suggestions"
+              variant="primary"
+              size="lg"
+              fullWidth
+              onPress={handleAcceptAllSuggestions}
+              style={{ marginBottom: 8 }}
+            />
+            <Button
+              title="Close"
+              variant="ghost"
+              size="sm"
+              fullWidth
+              onPress={() => setAiSheetVisible(false)}
+            />
+          </View>
+        }
       >
-        <ScrollView style={styles.sheetScroll} showsVerticalScrollIndicator={false}>
+        <View style={styles.aiSuggestionsList}>
           <View style={styles.aiSheetHeader}>
             <Text style={styles.aiSheetSubtitle}>
               Review each suggested field below. Accept, edit, or dismiss them individually. AI will
@@ -1222,25 +1239,7 @@ export default function CreateBasicsScreen() {
             </Card>
           )}
 
-          {/* Bottom Sheet Actions */}
-          <View style={styles.sheetActionRow}>
-            <Button
-              title="Accept All Suggestions"
-              variant="primary"
-              size="lg"
-              fullWidth
-              onPress={handleAcceptAllSuggestions}
-              style={{ marginBottom: 8 }}
-            />
-            <Button
-              title="Close"
-              variant="ghost"
-              size="md"
-              fullWidth
-              onPress={() => setAiSheetVisible(false)}
-            />
-          </View>
-        </ScrollView>
+        </View>
       </Sheet>
     </View>
   );
@@ -1624,10 +1623,12 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.lg,
     paddingBottom: 40,
   },
-  sheetScroll: {
-    maxHeight: 500,
-    paddingHorizontal: theme.spacing.base,
-    paddingBottom: 24,
+  aiSuggestionsList: {
+    gap: 12,
+  },
+  sheetFooterActions: {
+    width: '100%',
+    gap: 8,
   },
   categoryList: {
     gap: 8,

@@ -724,7 +724,24 @@ export default function ExploreScreen() {
       />
 
       {/* 5. Filter Bottom Sheet */}
-      <Sheet visible={isFilterSheetOpen} onClose={() => setIsFilterSheetOpen(false)} title="Filter Campaigns">
+      <Sheet
+        visible={isFilterSheetOpen}
+        onClose={() => setIsFilterSheetOpen(false)}
+        title="Filter Campaigns"
+        footer={
+          <Button
+            title={
+              isPreviewFetching
+                ? 'Updating...'
+                : `Show ${previewData?.pages[0]?.total ?? 0} ${(previewData?.pages[0]?.total ?? 0) === 1 ? 'campaign' : 'campaigns'}`
+            }
+            variant="primary"
+            size="lg"
+            fullWidth
+            onPress={handleApplyFilters}
+          />
+        }
+      >
         <View style={styles.sheetBody}>
           {/* Header Action: Clear all */}
           <View style={styles.filterSheetTopRow}>
@@ -847,20 +864,6 @@ export default function ExploreScreen() {
             </View>
           </View>
 
-          {/* Apply Button */}
-          <View style={styles.filterSheetFooter}>
-            <Button
-              title={
-                isPreviewFetching
-                  ? 'Updating...'
-                  : `Show ${previewData?.pages[0]?.total ?? 0} ${(previewData?.pages[0]?.total ?? 0) === 1 ? 'campaign' : 'campaigns'}`
-              }
-              variant="primary"
-              size="lg"
-              fullWidth
-              onPress={handleApplyFilters}
-            />
-          </View>
         </View>
       </Sheet>
     </View>

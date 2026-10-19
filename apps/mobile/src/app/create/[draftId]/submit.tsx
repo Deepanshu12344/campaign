@@ -870,8 +870,30 @@ export default function CreateSubmitScreen() {
         visible={policySheetType !== null}
         onClose={() => setPolicySheetType(null)}
         title={policySheetType === 'terms' ? 'Advertising Distribution Terms' : 'Community Guidelines'}
+        footer={
+          <View style={{ width: '100%', gap: 8 }}>
+            <Button
+              title="I Understand"
+              variant="primary"
+              size="md"
+              fullWidth
+              onPress={() => setPolicySheetType(null)}
+            />
+            <Button
+              title={policySheetType === 'terms' ? 'Read Full Distribution Terms' : 'Read Full Community Guidelines'}
+              variant="secondary"
+              size="md"
+              fullWidth
+              onPress={() => {
+                const target = policySheetType === 'terms' ? '/info/terms' : '/info/community-guidelines';
+                setPolicySheetType(null);
+                router.push(target as Href);
+              }}
+            />
+          </View>
+        }
       >
-        <ScrollView style={styles.policySheetContent} showsVerticalScrollIndicator={false}>
+        <View style={styles.policySheetContent}>
           {policySheetType === 'terms' ? (
             <View style={styles.policySheetBody}>
               <Text style={styles.policyModalHeading}>Ad Distribution Service Terms</Text>
@@ -902,29 +924,7 @@ export default function CreateSubmitScreen() {
               </Text>
             </View>
           )}
-
-          <Button
-            title="I Understand"
-            variant="primary"
-            size="md"
-            fullWidth
-            onPress={() => setPolicySheetType(null)}
-            style={{ marginTop: theme.spacing.base }}
-          />
-
-          <Button
-            title={policySheetType === 'terms' ? 'Read Full Distribution Terms' : 'Read Full Community Guidelines'}
-            variant="secondary"
-            size="md"
-            fullWidth
-            onPress={() => {
-              const target = policySheetType === 'terms' ? '/info/terms' : '/info/community-guidelines';
-              setPolicySheetType(null);
-              router.push(target as Href);
-            }}
-            style={{ marginTop: theme.spacing.sm, marginBottom: theme.spacing.md }}
-          />
-        </ScrollView>
+        </View>
       </Sheet>
     </ScrollView>
   );

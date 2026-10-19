@@ -493,7 +493,7 @@ export default function ProfileScreen() {
         }}
         title={selectedTopic ? selectedTopic.title : 'Help & Support'}
       >
-        <ScrollView style={styles.sheetScroll} showsVerticalScrollIndicator={false}>
+        <View style={styles.topicContainer}>
           {selectedTopic ? (
             <View style={styles.topicDetailBox}>
               <Text style={styles.topicDetailDesc}>{selectedTopic.description}</Text>
@@ -523,7 +523,7 @@ export default function ProfileScreen() {
               ))}
             </View>
           )}
-        </ScrollView>
+        </View>
       </Sheet>
 
       {/* Photo Picker Sheet */}
@@ -685,8 +685,8 @@ const styles = StyleSheet.create({
   },
 
   // Help Sheet
-  sheetScroll: {
-    maxHeight: 460,
+  topicContainer: {
+    paddingVertical: 4,
   },
   topicList: {
     paddingVertical: 8,
